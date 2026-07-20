@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#355963">
+<meta name="theme-color" content="#315b62">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Flexi Buddy">
@@ -12,37 +12,41 @@
 <title>Flexi Buddy</title>
 <style>
 :root{
-  --bg:#f3f0e9;--card:#fff;--ink:#213136;--muted:#6e7c80;--accent:#355963;
-  --soft:#dfe9e6;--soft2:#edf3f1;--danger:#a74440;--good:#2f7456;--line:#d9e0df;
-  --shadow:0 9px 28px rgba(25,48,55,.11);--radius:24px
+ --bg:#f4f1ea;--card:#fff;--ink:#203237;--muted:#6f7e81;--accent:#315b62;
+ --accent2:#dfeae8;--soft:#eef4f2;--line:#d9e2df;--danger:#a84543;--good:#287552;
+ --amber:#8a6817;--shadow:0 10px 30px rgba(28,50,56,.10);--r:23px
 }
-@media (prefers-color-scheme:dark){
- :root{--bg:#101718;--card:#192224;--ink:#edf3f2;--muted:#a6b3b3;--accent:#82b1bb;
- --soft:#243638;--soft2:#1e2b2d;--danger:#b95651;--good:#6fbe96;--line:#314143;
- --shadow:0 9px 28px rgba(0,0,0,.25)}
+[data-theme="dark"]{
+ --bg:#101718;--card:#192224;--ink:#f0f4f3;--muted:#a8b4b4;--accent:#83b6bf;
+ --accent2:#263b3e;--soft:#1f2d2f;--line:#334346;--danger:#c86660;--good:#79c49d;
+ --amber:#dfbb5f;--shadow:0 10px 30px rgba(0,0,0,.28)
 }
-*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.app{max-width:680px;margin:auto;padding:calc(18px + env(safe-area-inset-top)) 16px calc(92px + env(safe-area-inset-bottom))}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-h1{margin:0;font-size:31px}.sub{color:var(--muted);font-size:14px;margin-top:4px}.pill{background:var(--soft);padding:9px 12px;border-radius:999px;font-size:13px;font-weight:800}
-.card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin:13px 0}
-.state{font-weight:900;color:var(--accent);margin-bottom:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.metric{background:var(--soft2);border-radius:18px;padding:14px}.metric span{display:block;color:var(--muted);font-size:12px}.metric b{display:block;font-size:24px;margin-top:5px}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-button{border:0;border-radius:17px;padding:14px 12px;min-height:56px;font-weight:850;font-size:16px;background:var(--accent);color:white}
-button.secondary{background:var(--soft);color:var(--ink)} button.danger{background:var(--danger)}
-button.wide{grid-column:1/-1} button:disabled{opacity:.42}.mini{min-height:40px;padding:8px 11px;font-size:13px}
-.row{display:flex;gap:10px;align-items:center;justify-content:space-between}.smallgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+*{box-sizing:border-box}html{background:var(--bg)}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
+.app{max-width:720px;margin:auto;padding:calc(16px + env(safe-area-inset-top)) 15px calc(98px + env(safe-area-inset-bottom))}
+header{display:flex;justify-content:space-between;align-items:flex-start;margin:2px 2px 13px}
+h1{font-size:30px;margin:0;letter-spacing:-.7px}.sub{font-size:14px;color:var(--muted);margin-top:4px}.pill{background:var(--accent2);color:var(--accent);padding:9px 12px;border-radius:999px;font-weight:850;font-size:13px;white-space:nowrap}
+.card{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);margin:12px 0}
+.stateRow{display:flex;justify-content:space-between;align-items:center;gap:10px}.state{font-weight:900;color:var(--accent);font-size:18px}.location{font-size:13px;color:var(--muted)}
+.progress{height:11px;background:var(--soft);border-radius:999px;overflow:hidden;margin:15px 0 4px}.progress>div{height:100%;background:var(--accent);width:0%;transition:width .25s}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.metric{background:var(--soft);border-radius:17px;padding:13px}.metric span{display:block;color:var(--muted);font-size:12px}.metric b{display:block;font-size:22px;margin-top:4px;font-variant-numeric:tabular-nums}.metric .small{font-size:18px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions button.primaryAction{grid-column:1/-1;min-height:68px;font-size:19px}
+button{border:0;border-radius:16px;min-height:55px;padding:13px 12px;font-size:16px;font-weight:850;background:var(--accent);color:#fff;cursor:pointer}
+button.secondary{background:var(--accent2);color:var(--ink)}button.ghost{background:var(--soft);color:var(--ink)}button.danger{background:var(--danger)}button.good{background:var(--good)}
+button.wide{grid-column:1/-1}button.mini{min-height:38px;padding:8px 11px;font-size:13px;border-radius:12px}button:disabled{opacity:.38}
+.quickline{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}.quickline button{font-size:13px;min-height:44px;padding:8px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.badge{display:inline-block;padding:5px 8px;border-radius:999px;background:var(--accent2);font-size:12px;font-weight:800}
+.timeline{margin-top:8px}.entry{display:grid;grid-template-columns:58px 1fr auto;gap:9px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}.entry:last-child{border-bottom:0}.time{font-weight:850;font-variant-numeric:tabular-nums}.desc{font-size:14px;line-height:1.32}.muted{color:var(--muted)}.positive{color:var(--good)}.negative{color:var(--danger)}.warning{color:var(--amber)}
 section{display:none}section.active{display:block}
-nav{position:fixed;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--card) 94%,transparent);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:8px 8px calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:center;z-index:10}
-nav button{background:transparent;color:var(--muted);font-size:12px;min-height:50px;padding:7px 11px;border-radius:13px}nav button.active{background:var(--soft);color:var(--accent)}
-label{display:block;color:var(--muted);font-size:13px;margin:12px 0 6px}input,select{width:100%;padding:13px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:13px;font-size:16px}
-table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.right{text-align:right}
-.muted{color:var(--muted)}.positive{color:var(--good)}.negative{color:var(--danger)}
-.timeline{margin-top:8px}.entry{display:grid;grid-template-columns:58px 1fr auto;gap:9px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.entry:last-child{border-bottom:0}.entry .time{font-variant-numeric:tabular-nums;font-weight:800}.entry .desc{font-size:14px}.entry button{min-height:34px;padding:6px 9px;font-size:12px}
-.badge{display:inline-block;background:var(--soft);border-radius:999px;padding:5px 8px;font-size:12px;font-weight:750}
-dialog{border:0;border-radius:22px;max-width:530px;width:calc(100% - 26px);padding:20px;background:var(--card);color:var(--ink);box-shadow:var(--shadow)}dialog::backdrop{background:rgba(0,0,0,.4)}
-.notice{font-size:13px;line-height:1.45;color:var(--muted)}.hr{height:1px;background:var(--line);margin:16px 0}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:20;background:color-mix(in srgb,var(--card) 94%,transparent);backdrop-filter:blur(15px);border-top:1px solid var(--line);padding:7px 6px calc(7px + env(safe-area-inset-bottom));display:flex;justify-content:center}
+nav button{background:transparent;color:var(--muted);min-height:52px;padding:6px 14px;font-size:12px;border-radius:13px}nav button.active{background:var(--accent2);color:var(--accent)}
+label{display:block;color:var(--muted);font-size:13px;margin:12px 0 6px}input,select,textarea{width:100%;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:13px;padding:13px;font-size:16px;font-family:inherit}textarea{min-height:80px;resize:vertical}
+dialog{border:0;border-radius:24px;width:calc(100% - 26px);max-width:560px;max-height:88vh;overflow:auto;background:var(--card);color:var(--ink);padding:20px;box-shadow:var(--shadow)}dialog::backdrop{background:rgba(0,0,0,.42)}
+.dialogTitle{font-size:22px;font-weight:900;margin-bottom:6px}.choiceGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.choiceGrid button{background:var(--soft);color:var(--ink);text-align:left;min-height:62px}.choiceGrid button.wide{grid-column:1/-1}.dialogActions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.calendarHead{display:flex;align-items:center;justify-content:space-between}.calendarGrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:12px}.dow{text-align:center;font-size:11px;color:var(--muted);padding:5px 0}.day{aspect-ratio:1/1;border-radius:13px;background:var(--soft);color:var(--ink);min-height:0;padding:5px;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;font-size:13px}.day.out{opacity:.32}.day.today{outline:2px solid var(--accent)}.day .dot{font-size:11px}.day.worked{background:var(--accent2)}.day.leave{background:#e8e3f4}.day.sick{background:#f4dddd}.day.off{background:#e8e8e8}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 5px;border-bottom:1px solid var(--line);text-align:left}.right{text-align:right}
+.notice{font-size:13px;color:var(--muted);line-height:1.5}.hidden{display:none!important}.hr{height:1px;background:var(--line);margin:16px 0}
+.summaryText{line-height:1.6;margin:10px 0 0}.statGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:var(--ink);color:var(--card);padding:10px 14px;border-radius:999px;font-size:13px;font-weight:800;z-index:50;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1}
 </style>
 </head>
 <body>
@@ -50,250 +54,366 @@ dialog{border:0;border-radius:22px;max-width:530px;width:calc(100% - 26px);paddi
 <header><div><h1>Flexi Buddy</h1><div id="dateLabel" class="sub"></div></div><div id="balancePill" class="pill">0m flexi</div></header>
 
 <section id="today" class="active">
-<div class="card">
- <div id="state" class="state">Not working</div>
- <div class="grid">
-  <div class="metric"><span>Worked today</span><b id="worked">0h 00m</b></div>
-  <div class="metric"><span>Remaining</span><b id="remaining">8h 00m</b></div>
-  <div class="metric"><span>Flexi if finished now</span><b id="todayFlexi">0m</b></div>
-  <div class="metric"><span>Estimated finish</span><b id="estimate">—</b></div>
+ <div class="card">
+  <div class="stateRow"><div><div id="state" class="state">Ready to start</div><div id="where" class="location">No location set</div></div><span id="breakBadge" class="badge">0/2 breaks</span></div>
+  <div class="progress"><div id="progressBar"></div></div>
+  <div class="metrics">
+   <div class="metric"><span>Worked</span><b id="worked">0h 00m</b></div>
+   <div class="metric"><span>Remaining</span><b id="remaining">8h 00m</b></div>
+   <div class="metric"><span>Today’s flexi</span><b id="todayFlexi">0m</b></div>
+   <div class="metric"><span>Likely finish</span><b id="estimate" class="small">—</b></div>
+  </div>
  </div>
-</div>
 
-<div class="card">
- <div class="actions">
-  <button id="start" onclick="recordNow('work')">🟢 Start work</button>
-  <button id="resume" onclick="recordNow('work')">▶️ Resume</button>
-  <button class="secondary" onclick="recordNow('paid_break')">☕ Paid break</button>
-  <button class="secondary" onclick="recordNow('unpaid_break')">⏸ Unpaid break</button>
-  <button class="secondary" onclick="openQuick('work_travel')">🚗 Work travel</button><button class="secondary" onclick="openQuick('pause')">⏸ Pause</button><button class="secondary wide" onclick="recordNow('lunch')">🍽 Lunch</button>
-  <button class="danger wide" onclick="recordNow('finish')">🔴 Finish work</button><button class="secondary wide" onclick="explainMyDay()">✨ Explain my day</button>
+ <div class="card">
+  <div id="actionArea" class="actions"></div>
+  <div class="quickline">
+   <button class="ghost" onclick="openLocation()">📍 Location</button>
+   <button class="ghost" onclick="openForgot()">🕒 Forgot</button>
+   <button class="ghost" onclick="openMore()">••• More</button>
+  </div>
  </div>
- <div class="smallgrid">
-  <button class="secondary mini" onclick="openAdd()">🕒 I forgot</button>
-  <button class="secondary mini" onclick="undoLast()">↩️ Undo last</button>
- </div>
-</div>
 
-<div class="card">
- <div class="row"><b>Today’s timeline</b><span id="breakBadge" class="badge">0/2 paid breaks</span></div>
- <div id="timeline" class="timeline"></div>
-</div>
-
-<div id="explainCard" class="card" style="display:none"><div class="row"><b>Explain my day</b><button class="secondary mini" onclick="copyExplanation()">Copy</button></div><p id="explanationText" style="line-height:1.55"></p></div><div class="card">
- <b>This week</b>
- <div class="grid" style="margin-top:12px">
-  <div class="metric"><span>Hours worked</span><b id="weekWorked">0h 00m</b></div>
-  <div class="metric"><span>Flexi change</span><b id="weekFlexi">0m</b></div>
+ <div class="card">
+  <div class="row"><b>Today</b><button class="secondary mini" onclick="undoLast()">↩ Undo</button></div>
+  <div id="timeline" class="timeline"></div>
  </div>
-</div>
+
+ <div id="explainCard" class="card hidden">
+  <div class="row"><b>Explain my day</b><button class="secondary mini" onclick="copyExplanation()">Copy</button></div>
+  <p id="explanationText" class="summaryText"></p>
+ </div>
+
+ <div class="card">
+  <div class="row"><b>This week</b><span id="weekDates" class="muted"></span></div>
+  <div class="statGrid" style="margin-top:12px">
+   <div class="metric"><span>Worked</span><b id="weekWorked">0h 00m</b></div>
+   <div class="metric"><span>Flexi change</span><b id="weekFlexi">0m</b></div>
+  </div>
+ </div>
+</section>
+
+<section id="calendar">
+ <div class="card">
+  <div class="calendarHead"><button class="secondary mini" onclick="moveMonth(-1)">‹</button><b id="monthTitle"></b><button class="secondary mini" onclick="moveMonth(1)">›</button></div>
+  <div class="calendarGrid" id="calendarGrid"></div>
+ </div>
+ <div class="card">
+  <div class="row"><b id="selectedTitle">Selected day</b><button class="secondary mini" onclick="editSelectedDay()">Edit day</button></div>
+  <div id="selectedSummary" class="notice" style="margin-top:12px"></div>
+ </div>
 </section>
 
 <section id="leave">
-<div class="card">
- <b>Record leave or another day</b>
- <label>Date</label><input id="leaveDate" type="date">
- <label>Day type</label>
- <select id="leaveType">
-  <option value="annual_leave">🌴 Annual leave</option>
-  <option value="flexi_day">🏖 Full flexi day</option>
-  <option value="part_flexi">🕒 Part flexi</option>
-  <option value="sick">🤒 Sick leave</option>
-  <option value="dependants">👶 Dependants leave</option>
-  <option value="special">❤️ Special leave</option>
-  <option value="part_year">📅 Part-year non-working day</option>
-  <option value="bank_holiday">🏦 Bank holiday</option>
- </select>
- <label>Hours (only for part flexi or part-day annual leave)</label><input id="leaveHours" type="number" step=".25" min="0" max="24" placeholder="e.g. 3.5">
- <button style="width:100%;margin-top:14px" onclick="saveDay()">Save day</button>
- <p class="notice">A full flexi day deducts your daily target. A part-flexi entry deducts the hours entered. Authorised leave and part-year days do not reduce your flexi balance.</p>
-</div>
-<div class="card"><b>Annual leave</b><div class="grid" style="margin-top:12px"><div class="metric"><span>Used</span><b id="leaveUsed">0h</b></div><div class="metric"><span>Remaining</span><b id="leaveRemaining">—</b></div></div></div>
+ <div class="card">
+  <b>Record leave or a non-working day</b>
+  <label>Date</label><input id="leaveDate" type="date">
+  <label>Type</label>
+  <select id="leaveType">
+   <option value="annual_leave">🌴 Annual leave</option>
+   <option value="flexi_day">🏖 Full flexi day</option>
+   <option value="part_flexi">🕒 Part flexi</option>
+   <option value="sick">🤒 Sick leave</option>
+   <option value="dependants">👶 Dependants leave</option>
+   <option value="special">❤️ Special leave</option>
+   <option value="part_year">📅 Part-year non-working day</option>
+   <option value="bank_holiday">🏦 Bank holiday</option>
+  </select>
+  <label>Hours (only for part-day entries)</label><input id="leaveHours" type="number" step=".25" min="0" max="24" placeholder="e.g. 3.5">
+  <button class="wide" style="width:100%;margin-top:14px" onclick="saveDay()">Save day</button>
+ </div>
+ <div class="card"><b>Annual leave</b><div class="statGrid" style="margin-top:12px"><div class="metric"><span>Used</span><b id="leaveUsed">0h</b></div><div class="metric"><span>Remaining</span><b id="leaveRemaining">—</b></div></div></div>
 </section>
 
-<section id="history">
-<div class="card">
- <div class="row"><b>History</b><button class="secondary mini" onclick="exportCSV()">Export CSV</button></div>
- <div style="overflow:auto"><table><thead><tr><th>Date</th><th>Type</th><th class="right">Worked</th><th class="right">Flexi</th></tr></thead><tbody id="historyRows"></tbody></table></div>
-</div>
+<section id="reports">
+ <div class="card">
+  <b>Reports</b>
+  <p class="notice">Your private timeline stays detailed, while the export gives you the simple worked-time and credit figures needed for your official flexi record.</p>
+  <div class="actions">
+   <button class="secondary" onclick="exportCSV()">Export CSV</button>
+   <button class="secondary" onclick="exportBackup()">Backup data</button>
+   <button class="secondary wide" onclick="document.getElementById('restoreInput').click()">Restore backup</button>
+  </div>
+  <input class="hidden" id="restoreInput" type="file" accept="application/json" onchange="restoreBackup(event)">
+ </div>
+ <div class="card">
+  <b>Recent days</b>
+  <div style="overflow:auto;margin-top:8px"><table><thead><tr><th>Date</th><th>Type</th><th class="right">Worked</th><th class="right">Flexi</th></tr></thead><tbody id="historyRows"></tbody></table></div>
+ </div>
 </section>
 
 <section id="settings">
-<div class="card">
- <b>Work settings</b>
- <label>Daily target hours</label><input id="targetHours" type="number" step=".25" min="0" max="24">
- <label>Paid break allowance per break (minutes)</label><input id="paidLimit" type="number" min="0" max="120">
- <label>Number of paid breaks each day</label><input id="paidCount" type="number" min="0" max="10">
- <label>Starting flexi balance (minutes)</label><input id="startBalance" type="number">
- <label>Annual leave entitlement (hours, optional)</label><input id="leaveEntitlement" type="number" step=".25" min="0">
- <label>Default work location</label>
- <select id="defaultLocation"><option>Home</option><option>Office</option><option>Home visits</option><option>Training</option><option>Other</option></select>
- <button style="width:100%;margin-top:14px" onclick="saveSettings()">Save settings</button>
-</div>
-<div class="card">
- <b>Break reminders</b>
- <p class="notice">When installed on your Home Screen, Flexi Buddy can try to notify you when a paid break reaches its allowance. Keep the app installed and allow notifications when asked.</p>
- <button class="secondary" style="width:100%" onclick="enableNotifications()">Enable notifications</button>
-</div>
-<div class="card">
- <b>Backup and restore</b>
- <div class="smallgrid">
-  <button class="secondary mini" onclick="backup()">Download backup</button>
-  <button class="secondary mini" onclick="document.getElementById('restoreFile').click()">Restore backup</button>
+ <div class="card">
+  <b>Work rules</b>
+  <label>Daily target hours</label><input id="targetHours" type="number" step=".25" min="0">
+  <label>Paid break minutes per break</label><input id="paidLimit" type="number" min="0">
+  <label>Number of paid breaks</label><input id="paidCount" type="number" min="0">
+  <label style="display:flex;align-items:center;gap:10px;color:var(--ink);font-size:15px">
+   <input id="autoConvertPaidBreak" type="checkbox" style="width:auto;transform:scale(1.25)">
+   Automatically count time over the paid allowance as unpaid
+  </label>
+  <label>Starting flexi balance (minutes)</label><input id="startBalance" type="number">
+  <label>Annual leave allowance (hours)</label><input id="leaveEntitlement" type="number" step=".5" min="0">
+  <label>Usual starting location</label>
+  <select id="defaultLocation"><option>Home</option><option>Office</option><option>Home visit</option><option>Training</option><option>Other</option></select>
+  <label>Usual commute (minutes)</label><input id="commuteMinutes" type="number" min="0" step="1" placeholder="e.g. 20">
+  <button style="width:100%;margin-top:14px" onclick="saveSettings()">Save settings</button>
  </div>
- <input id="restoreFile" type="file" accept=".json,application/json" hidden onchange="restoreBackup(this)">
- <button class="danger" style="width:100%;margin-top:10px" onclick="resetAll()">Delete all data</button>
-</div>
+ <div class="card">
+  <div class="row"><b>Appearance</b><button class="secondary mini" onclick="toggleTheme()">Toggle light/dark</button></div>
+  <p class="notice">Data is stored privately on this device. Use Backup data regularly, especially before replacing your phone or clearing Safari data.</p>
+ </div>
 </section>
 </div>
 
 <nav>
-<button class="active" onclick="showTab('today',this)">Today</button>
-<button onclick="showTab('leave',this)">Leave</button>
-<button onclick="showTab('history',this)">History</button>
-<button onclick="showTab('settings',this)">Settings</button>
+ <button class="active" onclick="showTab('today',this)">🏠<br>Today</button>
+ <button onclick="showTab('calendar',this)">📅<br>Calendar</button>
+ <button onclick="showTab('leave',this)">🌴<br>Leave</button>
+ <button onclick="showTab('reports',this)">📄<br>Reports</button>
+ <button onclick="showTab('settings',this)">⚙️<br>Settings</button>
 </nav>
 
+<div id="toast" class="toast"></div>
+
+<dialog id="startDialog">
+ <div class="dialogTitle">Where are you starting?</div>
+ <div class="choiceGrid">
+  <button onclick="startAt('Home')">🏠 Home</button><button onclick="startAt('Office')">🏢 Office</button>
+  <button onclick="startAt('Home visit')">👤 Home visit</button><button onclick="startAt('Training')">🎓 Training</button>
+  <button class="wide" onclick="customStart()">📍 Somewhere else…</button>
+ </div>
+ <div class="dialogActions"><button class="secondary wide" onclick="startDialog.close()">Cancel</button></div>
+</dialog>
+
+<dialog id="pauseDialog">
+ <div class="dialogTitle">Why are you pausing?</div>
+ <p class="notice">Pause time does not count as work and does not use one of your paid breaks.</p>
+ <div class="choiceGrid">
+  <button onclick="pauseFor('Commute to office')">🚗 Commute to office</button>
+  <button onclick="pauseFor('School / nursery')">👧 School / nursery</button>
+  <button onclick="pauseFor('Appointment')">🩺 Appointment</button>
+  <button onclick="pauseFor('Personal errand')">🛍 Personal errand</button>
+  <button onclick="pauseFor('Delivery / waiting')">📦 Delivery / waiting</button>
+  <button onclick="pauseFor('Personal phone call')">📞 Personal phone call</button>
+  <button class="wide" onclick="customPause()">✏️ Other reason…</button>
+ </div>
+ <div class="dialogActions"><button class="secondary wide" onclick="pauseDialog.close()">Cancel</button></div>
+</dialog>
+
+<dialog id="locationDialog">
+ <div class="dialogTitle">Change location</div>
+ <p class="notice">This keeps the timer running and simply adds a note to your diary.</p>
+ <div class="choiceGrid">
+  <button onclick="changeLocation('Home')">🏠 Home</button><button onclick="changeLocation('Office')">🏢 Office</button>
+  <button onclick="changeLocation('Home visit')">👤 Home visit</button><button onclick="changeLocation('Training')">🎓 Training</button>
+  <button class="wide" onclick="customLocation()">📍 Somewhere else…</button>
+ </div>
+ <div class="dialogActions"><button class="secondary wide" onclick="locationDialog.close()">Cancel</button></div>
+</dialog>
+
+<dialog id="moreDialog">
+ <div class="dialogTitle">More actions</div>
+ <div class="choiceGrid">
+  <button onclick="openCredit()">➕ Add credit</button>
+  <button onclick="explainMyDay();moreDialog.close()">✨ Explain my day</button>
+  <button onclick="finishCheck();moreDialog.close()">✅ Check my day</button>
+  <button onclick="openForgot();moreDialog.close()">🕒 Add forgotten entry</button>
+ </div>
+ <div class="dialogActions"><button class="secondary wide" onclick="moreDialog.close()">Close</button></div>
+</dialog>
+
+<dialog id="creditDialog">
+ <div class="dialogTitle">Add a credit</div>
+ <label>Minutes</label>
+ <div class="choiceGrid">
+  <button onclick="setCredit(15)">15 minutes</button><button onclick="setCredit(30)">30 minutes</button>
+  <button onclick="setCredit(45)">45 minutes</button><button onclick="setCredit(60)">60 minutes</button>
+ </div>
+ <label>Custom minutes</label><input id="creditMinutes" type="number" min="0" step="1">
+ <label>Reason (optional)</label><input id="creditNote" type="text" placeholder="e.g. manager-authorised credit">
+ <div class="dialogActions"><button class="secondary" onclick="creditDialog.close()">Cancel</button><button onclick="saveCredit()">Save credit</button></div>
+</dialog>
+
 <dialog id="entryDialog">
-<h3 id="dialogTitle">Add an entry</h3>
-<label>Entry</label>
-<select id="entryType"><option value="work">Start/resume work</option><option value="paid_break">Start paid break</option><option value="unpaid_break">Start unpaid break</option><option value="lunch">Start lunch</option><option value="work_travel">Work travel (counts as work)</option><option value="pause">Pause (does not count)</option><option value="credit">Add credit</option><option value="finish">Finish work</option></select>
-<label>Date and time</label><input id="entryTime" type="datetime-local">
-<label>Note or reason</label><input id="entryNote" type="text" placeholder="Type any explanation"><label>Credit minutes (only for a credit entry)</label><input id="entryCredit" type="number" min="0" step="1" placeholder="e.g. 15"><label>Location (used for work entries)</label><select id="entryLocation"><option>Home</option><option>Office</option><option>Home visits</option><option>Training</option><option>Other</option></select>
-<div class="smallgrid"><button class="secondary" onclick="closeDialog()">Cancel</button><button onclick="saveEntry()">Save</button></div>
+ <div id="entryTitle" class="dialogTitle">Add an entry</div>
+ <label>Entry type</label>
+ <select id="entryType">
+  <option value="work">Started/resumed work</option><option value="paid_break">Paid break</option>
+  <option value="lunch">Lunch</option><option value="pause">Pause</option>
+  <option value="location">Location change</option><option value="credit">Credit</option><option value="finish">Finish work</option>
+ </select>
+ <label>Date and time</label><input id="entryTime" type="datetime-local">
+ <label>Location</label><input id="entryLocation" type="text">
+ <label>Note or reason</label><input id="entryNote" type="text">
+ <label>Credit minutes</label><input id="entryCredit" type="number" min="0">
+ <div class="dialogActions"><button class="secondary" onclick="entryDialog.close()">Cancel</button><button onclick="saveEntry()">Save</button></div>
+ <button id="deleteEntryBtn" class="danger hidden" style="width:100%;margin-top:10px" onclick="deleteEntry()">Delete entry</button>
 </dialog>
 
 <script>
 const KEY='flexiBuddyDataV1';
-let editingId=null, reminderTimer=null;
-function defaults(){return {settings:{targetMinutes:480,paidBreakLimit:15,paidBreakCount:2,startingBalance:0,annualLeaveHours:0,defaultLocation:'Home'},events:[],days:[]}}
-function load(){let d;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){};d=d||defaults();d.settings={...defaults().settings,...(d.settings||{})};d.events=(d.events||[]).map((e,i)=>({...e,id:e.id||('e'+e.time+i)}));d.days=d.days||[];return d}
-let data=load();
+const defaults=()=>({settings:{targetMinutes:480,paidBreakLimit:15,paidBreakCount:2,startingBalance:0,annualLeaveHours:0,defaultLocation:'Home',commuteMinutes:20,autoConvertPaidBreak:true,theme:'system'},events:[],days:[]});
+function load(){
+ let d;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+ d=d||defaults();d.settings={...defaults().settings,...(d.settings||{})};d.events=(d.events||[]).map((e,i)=>({...e,id:e.id||('e'+e.time+i)}));d.days=d.days||[];
+ return d
+}
+let data=load(),editingId=null,calendarCursor=new Date(),selectedDate=null,reminderTimer=null;
+const $=id=>document.getElementById(id),pad=n=>String(n).padStart(2,'0');
+const dayKey=d=>{d=new Date(d);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
+const fmt=m=>{m=Math.round(Number(m)||0);let s=m<0?'-':m>0?'+':'';m=Math.abs(m);let h=Math.floor(m/60),r=m%60;return h?`${s}${h}h ${pad(r)}m`:`${s}${r}m`};
+const clock=t=>new Date(t).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+const labels={work:'Started/resumed work',paid_break:'Paid break',lunch:'Lunch',pause:'Paused',location:'Location changed',credit:'Credit added',finish:'Finished work',unpaid_break:'Unpaid break',work_travel:'Work travel'};
+const icons={work:'🟢',paid_break:'☕',lunch:'🍽',pause:'⏸',location:'📍',credit:'➕',finish:'🔴',unpaid_break:'⏸',work_travel:'🚗'};
 function persist(){localStorage.setItem(KEY,JSON.stringify(data));render()}
-const pad=n=>String(n).padStart(2,'0');
-const key=d=>{d=new Date(d);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
-const fmt=m=>{m=Math.round(m);let sign=m<0?'-':m>0?'+':'';m=Math.abs(m);let h=Math.floor(m/60),r=m%60;return h?`${sign}${h}h ${pad(r)}m`:`${sign}${r}m`}
-const time=t=>new Date(t).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-const labels={work:'Started/resumed work',paid_break:'Paid break',unpaid_break:'Unpaid break',lunch:'Lunch',work_travel:'Work travel',pause:'Paused',credit:'Credit added',finish:'Finished work'};
-const icons={work:'🟢',paid_break:'☕',unpaid_break:'⏸',lunch:'🍽',work_travel:'🚗',pause:'⏸',credit:'➕',finish:'🔴'};
-function eventsFor(d){return data.events.filter(e=>key(e.time)===d).sort((a,b)=>a.time-b.time)}
+function toast(s){$('toast').textContent=s;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1500)}
+function eventsFor(d){return data.events.filter(e=>dayKey(e.time)===d).sort((a,b)=>a.time-b.time)}
+function stateFor(d=dayKey(Date.now())){let e=eventsFor(d);if(!e.length)return null;let t=e[e.length-1].type;return t==='finish'?null:t}
+function latestLocation(d=dayKey(Date.now())){let e=eventsFor(d).filter(x=>x.location);return e.length?e[e.length-1].location:''}
 function calc(d,live=true){
  let ev=eventsFor(d),work=0,paid=0,unpaid=0,paidSessions=0;
  for(let i=0;i<ev.length;i++){
-  let e=ev[i],n=ev[i+1],end=n?n.time:((live&&d===key(Date.now())&&e.type!=='finish')?Date.now():e.time),mins=Math.max(0,(end-e.time)/60000);
-  if(e.type==='work'||e.type==='work_travel')work+=mins;
-  if(e.type==='paid_break'){paidSessions++;let allowance=paidSessions<=data.settings.paidBreakCount?data.settings.paidBreakLimit:0;paid+=Math.min(mins,allowance);unpaid+=Math.max(0,mins-allowance)}
-  if(e.type==='unpaid_break'||e.type==='lunch')unpaid+=mins;
+  let e=ev[i],n=ev[i+1],end=n?n.time:((live&&d===dayKey(Date.now())&&e.type!=='finish')?Date.now():e.time),mins=Math.max(0,(end-e.time)/60000);
+  if(['work','location','work_travel'].includes(e.type))work+=mins;
+  if(e.type==='paid_break'){
+   paidSessions++;
+   let allowance=paidSessions<=data.settings.paidBreakCount?data.settings.paidBreakLimit:0;
+   if(data.settings.autoConvertPaidBreak!==false){
+    paid+=Math.min(mins,allowance);
+    unpaid+=Math.max(0,mins-allowance);
+   }else{
+    paid+=mins;
+   }
+  }
+  if(['pause','lunch','unpaid_break'].includes(e.type))unpaid+=mins;
  }
- let credit=ev.filter(e=>e.type==='credit').reduce((s,e)=>s+Number(e.creditMinutes||0),0);return {work,paid,unpaid,paidSessions,credit,events:ev}
+ let credit=ev.filter(e=>e.type==='credit').reduce((s,e)=>s+Number(e.creditMinutes||0),0);
+ return {work,paid,unpaid,paidSessions,credit,events:ev}
 }
-function current(){let e=eventsFor(key(Date.now()));if(!e.length)return null;let t=e[e.length-1].type;return t==='finish'?null:t}
-function hasFinished(d){let e=eventsFor(d);return e.some(x=>x.type==='finish')}
 function special(d){return data.days.find(x=>x.date===d)}
+function hasFinished(d){return eventsFor(d).some(x=>x.type==='finish')}
 function flexFor(d,live=false){
- let s=special(d);if(s){if(s.type==='flexi_day')return -data.settings.targetMinutes;if(s.type==='part_flexi')return -(Number(s.hours||0)*60);return 0}
- let e=eventsFor(d);if(!e.length)return 0;
- if(!live && d===key(Date.now()) && !hasFinished(d))return 0;
+ let s=special(d);if(s){if(s.type==='flexi_day')return-data.settings.targetMinutes;if(s.type==='part_flexi')return-(Number(s.hours||0)*60);return 0}
+ let ev=eventsFor(d);if(!ev.length)return 0;if(!live&&d===dayKey(Date.now())&&!hasFinished(d))return 0;
  let c=calc(d,live);return Math.round(c.work+c.credit-data.settings.targetMinutes)
 }
-function runningBalance(){
- let today=key(Date.now()),dates=new Set(data.events.map(e=>key(e.time)));data.days.forEach(d=>dates.add(d.date));
- return data.settings.startingBalance+[...dates].reduce((sum,d)=>sum+(d===today&&!hasFinished(d)&&!special(d)?0:flexFor(d,false)),0)
+function runningBalance(){let today=dayKey(Date.now()),dates=new Set(data.events.map(e=>dayKey(e.time)));data.days.forEach(x=>dates.add(x.date));return data.settings.startingBalance+[...dates].reduce((s,d)=>s+(d===today&&!hasFinished(d)&&!special(d)?0:flexFor(d,false)),0)}
+function addEvent(type,extra={}){data.events.push({id:'e'+Date.now()+Math.random().toString(16).slice(2),type,time:Date.now(),...extra});persist()}
+function openStart(){$('startDialog').showModal()}
+function startAt(location){$('startDialog').close();addEvent('work',{location});toast('Work started')}
+function customStart(){let v=prompt('Where are you starting?');if(v){$('startDialog').close();startAt(v.trim())}}
+function openPause(){$('pauseDialog').showModal()}
+function pauseFor(note){$('pauseDialog').close();addEvent('pause',{note});toast('Timer paused')}
+function customPause(){let v=prompt('Why are you pausing?');if(v){$('pauseDialog').close();pauseFor(v.trim())}}
+function resumeWork(){addEvent('work',{location:latestLocation()||data.settings.defaultLocation});toast('Work resumed')}
+function paidBreak(){addEvent('paid_break');scheduleBreakReminder();toast('Paid break started')}
+function lunch(){addEvent('lunch');toast('Lunch started')}
+function finishWork(){addEvent('finish');finishSummary()}
+function openLocation(){if(!stateFor())return toast('Start work first');$('locationDialog').showModal()}
+function changeLocation(location){$('locationDialog').close();addEvent('location',{location,note:'Location changed'});toast('Location updated')}
+function customLocation(){let v=prompt('New location');if(v){$('locationDialog').close();changeLocation(v.trim())}}
+function openMore(){$('moreDialog').showModal()}
+function openCredit(){$('moreDialog').close();$('creditMinutes').value='';$('creditNote').value='';$('creditDialog').showModal()}
+function setCredit(n){$('creditMinutes').value=n}
+function saveCredit(){let n=Number($('creditMinutes').value||0);if(!n)return alert('Enter the number of credit minutes.');$('creditDialog').close();addEvent('credit',{creditMinutes:n,note:$('creditNote').value.trim()});toast('Credit added')}
+function breakNotify(title,body){
+ if(Notification.permission==='granted'&&navigator.serviceWorker?.controller){
+  navigator.serviceWorker.ready.then(r=>r.showNotification(title,{body,icon:'icon-192.png'}))
+ }else{
+  toast(title)
+ }
 }
-function recordNow(type){
- let c=current();
- if(type==='work'&&c==='work')return;
- if(type!=='work'&&type!=='finish'&&!c)return alert('Start work first.');
- data.events.push({id:'e'+Date.now(),type,time:Date.now(),location:type==='work'?data.settings.defaultLocation:''});
- if(type==='paid_break')scheduleBreakReminder();
- persist()
-}
-function undoLast(){let e=eventsFor(key(Date.now()));if(!e.length)return alert('Nothing to undo today.');let id=e[e.length-1].id;data.events=data.events.filter(x=>x.id!==id);persist()}
 function scheduleBreakReminder(){
- clearTimeout(reminderTimer);let ms=data.settings.paidBreakLimit*60000;
- reminderTimer=setTimeout(()=>{if(current()==='paid_break'){if(Notification.permission==='granted'&&navigator.serviceWorker?.controller){navigator.serviceWorker.ready.then(r=>r.showNotification('Paid break allowance reached',{body:'Anything beyond this point will be counted as unpaid.',icon:'icon-192.png'}))}else alert('Your paid break allowance has been reached.')}},ms)
+ clearTimeout(reminderTimer);
+ let limit=Math.max(1,Number(data.settings.paidBreakLimit||15));
+ let warningAt=Math.max(0,limit-1);
+ setTimeout(()=>{
+  if(stateFor()==='paid_break')breakNotify('Paid break nearly finished',`Your paid break allowance ends in 1 minute.`)
+ },warningAt*60000);
+ reminderTimer=setTimeout(()=>{
+  if(stateFor()==='paid_break'&&data.settings.autoConvertPaidBreak!==false){
+   breakNotify('Paid break allowance reached','Any extra time is now being counted automatically as unpaid.')
+  }
+ },limit*60000)
 }
-function estimate(){
- if(!['work','work_travel'].includes(current()))return null;let x=calc(key(Date.now()),true),remaining=Math.max(0,data.settings.targetMinutes-x.work);return Date.now()+remaining*60000
+function actionButtons(){
+ let s=stateFor(),has=eventsFor(dayKey(Date.now())).length>0;
+ if(!s)return has?`<button class="primaryAction good" onclick="resumeWork()">▶️ Resume work</button><button class="secondary" onclick="openStart()">🟢 New start</button><button class="danger" onclick="finishWork()">🔴 Finish</button>`:`<button class="primaryAction" onclick="openStart()">🟢 Start work</button>`;
+ if(['pause','paid_break','lunch','unpaid_break'].includes(s))return `<button class="primaryAction good" onclick="resumeWork()">▶️ Resume work</button><button class="danger wide" onclick="finishWork()">🔴 Finish day</button>`;
+ return `<button class="secondary" onclick="paidBreak()">☕ Paid break</button><button class="secondary" onclick="lunch()">🍽 Lunch</button><button class="secondary wide" onclick="openPause()">⏸ Pause</button><button class="danger wide" onclick="finishWork()">🔴 Finish work</button>`
 }
-function weekDates(){
- let n=new Date(),day=(n.getDay()+6)%7,m=new Date(n);m.setHours(0,0,0,0);m.setDate(m.getDate()-day);return [...Array(7)].map((_,i)=>{let d=new Date(m);d.setDate(m.getDate()+i);return key(d)})
-}
+function estimate(){let s=stateFor();if(!['work','location','work_travel'].includes(s))return null;let c=calc(dayKey(Date.now()),true),rem=Math.max(0,data.settings.targetMinutes-c.work-c.credit);return Date.now()+rem*60000}
+function weekDatesList(){let n=new Date(),day=(n.getDay()+6)%7,m=new Date(n);m.setHours(0,0,0,0);m.setDate(m.getDate()-day);return [...Array(7)].map((_,i)=>{let d=new Date(m);d.setDate(m.getDate()+i);return dayKey(d)})}
 function render(){
- let now=new Date(),d=key(now),x=calc(d,true),c=current(),has=eventsFor(d).length>0;
- document.getElementById('dateLabel').textContent=now.toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'});
- document.getElementById('balancePill').textContent=fmt(runningBalance())+' flexi';
- document.getElementById('worked').textContent=fmt(x.work).replace('+','');
- document.getElementById('remaining').textContent=fmt(Math.max(0,data.settings.targetMinutes-x.work)).replace('+','');
- let tf=has?Math.round(x.work-data.settings.targetMinutes):0,tfEl=document.getElementById('todayFlexi');tfEl.textContent=fmt(tf);tfEl.className=tf>=0?'positive':'negative';
- document.getElementById('estimate').textContent=estimate()?time(estimate()):'—';
- let stateNames={work:'Currently working',work_travel:'Travelling for work',paid_break:'On a paid break',unpaid_break:'On an unpaid break',pause:'Paused',lunch:'At lunch'};document.getElementById('state').textContent=stateNames[c]||'Not working';
- document.getElementById('start').disabled=!!c||has;document.getElementById('resume').disabled=!c||c==='work';
- document.getElementById('breakBadge').textContent=`${x.paidSessions}/${data.settings.paidBreakCount} paid breaks`;
- renderTimeline();
- let wd=weekDates(),ww=wd.reduce((s,k)=>s+calc(k,k===d).work,0),wf=wd.reduce((s,k)=>s+flexFor(k,k===d),0);document.getElementById('weekWorked').textContent=fmt(ww).replace('+','');document.getElementById('weekFlexi').textContent=fmt(wf);
- renderHistory();renderLeave();
- document.getElementById('targetHours').value=data.settings.targetMinutes/60;document.getElementById('paidLimit').value=data.settings.paidBreakLimit;document.getElementById('paidCount').value=data.settings.paidBreakCount;document.getElementById('startBalance').value=data.settings.startingBalance;document.getElementById('leaveEntitlement').value=data.settings.annualLeaveHours||'';document.getElementById('defaultLocation').value=data.settings.defaultLocation;
+ let now=new Date(),d=dayKey(now),c=calc(d,true),s=stateFor(),has=eventsFor(d).length>0,loc=latestLocation(d);
+ $('dateLabel').textContent=now.toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'});
+ $('balancePill').textContent=fmt(runningBalance())+' flexi';
+ let stateNames={work:'Working',location:'Working',work_travel:'Working',paid_break:'Paid break',pause:'Paused',unpaid_break:'Paused',lunch:'Lunch'};
+ $('state').textContent=stateNames[s]||(has?'Day finished':'Ready to start');$('where').textContent=loc?`📍 ${loc}`:'No location set';
+ $('worked').textContent=fmt(c.work).replace('+','');let rem=Math.max(0,data.settings.targetMinutes-c.work-c.credit);$('remaining').textContent=fmt(rem).replace('+','');
+ let tf=has?Math.round(c.work+c.credit-data.settings.targetMinutes):0;$('todayFlexi').textContent=fmt(tf);$('todayFlexi').className=tf>=0?'positive':'negative';
+ $('estimate').textContent=estimate()?clock(estimate()):'—';$('progressBar').style.width=Math.min(100,(c.work+c.credit)/data.settings.targetMinutes*100)+'%';
+ $('breakBadge').textContent=`${c.paidSessions}/${data.settings.paidBreakCount} breaks`;$('actionArea').innerHTML=actionButtons();
+ renderTimeline();let wd=weekDatesList(),ww=wd.reduce((a,k)=>a+calc(k,k===d).work,0),wf=wd.reduce((a,k)=>a+flexFor(k,k===d),0);
+ $('weekWorked').textContent=fmt(ww).replace('+','');$('weekFlexi').textContent=fmt(wf);$('weekDates').textContent=new Date(wd[0]+'T12:00').toLocaleDateString([],{day:'numeric',month:'short'})+' – '+new Date(wd[6]+'T12:00').toLocaleDateString([],{day:'numeric',month:'short'});
+ renderCalendar();renderSelected();renderHistory();renderLeave();renderSettings()
 }
 function renderTimeline(){
- let e=eventsFor(key(Date.now()));document.getElementById('timeline').innerHTML=e.length?e.map(x=>`<div class="entry"><div class="time">${time(x.time)}</div><div class="desc">${icons[x.type]} ${labels[x.type]}${x.location?` · <span class="muted">${x.location}</span>`:''}${x.note?`<br><span class="muted">${x.note}</span>`:''}${x.type==='credit'?` · ${x.creditMinutes||0}m`:''}</div><button class="secondary" onclick="editEntry('${x.id}')">Edit</button></div>`).join(''):'<p class="notice">No entries yet today.</p>'
+ let ev=eventsFor(dayKey(Date.now()));$('timeline').innerHTML=ev.length?ev.map(e=>`<div class="entry"><div class="time">${clock(e.time)}</div><div class="desc">${icons[e.type]||'•'} ${labels[e.type]||e.type}${e.location?` · <span class="muted">${escapeHtml(e.location)}</span>`:''}${e.note&&e.note!=='Location changed'?`<br><span class="muted">${escapeHtml(e.note)}</span>`:''}${e.type==='credit'?` · ${e.creditMinutes||0}m`:''}</div><button class="secondary mini" onclick="editEntry('${e.id}')">Edit</button></div>`).join(''):'<p class="notice">Nothing recorded yet. Tap Start work when you begin.</p>'
 }
-function renderHistory(){
- let dates=new Set(data.events.map(e=>key(e.time)));data.days.forEach(x=>dates.add(x.date));let names={annual_leave:'Annual leave',flexi_day:'Full flexi day',part_flexi:'Part flexi',sick:'Sick leave',dependants:'Dependants leave',special:'Special leave',part_year:'Part-year day',bank_holiday:'Bank holiday'};
- document.getElementById('historyRows').innerHTML=[...dates].sort().reverse().slice(0,120).map(d=>{let s=special(d),x=calc(d,false),f=flexFor(d,false);return `<tr><td>${new Date(d+'T12:00').toLocaleDateString([], {day:'2-digit',month:'short',year:'2-digit'})}</td><td>${s?names[s.type]:'Working day'}</td><td class="right">${s?'—':fmt(x.work).replace('+','')}</td><td class="right ${f>=0?'positive':'negative'}">${fmt(f)}</td></tr>`}).join('')||'<tr><td colspan="4" class="muted">No records yet.</td></tr>'
-}
-function renderLeave(){
- let used=data.days.filter(x=>x.type==='annual_leave').reduce((s,x)=>s+(Number(x.hours)||data.settings.targetMinutes/60),0),ent=Number(data.settings.annualLeaveHours||0);document.getElementById('leaveUsed').textContent=used+'h';document.getElementById('leaveRemaining').textContent=ent?Math.max(0,ent-used)+'h':'—'
-}
-function showTab(id,b){document.querySelectorAll('section').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active')}
-function openQuick(type){
- editingId=null;
- document.getElementById('dialogTitle').textContent=type==='pause'?'Pause work':type==='work_travel'?'Work travel':'Add an entry';
- document.getElementById('entryType').value=type;
- document.getElementById('entryLocation').value=data.settings.defaultLocation;
- document.getElementById('entryNote').value='';
- document.getElementById('entryCredit').value='';
- document.getElementById('entryTime').value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
- document.getElementById('entryDialog').showModal()
-}
-function openAdd(){editingId=null;document.getElementById('dialogTitle').textContent='Add an entry';document.getElementById('entryType').value='work';document.getElementById('entryLocation').value=data.settings.defaultLocation;document.getElementById('entryNote').value='';document.getElementById('entryCredit').value='';document.getElementById('entryTime').value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);document.getElementById('entryDialog').showModal()}
-function editEntry(id){let e=data.events.find(x=>x.id===id);if(!e)return;editingId=id;document.getElementById('dialogTitle').textContent='Edit entry';document.getElementById('entryType').value=e.type;document.getElementById('entryLocation').value=e.location||data.settings.defaultLocation;document.getElementById('entryNote').value=e.note||'';document.getElementById('entryCredit').value=e.creditMinutes||'';document.getElementById('entryTime').value=new Date(e.time-new Date(e.time).getTimezoneOffset()*60000).toISOString().slice(0,16);document.getElementById('entryDialog').showModal()}
-function closeDialog(){document.getElementById('entryDialog').close()}
-function saveEntry(){let t=new Date(document.getElementById('entryTime').value).getTime(),type=document.getElementById('entryType').value;if(!t)return alert('Choose a date and time.');let obj={id:editingId||'e'+Date.now(),type,time:t,location:['work','work_travel'].includes(type)?document.getElementById('entryLocation').value:'',note:document.getElementById('entryNote').value.trim(),creditMinutes:type==='credit'?Number(document.getElementById('entryCredit').value||0):0};if(editingId)data.events=data.events.map(x=>x.id===editingId?obj:x);else data.events.push(obj);data.events.sort((a,b)=>a.time-b.time);closeDialog();persist()}
-function saveDay(){let date=document.getElementById('leaveDate').value||key(Date.now()),type=document.getElementById('leaveType').value,hours=Number(document.getElementById('leaveHours').value||0);data.days=data.days.filter(x=>x.date!==date);data.days.push({date,type,hours});persist();alert('Day saved.')}
-function saveSettings(){data.settings.targetMinutes=Math.round(Number(document.getElementById('targetHours').value||8)*60);data.settings.paidBreakLimit=Math.round(Number(document.getElementById('paidLimit').value||15));data.settings.paidBreakCount=Math.round(Number(document.getElementById('paidCount').value||2));data.settings.startingBalance=Math.round(Number(document.getElementById('startBalance').value||0));data.settings.annualLeaveHours=Number(document.getElementById('leaveEntitlement').value||0);data.settings.defaultLocation=document.getElementById('defaultLocation').value;persist();alert('Settings saved.')}
-async function enableNotifications(){if(!('Notification'in window))return alert('Notifications are not supported here.');let p=await Notification.requestPermission();alert(p==='granted'?'Notifications enabled.':'Notifications were not enabled.')}
+function escapeHtml(v){return String(v||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function undoLast(){let ev=eventsFor(dayKey(Date.now()));if(!ev.length)return toast('Nothing to undo');data.events=data.events.filter(x=>x.id!==ev[ev.length-1].id);persist();toast('Last action undone')}
+function finishSummary(){let d=dayKey(Date.now()),c=calc(d,false),f=Math.round(c.work+c.credit-data.settings.targetMinutes);setTimeout(()=>alert(`Day saved\n\nWorked: ${fmt(c.work).replace('+','')}\nPaid breaks: ${fmt(c.paid).replace('+','')}\nLunch / pauses: ${fmt(c.unpaid).replace('+','')}\nCredits: ${fmt(c.credit).replace('+','')}\nFlexi: ${fmt(f)}`),50)}
 function explainMyDay(){
- let d=key(Date.now()),x=calc(d,true),ev=eventsFor(d);
- if(!ev.length){alert('There are no entries to explain yet.');return}
- let first=ev.find(e=>['work','work_travel'].includes(e.type)),finish=[...ev].reverse().find(e=>e.type==='finish');
- let locations=[...new Set(ev.filter(e=>e.location).map(e=>e.location))];
- let pauses=ev.filter(e=>e.type==='pause');
- let travels=ev.filter(e=>e.type==='work_travel');
- let credits=ev.filter(e=>e.type==='credit');
- let parts=[];
- if(first)parts.push(`Started at ${time(first.time)}${first.location?' from '+first.location:''}.`);
- parts.push(`Recorded ${fmt(x.work).replace('+','')} of worked time${x.credit?` plus ${fmt(x.credit).replace('+','')} of credits`:''}.`);
- if(locations.length)parts.push(`Worked across ${locations.join(', ')}.`);
- if(travels.length)parts.push(`${travels.length} work-travel ${travels.length===1?'period was':'periods were'} recorded as working time.`);
- if(pauses.length){let reasons=pauses.map(p=>p.note).filter(Boolean);parts.push(`${pauses.length} unpaid pause ${pauses.length===1?'was':'periods were'} recorded${reasons.length?`: ${reasons.join('; ')}`:'.'}`)}
- if(x.paidSessions)parts.push(`${x.paidSessions} paid break ${x.paidSessions===1?'was':'breaks were'} recorded.`);
- if(finish)parts.push(`Finished at ${time(finish.time)}.`);
- let f=Math.round(x.work+x.credit-data.settings.targetMinutes);
- parts.push(`The day's flexi change is ${fmt(f)}.`);
- document.getElementById('explanationText').textContent=parts.join(' ');
- document.getElementById('explainCard').style.display='block';
- document.getElementById('explainCard').scrollIntoView({behavior:'smooth',block:'center'});
+ let d=dayKey(Date.now()),ev=eventsFor(d),c=calc(d,true);if(!ev.length)return toast('Nothing to explain yet');
+ let first=ev.find(e=>['work','location','work_travel'].includes(e.type)),finish=[...ev].reverse().find(e=>e.type==='finish'),parts=[];
+ if(first)parts.push(`You started work at ${clock(first.time)}${first.location?` from ${first.location}`:''}.`);
+ let locs=[...new Set(ev.filter(e=>e.location).map(e=>e.location))];if(locs.length>1)parts.push(`During the day you worked across ${locs.join(', ')}.`);
+ let pauses=ev.filter(e=>['pause','unpaid_break'].includes(e.type)),reasons=pauses.map(e=>e.note).filter(Boolean);if(pauses.length)parts.push(`You recorded ${pauses.length===1?'one unpaid pause':pauses.length+' unpaid pauses'}${reasons.length?`, including ${reasons.join(' and ')}`:''}.`);
+ let lunchEv=ev.filter(e=>e.type==='lunch');if(lunchEv.length)parts.push(`You took ${lunchEv.length===1?'a lunch break':lunchEv.length+' lunch breaks'}.`);
+ if(c.paidSessions)parts.push(`You used ${c.paidSessions===1?'one paid break':c.paidSessions+' paid breaks'}.`);
+ if(c.credit)parts.push(`${fmt(c.credit).replace('+','')} of credits were added.`);
+ if(finish)parts.push(`You finished at ${clock(finish.time)}.`);
+ let f=Math.round(c.work+c.credit-data.settings.targetMinutes);parts.push(`Your recorded worked time is ${fmt(c.work).replace('+','')}, giving a flexi change of ${fmt(f)}.`);
+ $('explanationText').textContent=parts.join(' ');$('explainCard').classList.remove('hidden');$('explainCard').scrollIntoView({behavior:'smooth',block:'center'})
 }
-function copyExplanation(){let t=document.getElementById('explanationText').textContent;navigator.clipboard?.writeText(t).then(()=>alert('Explanation copied.')).catch(()=>alert(t))}
-function exportCSV(){let dates=new Set(data.events.map(e=>key(e.time)));data.days.forEach(x=>dates.add(x.date));let rows=[['Date','Day type','Worked minutes','Paid break minutes','Unpaid/lunch minutes','Credit minutes','Flexi minutes','Timeline']];[...dates].sort().forEach(d=>{let s=special(d),x=calc(d,false),tl=eventsFor(d).map(e=>`${time(e.time)} ${labels[e.type]}${e.location?' '+e.location:''}${e.note?' - '+e.note:''}${e.type==='credit'?' '+(e.creditMinutes||0)+'m':''}`).join(' | ');rows.push([d,s?s.type:'working_day',Math.round(x.work),Math.round(x.paid),Math.round(x.unpaid),Math.round(x.credit||0),flexFor(d,false),`"${tl.replaceAll('"','""')}"`])});download(rows.map(r=>r.join(',')).join('\n'),'flexi-buddy.csv','text/csv')}
-function backup(){download(JSON.stringify(data,null,2),'flexi-buddy-backup.json','application/json')}
-function download(c,n,t){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:t}));a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
-function restoreBackup(inp){let f=inp.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!d.events||!d.days||!d.settings)throw 0;data=d;data.settings={...defaults().settings,...data.settings};persist();alert('Backup restored.')}catch(e){alert('That backup file could not be read.')}};r.readAsText(f)}
-function resetAll(){if(confirm('Delete every Flexi Buddy record from this device?')){data=defaults();persist()}}
-document.getElementById('leaveDate').value=key(Date.now());
+function copyExplanation(){navigator.clipboard?.writeText($('explanationText').textContent).then(()=>toast('Copied')).catch(()=>alert($('explanationText').textContent))}
+function finishCheck(){
+ let s=stateFor(),c=calc(dayKey(Date.now()),true),issues=[];
+ if(['pause','paid_break','lunch','unpaid_break'].includes(s))issues.push('You are currently paused or on a break.');
+ if(c.paidSessions>data.settings.paidBreakCount)issues.push('You have more paid-break entries than your allowance.');
+ if(!eventsFor(dayKey(Date.now())).some(e=>e.type==='finish'))issues.push('There is no finish entry yet.');
+ alert(issues.length?'Things to check:\n\n• '+issues.join('\n• '):'Everything looks consistent for today.')
+}
+function openForgot(){editingId=null;$('entryTitle').textContent='Add forgotten entry';$('entryType').value='work';$('entryTime').value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);$('entryLocation').value=latestLocation()||data.settings.defaultLocation;$('entryNote').value='';$('entryCredit').value='';$('deleteEntryBtn').classList.add('hidden');$('entryDialog').showModal()}
+function editEntry(id){let e=data.events.find(x=>x.id===id);if(!e)return;editingId=id;$('entryTitle').textContent='Edit entry';$('entryType').value=e.type;$('entryTime').value=new Date(e.time-new Date(e.time).getTimezoneOffset()*60000).toISOString().slice(0,16);$('entryLocation').value=e.location||'';$('entryNote').value=e.note||'';$('entryCredit').value=e.creditMinutes||'';$('deleteEntryBtn').classList.remove('hidden');$('entryDialog').showModal()}
+function saveEntry(){let t=new Date($('entryTime').value).getTime();if(!t)return alert('Choose a date and time.');let obj={id:editingId||'e'+Date.now(),type:$('entryType').value,time:t,location:$('entryLocation').value.trim(),note:$('entryNote').value.trim(),creditMinutes:Number($('entryCredit').value||0)};if(editingId){data.events=data.events.map(e=>e.id===editingId?obj:e)}else data.events.push(obj);$('entryDialog').close();persist();toast('Entry saved')}
+function deleteEntry(){if(!editingId)return;if(confirm('Delete this entry?')){data.events=data.events.filter(e=>e.id!==editingId);$('entryDialog').close();persist();toast('Entry deleted')}}
+function showTab(id,b){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');if(id==='calendar'){selectedDate=selectedDate||dayKey(Date.now());renderCalendar();renderSelected()}}
+function moveMonth(n){calendarCursor.setMonth(calendarCursor.getMonth()+n);renderCalendar()}
+function renderCalendar(){
+ let y=calendarCursor.getFullYear(),m=calendarCursor.getMonth(),first=new Date(y,m,1),start=new Date(first);start.setDate(1-((first.getDay()+6)%7));$('monthTitle').textContent=first.toLocaleDateString([],{month:'long',year:'numeric'});
+ let html=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<div class="dow">${x}</div>`).join('');
+ for(let i=0;i<42;i++){let d=new Date(start);d.setDate(start.getDate()+i);let k=dayKey(d),s=special(k),ev=eventsFor(k),cls='day '+(d.getMonth()!==m?'out ':'')+(k===dayKey(Date.now())?'today ':'');if(s)cls+=s.type==='sick'?'sick ':['annual_leave','flexi_day'].includes(s.type)?'leave ':'off ';else if(ev.length)cls+='worked ';let dot=s?'●':ev.length?'●':'';html+=`<button class="${cls}" onclick="selectDate('${k}')"><span>${d.getDate()}</span><span class="dot">${dot}</span></button>`}
+ $('calendarGrid').innerHTML=html
+}
+function selectDate(k){selectedDate=k;renderSelected()}
+function renderSelected(){if(!selectedDate)return;let s=special(selectedDate),c=calc(selectedDate,false),ev=eventsFor(selectedDate),names={annual_leave:'Annual leave',flexi_day:'Full flexi day',part_flexi:'Part flexi',sick:'Sick leave',dependants:'Dependants leave',special:'Special leave',part_year:'Part-year day',bank_holiday:'Bank holiday'};$('selectedTitle').textContent=new Date(selectedDate+'T12:00').toLocaleDateString([],{weekday:'long',day:'numeric',month:'long'});$('selectedSummary').innerHTML=s?`<b>${names[s.type]}</b>${s.hours?` · ${s.hours}h`:''}`:ev.length?`Worked ${fmt(c.work).replace('+','')} · Credits ${fmt(c.credit).replace('+','')} · Flexi ${fmt(flexFor(selectedDate,false))}<br><br>${ev.map(e=>`${clock(e.time)} ${icons[e.type]||'•'} ${labels[e.type]||e.type}${e.location?' · '+escapeHtml(e.location):''}${e.note?' · '+escapeHtml(e.note):''}`).join('<br>')}`:'No record for this day.'}
+function editSelectedDay(){if(!selectedDate)return;$('leaveDate').value=selectedDate;showTab('leave',document.querySelectorAll('nav button')[2])}
+function saveDay(){let date=$('leaveDate').value,type=$('leaveType').value,hours=Number($('leaveHours').value||0);if(!date)return alert('Choose a date.');data.days=data.days.filter(x=>x.date!==date);data.days.push({date,type,hours});persist();toast('Day saved')}
+function renderLeave(){let used=data.days.filter(x=>x.type==='annual_leave').reduce((s,x)=>s+(Number(x.hours)||data.settings.targetMinutes/60),0),ent=Number(data.settings.annualLeaveHours||0);$('leaveUsed').textContent=used+'h';$('leaveRemaining').textContent=ent?Math.max(0,ent-used)+'h':'—'}
+function renderHistory(){let dates=new Set(data.events.map(e=>dayKey(e.time)));data.days.forEach(x=>dates.add(x.date));let names={annual_leave:'Annual leave',flexi_day:'Flexi day',part_flexi:'Part flexi',sick:'Sick',dependants:'Dependants',special:'Special',part_year:'Part-year',bank_holiday:'Bank holiday'};$('historyRows').innerHTML=[...dates].sort().reverse().slice(0,120).map(d=>{let s=special(d),c=calc(d,false),f=flexFor(d,false);return `<tr><td>${new Date(d+'T12:00').toLocaleDateString([],{day:'2-digit',month:'short',year:'2-digit'})}</td><td>${s?names[s.type]:'Working day'}</td><td class="right">${s?'—':fmt(c.work).replace('+','')}</td><td class="right ${f>=0?'positive':'negative'}">${fmt(f)}</td></tr>`}).join('')||'<tr><td colspan="4" class="muted">No records yet.</td></tr>'}
+function renderSettings(){$('targetHours').value=data.settings.targetMinutes/60;$('paidLimit').value=data.settings.paidBreakLimit;$('paidCount').value=data.settings.paidBreakCount;$('autoConvertPaidBreak').checked=data.settings.autoConvertPaidBreak!==false;$('startBalance').value=data.settings.startingBalance;$('leaveEntitlement').value=data.settings.annualLeaveHours||'';$('defaultLocation').value=data.settings.defaultLocation;$('commuteMinutes').value=data.settings.commuteMinutes||'';applyTheme()}
+function saveSettings(){data.settings.targetMinutes=Math.round(Number($('targetHours').value||8)*60);data.settings.paidBreakLimit=Number($('paidLimit').value||15);data.settings.paidBreakCount=Number($('paidCount').value||2);data.settings.autoConvertPaidBreak=$('autoConvertPaidBreak').checked;data.settings.startingBalance=Number($('startBalance').value||0);data.settings.annualLeaveHours=Number($('leaveEntitlement').value||0);data.settings.defaultLocation=$('defaultLocation').value;data.settings.commuteMinutes=Number($('commuteMinutes').value||20);persist();toast('Settings saved')}
+function toggleTheme(){data.settings.theme=data.settings.theme==='dark'?'light':'dark';persist()}
+function applyTheme(){if(data.settings.theme==='dark')document.documentElement.setAttribute('data-theme','dark');else document.documentElement.removeAttribute('data-theme')}
+function exportCSV(){let dates=new Set(data.events.map(e=>dayKey(e.time)));data.days.forEach(x=>dates.add(x.date));let rows=[['Date','Day type','Worked minutes','Paid break minutes','Unpaid/lunch minutes','Credit minutes','Flexi minutes','Timeline']];[...dates].sort().forEach(d=>{let s=special(d),c=calc(d,false);rows.push([d,s?s.type:'working_day',Math.round(c.work),Math.round(c.paid),Math.round(c.unpaid),Math.round(c.credit),flexFor(d,false),eventsFor(d).map(e=>`${clock(e.time)} ${labels[e.type]||e.type}${e.location?' '+e.location:''}${e.note?' - '+e.note:''}${e.type==='credit'?' '+e.creditMinutes+'m':''}`).join(' | ')])});download('flexi-buddy.csv',rows.map(r=>r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(',')).join('\n'),'text/csv')}
+function exportBackup(){download('flexi-buddy-backup.json',JSON.stringify(data,null,2),'application/json')}
+function restoreBackup(ev){let f=ev.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!d.settings||!Array.isArray(d.events))throw 0;if(confirm('Replace current Flexi Buddy data with this backup?')){data=d;data.settings={...defaults().settings,...data.settings};persist();toast('Backup restored')}}catch(e){alert('That does not look like a valid Flexi Buddy backup.')}};r.readAsText(f)}
+function download(name,text,type){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 if('serviceWorker'in navigator)navigator.serviceWorker.register('service-worker.js');
-render();setInterval(render,15000);
+$('leaveDate').value=dayKey(Date.now());selectedDate=dayKey(Date.now());calendarCursor=new Date();render();setInterval(render,30000);
 </script>
 </body>
 </html>

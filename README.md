@@ -1,26 +1,20 @@
-# Flexi Buddy — Best Version
+# Flexi Buddy Ultimate
 
-Replace the existing files in the GitHub repository with these files.
+Replace the existing GitHub Pages files with all files from this folder.
 
-This version keeps the same local-storage key as version 1, so existing records and settings on the same GitHub Pages address should remain available.
+Key improvements:
+- One obvious main action based on your current state
+- Pause reason buttons, including commute, school/nursery, appointment and custom reason
+- Location changes keep the timer running
+- Credits moved into More because they are rarely used
+- Monthly calendar and day summaries
+- Explain My Day
+- Check My Day
+- Flexible editing, undo, CSV export and JSON backup
+- Existing Flexi Buddy records are retained because the same local-storage key is used
 
-Features:
-- Live worked-time display
-- Correct zero flexi before a day starts
-- Running balance excludes an unfinished current day
-- Two configurable paid breaks; excess time is unpaid
-- Break reminder support
-- Editable timeline
-- Weekly totals
-- Leave and part-year days
-- Annual leave allowance
-- Work locations
-- CSV export
-- JSON backup and restore
-- Dark mode
-- Offline caching
-
-- Separate unpaid pauses with typed reasons
-- Work travel that continues counting as work
-- Non-accountable or other time credits
-- Explain My Day summary with copy button
+## Paid-break handling
+- Warns one minute before the paid allowance ends.
+- Once the allowance is reached, excess time is automatically counted as unpaid.
+- This can be switched off in Settings.
+- The default remains 15 minutes per paid break and two paid breaks per day.
