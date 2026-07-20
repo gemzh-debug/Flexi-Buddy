@@ -19,3 +19,8 @@ Features:
 - JSON backup and restore
 - Dark mode
 - Offline caching
+
+- Separate unpaid pauses with typed reasons
+- Work travel that continues counting as work
+- Non-accountable or other time credits
+- Explain My Day summary with copy button

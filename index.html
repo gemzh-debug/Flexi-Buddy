@@ -66,8 +66,8 @@ dialog{border:0;border-radius:22px;max-width:530px;width:calc(100% - 26px);paddi
   <button id="resume" onclick="recordNow('work')">▶️ Resume</button>
   <button class="secondary" onclick="recordNow('paid_break')">☕ Paid break</button>
   <button class="secondary" onclick="recordNow('unpaid_break')">⏸ Unpaid break</button>
-  <button class="secondary wide" onclick="recordNow('lunch')">🍽 Lunch</button>
-  <button class="danger wide" onclick="recordNow('finish')">🔴 Finish work</button>
+  <button class="secondary" onclick="openQuick('work_travel')">🚗 Work travel</button><button class="secondary" onclick="openQuick('pause')">⏸ Pause</button><button class="secondary wide" onclick="recordNow('lunch')">🍽 Lunch</button>
+  <button class="danger wide" onclick="recordNow('finish')">🔴 Finish work</button><button class="secondary wide" onclick="explainMyDay()">✨ Explain my day</button>
  </div>
  <div class="smallgrid">
   <button class="secondary mini" onclick="openAdd()">🕒 I forgot</button>
@@ -80,7 +80,7 @@ dialog{border:0;border-radius:22px;max-width:530px;width:calc(100% - 26px);paddi
  <div id="timeline" class="timeline"></div>
 </div>
 
-<div class="card">
+<div id="explainCard" class="card" style="display:none"><div class="row"><b>Explain my day</b><button class="secondary mini" onclick="copyExplanation()">Copy</button></div><p id="explanationText" style="line-height:1.55"></p></div><div class="card">
  <b>This week</b>
  <div class="grid" style="margin-top:12px">
   <div class="metric"><span>Hours worked</span><b id="weekWorked">0h 00m</b></div>
@@ -157,9 +157,9 @@ dialog{border:0;border-radius:22px;max-width:530px;width:calc(100% - 26px);paddi
 <dialog id="entryDialog">
 <h3 id="dialogTitle">Add an entry</h3>
 <label>Entry</label>
-<select id="entryType"><option value="work">Start/resume work</option><option value="paid_break">Start paid break</option><option value="unpaid_break">Start unpaid break</option><option value="lunch">Start lunch</option><option value="finish">Finish work</option></select>
+<select id="entryType"><option value="work">Start/resume work</option><option value="paid_break">Start paid break</option><option value="unpaid_break">Start unpaid break</option><option value="lunch">Start lunch</option><option value="work_travel">Work travel (counts as work)</option><option value="pause">Pause (does not count)</option><option value="credit">Add credit</option><option value="finish">Finish work</option></select>
 <label>Date and time</label><input id="entryTime" type="datetime-local">
-<label>Location (used for work entries)</label><select id="entryLocation"><option>Home</option><option>Office</option><option>Home visits</option><option>Training</option><option>Other</option></select>
+<label>Note or reason</label><input id="entryNote" type="text" placeholder="Type any explanation"><label>Credit minutes (only for a credit entry)</label><input id="entryCredit" type="number" min="0" step="1" placeholder="e.g. 15"><label>Location (used for work entries)</label><select id="entryLocation"><option>Home</option><option>Office</option><option>Home visits</option><option>Training</option><option>Other</option></select>
 <div class="smallgrid"><button class="secondary" onclick="closeDialog()">Cancel</button><button onclick="saveEntry()">Save</button></div>
 </dialog>
 
@@ -174,18 +174,18 @@ const pad=n=>String(n).padStart(2,'0');
 const key=d=>{d=new Date(d);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
 const fmt=m=>{m=Math.round(m);let sign=m<0?'-':m>0?'+':'';m=Math.abs(m);let h=Math.floor(m/60),r=m%60;return h?`${sign}${h}h ${pad(r)}m`:`${sign}${r}m`}
 const time=t=>new Date(t).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-const labels={work:'Started/resumed work',paid_break:'Paid break',unpaid_break:'Unpaid break',lunch:'Lunch',finish:'Finished work'};
-const icons={work:'🟢',paid_break:'☕',unpaid_break:'⏸',lunch:'🍽',finish:'🔴'};
+const labels={work:'Started/resumed work',paid_break:'Paid break',unpaid_break:'Unpaid break',lunch:'Lunch',work_travel:'Work travel',pause:'Paused',credit:'Credit added',finish:'Finished work'};
+const icons={work:'🟢',paid_break:'☕',unpaid_break:'⏸',lunch:'🍽',work_travel:'🚗',pause:'⏸',credit:'➕',finish:'🔴'};
 function eventsFor(d){return data.events.filter(e=>key(e.time)===d).sort((a,b)=>a.time-b.time)}
 function calc(d,live=true){
  let ev=eventsFor(d),work=0,paid=0,unpaid=0,paidSessions=0;
  for(let i=0;i<ev.length;i++){
   let e=ev[i],n=ev[i+1],end=n?n.time:((live&&d===key(Date.now())&&e.type!=='finish')?Date.now():e.time),mins=Math.max(0,(end-e.time)/60000);
-  if(e.type==='work')work+=mins;
+  if(e.type==='work'||e.type==='work_travel')work+=mins;
   if(e.type==='paid_break'){paidSessions++;let allowance=paidSessions<=data.settings.paidBreakCount?data.settings.paidBreakLimit:0;paid+=Math.min(mins,allowance);unpaid+=Math.max(0,mins-allowance)}
   if(e.type==='unpaid_break'||e.type==='lunch')unpaid+=mins;
  }
- return {work,paid,unpaid,paidSessions,events:ev}
+ let credit=ev.filter(e=>e.type==='credit').reduce((s,e)=>s+Number(e.creditMinutes||0),0);return {work,paid,unpaid,paidSessions,credit,events:ev}
 }
 function current(){let e=eventsFor(key(Date.now()));if(!e.length)return null;let t=e[e.length-1].type;return t==='finish'?null:t}
 function hasFinished(d){let e=eventsFor(d);return e.some(x=>x.type==='finish')}
@@ -194,7 +194,7 @@ function flexFor(d,live=false){
  let s=special(d);if(s){if(s.type==='flexi_day')return -data.settings.targetMinutes;if(s.type==='part_flexi')return -(Number(s.hours||0)*60);return 0}
  let e=eventsFor(d);if(!e.length)return 0;
  if(!live && d===key(Date.now()) && !hasFinished(d))return 0;
- return Math.round(calc(d,live).work-data.settings.targetMinutes)
+ let c=calc(d,live);return Math.round(c.work+c.credit-data.settings.targetMinutes)
 }
 function runningBalance(){
  let today=key(Date.now()),dates=new Set(data.events.map(e=>key(e.time)));data.days.forEach(d=>dates.add(d.date));
@@ -214,7 +214,7 @@ function scheduleBreakReminder(){
  reminderTimer=setTimeout(()=>{if(current()==='paid_break'){if(Notification.permission==='granted'&&navigator.serviceWorker?.controller){navigator.serviceWorker.ready.then(r=>r.showNotification('Paid break allowance reached',{body:'Anything beyond this point will be counted as unpaid.',icon:'icon-192.png'}))}else alert('Your paid break allowance has been reached.')}},ms)
 }
 function estimate(){
- if(current()!=='work')return null;let x=calc(key(Date.now()),true),remaining=Math.max(0,data.settings.targetMinutes-x.work);return Date.now()+remaining*60000
+ if(!['work','work_travel'].includes(current()))return null;let x=calc(key(Date.now()),true),remaining=Math.max(0,data.settings.targetMinutes-x.work);return Date.now()+remaining*60000
 }
 function weekDates(){
  let n=new Date(),day=(n.getDay()+6)%7,m=new Date(n);m.setHours(0,0,0,0);m.setDate(m.getDate()-day);return [...Array(7)].map((_,i)=>{let d=new Date(m);d.setDate(m.getDate()+i);return key(d)})
@@ -227,7 +227,7 @@ function render(){
  document.getElementById('remaining').textContent=fmt(Math.max(0,data.settings.targetMinutes-x.work)).replace('+','');
  let tf=has?Math.round(x.work-data.settings.targetMinutes):0,tfEl=document.getElementById('todayFlexi');tfEl.textContent=fmt(tf);tfEl.className=tf>=0?'positive':'negative';
  document.getElementById('estimate').textContent=estimate()?time(estimate()):'—';
- let stateNames={work:'Currently working',paid_break:'On a paid break',unpaid_break:'On an unpaid break',lunch:'At lunch'};document.getElementById('state').textContent=stateNames[c]||'Not working';
+ let stateNames={work:'Currently working',work_travel:'Travelling for work',paid_break:'On a paid break',unpaid_break:'On an unpaid break',pause:'Paused',lunch:'At lunch'};document.getElementById('state').textContent=stateNames[c]||'Not working';
  document.getElementById('start').disabled=!!c||has;document.getElementById('resume').disabled=!c||c==='work';
  document.getElementById('breakBadge').textContent=`${x.paidSessions}/${data.settings.paidBreakCount} paid breaks`;
  renderTimeline();
@@ -236,7 +236,7 @@ function render(){
  document.getElementById('targetHours').value=data.settings.targetMinutes/60;document.getElementById('paidLimit').value=data.settings.paidBreakLimit;document.getElementById('paidCount').value=data.settings.paidBreakCount;document.getElementById('startBalance').value=data.settings.startingBalance;document.getElementById('leaveEntitlement').value=data.settings.annualLeaveHours||'';document.getElementById('defaultLocation').value=data.settings.defaultLocation;
 }
 function renderTimeline(){
- let e=eventsFor(key(Date.now()));document.getElementById('timeline').innerHTML=e.length?e.map(x=>`<div class="entry"><div class="time">${time(x.time)}</div><div class="desc">${icons[x.type]} ${labels[x.type]}${x.location?` · <span class="muted">${x.location}</span>`:''}</div><button class="secondary" onclick="editEntry('${x.id}')">Edit</button></div>`).join(''):'<p class="notice">No entries yet today.</p>'
+ let e=eventsFor(key(Date.now()));document.getElementById('timeline').innerHTML=e.length?e.map(x=>`<div class="entry"><div class="time">${time(x.time)}</div><div class="desc">${icons[x.type]} ${labels[x.type]}${x.location?` · <span class="muted">${x.location}</span>`:''}${x.note?`<br><span class="muted">${x.note}</span>`:''}${x.type==='credit'?` · ${x.creditMinutes||0}m`:''}</div><button class="secondary" onclick="editEntry('${x.id}')">Edit</button></div>`).join(''):'<p class="notice">No entries yet today.</p>'
 }
 function renderHistory(){
  let dates=new Set(data.events.map(e=>key(e.time)));data.days.forEach(x=>dates.add(x.date));let names={annual_leave:'Annual leave',flexi_day:'Full flexi day',part_flexi:'Part flexi',sick:'Sick leave',dependants:'Dependants leave',special:'Special leave',part_year:'Part-year day',bank_holiday:'Bank holiday'};
@@ -246,14 +246,47 @@ function renderLeave(){
  let used=data.days.filter(x=>x.type==='annual_leave').reduce((s,x)=>s+(Number(x.hours)||data.settings.targetMinutes/60),0),ent=Number(data.settings.annualLeaveHours||0);document.getElementById('leaveUsed').textContent=used+'h';document.getElementById('leaveRemaining').textContent=ent?Math.max(0,ent-used)+'h':'—'
 }
 function showTab(id,b){document.querySelectorAll('section').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active')}
-function openAdd(){editingId=null;document.getElementById('dialogTitle').textContent='Add an entry';document.getElementById('entryType').value='work';document.getElementById('entryLocation').value=data.settings.defaultLocation;document.getElementById('entryTime').value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);document.getElementById('entryDialog').showModal()}
-function editEntry(id){let e=data.events.find(x=>x.id===id);if(!e)return;editingId=id;document.getElementById('dialogTitle').textContent='Edit entry';document.getElementById('entryType').value=e.type;document.getElementById('entryLocation').value=e.location||data.settings.defaultLocation;document.getElementById('entryTime').value=new Date(e.time-new Date(e.time).getTimezoneOffset()*60000).toISOString().slice(0,16);document.getElementById('entryDialog').showModal()}
+function openQuick(type){
+ editingId=null;
+ document.getElementById('dialogTitle').textContent=type==='pause'?'Pause work':type==='work_travel'?'Work travel':'Add an entry';
+ document.getElementById('entryType').value=type;
+ document.getElementById('entryLocation').value=data.settings.defaultLocation;
+ document.getElementById('entryNote').value='';
+ document.getElementById('entryCredit').value='';
+ document.getElementById('entryTime').value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
+ document.getElementById('entryDialog').showModal()
+}
+function openAdd(){editingId=null;document.getElementById('dialogTitle').textContent='Add an entry';document.getElementById('entryType').value='work';document.getElementById('entryLocation').value=data.settings.defaultLocation;document.getElementById('entryNote').value='';document.getElementById('entryCredit').value='';document.getElementById('entryTime').value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);document.getElementById('entryDialog').showModal()}
+function editEntry(id){let e=data.events.find(x=>x.id===id);if(!e)return;editingId=id;document.getElementById('dialogTitle').textContent='Edit entry';document.getElementById('entryType').value=e.type;document.getElementById('entryLocation').value=e.location||data.settings.defaultLocation;document.getElementById('entryNote').value=e.note||'';document.getElementById('entryCredit').value=e.creditMinutes||'';document.getElementById('entryTime').value=new Date(e.time-new Date(e.time).getTimezoneOffset()*60000).toISOString().slice(0,16);document.getElementById('entryDialog').showModal()}
 function closeDialog(){document.getElementById('entryDialog').close()}
-function saveEntry(){let t=new Date(document.getElementById('entryTime').value).getTime(),type=document.getElementById('entryType').value;if(!t)return alert('Choose a date and time.');let obj={id:editingId||'e'+Date.now(),type,time:t,location:type==='work'?document.getElementById('entryLocation').value:''};if(editingId)data.events=data.events.map(x=>x.id===editingId?obj:x);else data.events.push(obj);data.events.sort((a,b)=>a.time-b.time);closeDialog();persist()}
+function saveEntry(){let t=new Date(document.getElementById('entryTime').value).getTime(),type=document.getElementById('entryType').value;if(!t)return alert('Choose a date and time.');let obj={id:editingId||'e'+Date.now(),type,time:t,location:['work','work_travel'].includes(type)?document.getElementById('entryLocation').value:'',note:document.getElementById('entryNote').value.trim(),creditMinutes:type==='credit'?Number(document.getElementById('entryCredit').value||0):0};if(editingId)data.events=data.events.map(x=>x.id===editingId?obj:x);else data.events.push(obj);data.events.sort((a,b)=>a.time-b.time);closeDialog();persist()}
 function saveDay(){let date=document.getElementById('leaveDate').value||key(Date.now()),type=document.getElementById('leaveType').value,hours=Number(document.getElementById('leaveHours').value||0);data.days=data.days.filter(x=>x.date!==date);data.days.push({date,type,hours});persist();alert('Day saved.')}
 function saveSettings(){data.settings.targetMinutes=Math.round(Number(document.getElementById('targetHours').value||8)*60);data.settings.paidBreakLimit=Math.round(Number(document.getElementById('paidLimit').value||15));data.settings.paidBreakCount=Math.round(Number(document.getElementById('paidCount').value||2));data.settings.startingBalance=Math.round(Number(document.getElementById('startBalance').value||0));data.settings.annualLeaveHours=Number(document.getElementById('leaveEntitlement').value||0);data.settings.defaultLocation=document.getElementById('defaultLocation').value;persist();alert('Settings saved.')}
 async function enableNotifications(){if(!('Notification'in window))return alert('Notifications are not supported here.');let p=await Notification.requestPermission();alert(p==='granted'?'Notifications enabled.':'Notifications were not enabled.')}
-function exportCSV(){let dates=new Set(data.events.map(e=>key(e.time)));data.days.forEach(x=>dates.add(x.date));let rows=[['Date','Day type','Worked minutes','Paid break minutes','Unpaid/lunch minutes','Flexi minutes','Timeline']];[...dates].sort().forEach(d=>{let s=special(d),x=calc(d,false),tl=eventsFor(d).map(e=>`${time(e.time)} ${labels[e.type]}${e.location?' '+e.location:''}`).join(' | ');rows.push([d,s?s.type:'working_day',Math.round(x.work),Math.round(x.paid),Math.round(x.unpaid),flexFor(d,false),`"${tl.replaceAll('"','""')}"`])});download(rows.map(r=>r.join(',')).join('\n'),'flexi-buddy.csv','text/csv')}
+function explainMyDay(){
+ let d=key(Date.now()),x=calc(d,true),ev=eventsFor(d);
+ if(!ev.length){alert('There are no entries to explain yet.');return}
+ let first=ev.find(e=>['work','work_travel'].includes(e.type)),finish=[...ev].reverse().find(e=>e.type==='finish');
+ let locations=[...new Set(ev.filter(e=>e.location).map(e=>e.location))];
+ let pauses=ev.filter(e=>e.type==='pause');
+ let travels=ev.filter(e=>e.type==='work_travel');
+ let credits=ev.filter(e=>e.type==='credit');
+ let parts=[];
+ if(first)parts.push(`Started at ${time(first.time)}${first.location?' from '+first.location:''}.`);
+ parts.push(`Recorded ${fmt(x.work).replace('+','')} of worked time${x.credit?` plus ${fmt(x.credit).replace('+','')} of credits`:''}.`);
+ if(locations.length)parts.push(`Worked across ${locations.join(', ')}.`);
+ if(travels.length)parts.push(`${travels.length} work-travel ${travels.length===1?'period was':'periods were'} recorded as working time.`);
+ if(pauses.length){let reasons=pauses.map(p=>p.note).filter(Boolean);parts.push(`${pauses.length} unpaid pause ${pauses.length===1?'was':'periods were'} recorded${reasons.length?`: ${reasons.join('; ')}`:'.'}`)}
+ if(x.paidSessions)parts.push(`${x.paidSessions} paid break ${x.paidSessions===1?'was':'breaks were'} recorded.`);
+ if(finish)parts.push(`Finished at ${time(finish.time)}.`);
+ let f=Math.round(x.work+x.credit-data.settings.targetMinutes);
+ parts.push(`The day's flexi change is ${fmt(f)}.`);
+ document.getElementById('explanationText').textContent=parts.join(' ');
+ document.getElementById('explainCard').style.display='block';
+ document.getElementById('explainCard').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function copyExplanation(){let t=document.getElementById('explanationText').textContent;navigator.clipboard?.writeText(t).then(()=>alert('Explanation copied.')).catch(()=>alert(t))}
+function exportCSV(){let dates=new Set(data.events.map(e=>key(e.time)));data.days.forEach(x=>dates.add(x.date));let rows=[['Date','Day type','Worked minutes','Paid break minutes','Unpaid/lunch minutes','Credit minutes','Flexi minutes','Timeline']];[...dates].sort().forEach(d=>{let s=special(d),x=calc(d,false),tl=eventsFor(d).map(e=>`${time(e.time)} ${labels[e.type]}${e.location?' '+e.location:''}${e.note?' - '+e.note:''}${e.type==='credit'?' '+(e.creditMinutes||0)+'m':''}`).join(' | ');rows.push([d,s?s.type:'working_day',Math.round(x.work),Math.round(x.paid),Math.round(x.unpaid),Math.round(x.credit||0),flexFor(d,false),`"${tl.replaceAll('"','""')}"`])});download(rows.map(r=>r.join(',')).join('\n'),'flexi-buddy.csv','text/csv')}
 function backup(){download(JSON.stringify(data,null,2),'flexi-buddy-backup.json','application/json')}
 function download(c,n,t){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:t}));a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 function restoreBackup(inp){let f=inp.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!d.events||!d.days||!d.settings)throw 0;data=d;data.settings={...defaults().settings,...data.settings};persist();alert('Backup restored.')}catch(e){alert('That backup file could not be read.')}};r.readAsText(f)}
