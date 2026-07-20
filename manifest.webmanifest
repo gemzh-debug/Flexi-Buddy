@@ -3,8 +3,8 @@
   "short_name": "Flexi Buddy",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f4f1eb",
-  "theme_color": "#385a64",
+  "background_color": "#f3f0e9",
+  "theme_color": "#355963",
   "icons": [
     {
       "src": "icon-192.png",
