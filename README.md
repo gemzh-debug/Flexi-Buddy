@@ -59,3 +59,14 @@ Note: native iPhone Home Screen widgets and reliable background alarms are not a
 - Settings remain flexible for different employers and working patterns
 
 Important: the optional PIN is a local convenience lock, not encrypted storage or Face ID.
+
+## App Store Edition v6
+- Full premium visual redesign
+- Glass-style cards and modern iPhone colour system
+- Thumb-friendly Today controls with smarter action visibility
+- iPhone-style fixed bottom navigation
+- Cleaner typography, spacing, inputs and dialogs
+- Icon-led timeline entries
+- Branded header and clearer screen hierarchy
+- Smooth screen transitions and refined microcopy
+- Existing calculations, reports, backups, reminders and accessibility retained

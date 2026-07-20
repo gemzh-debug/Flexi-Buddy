@@ -84,16 +84,72 @@ body.dark.highContrast{--line:#fff;--muted:#ddd;--soft:#000;--card:#000;--ink:#f
 .integrityGood{color:var(--good);font-weight:850}.integrityWarn{color:var(--danger);font-weight:850}
 @media(max-width:430px){.progressWrap{grid-template-columns:1fr}.progressRing{margin:auto}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* App Store Edition v6 */
+:root{
+ --bg:#f4f6fb;--bg2:#eef1f8;--card:rgba(255,255,255,.9);--card-solid:#fff;
+ --ink:#141826;--muted:#6d7486;--line:rgba(20,24,38,.08);--soft:#f0f3fb;
+ --accent:#6f61ff;--accent2:#ece9ff;--good:#21a36a;--warn:#e49a20;--danger:#d95757;
+ --shadow:0 12px 34px rgba(28,35,66,.10);--shadow-lg:0 22px 54px rgba(28,35,66,.16);
+ --radius:22px;--nav-h:84px
+}
+body.dark{
+ --bg:#0e1119;--bg2:#151923;--card:rgba(24,29,41,.9);--card-solid:#181d29;
+ --ink:#f4f6fb;--muted:#a7afc1;--line:rgba(255,255,255,.08);--soft:#212735;
+ --accent2:#2a244d;--shadow:0 14px 38px rgba(0,0,0,.3);--shadow-lg:0 22px 64px rgba(0,0,0,.42)
+}
+html{background:var(--bg)}
+body{
+ background:radial-gradient(circle at top right,color-mix(in srgb,var(--accent) 13%,transparent),transparent 32%),linear-gradient(180deg,var(--bg2),var(--bg));
+ min-height:100vh;padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 24px)
+}
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);background:color-mix(in srgb,var(--bg) 76%,transparent);border-bottom:1px solid var(--line)}
+header .topbar{max-width:760px;margin:auto;padding:calc(10px + env(safe-area-inset-top)) 18px 12px}
+.appTitle{font-weight:950;letter-spacing:-.8px;font-size:22px}.appSubtitle{font-size:12px;color:var(--muted);margin-top:2px}
+main{max-width:760px;margin:auto;padding:18px 14px 20px}
+section{animation:screenIn .24s ease both}@keyframes screenIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{border:1px solid color-mix(in srgb,var(--line) 75%,transparent);background:var(--card);backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%);box-shadow:var(--shadow);border-radius:var(--radius);padding:18px;margin:0 0 14px}
+.card.hero{padding:20px;overflow:hidden;position:relative;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 16%,var(--card)),var(--card))}
+.card.hero:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;right:-80px;top:-90px;background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.greeting{font-size:30px!important;line-height:1.08;letter-spacing:-1.1px!important}.greetingSub{font-size:15px;max-width:440px}
+.progressWrap{grid-template-columns:160px 1fr!important}.progressRing{width:152px!important;height:152px!important;box-shadow:inset 0 0 0 1px var(--line),0 10px 25px rgba(67,58,170,.12)}
+.progressRing:before{inset:13px!important;box-shadow:inset 0 0 0 1px var(--line)}.progressInner b{font-size:29px!important;letter-spacing:-1px}
+.prediction{background:linear-gradient(135deg,var(--soft),color-mix(in srgb,var(--accent2) 60%,var(--soft)));border:1px solid var(--line);padding:14px!important}
+.statusPill{background:var(--card-solid)!important;border:1px solid var(--line);box-shadow:0 4px 14px rgba(20,24,38,.06)}
+.quickGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.quickAction{min-height:74px;border-radius:20px!important;padding:15px!important;display:flex;align-items:center;justify-content:flex-start;gap:12px;font-weight:900!important;font-size:16px!important;box-shadow:0 8px 20px rgba(34,38,66,.09)}
+.quickAction .qaIcon{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.18);font-size:20px;flex:none}
+.quickAction.primaryAction{grid-column:span 2;min-height:82px;font-size:18px!important}
+button{border-radius:16px!important;min-height:46px;font-weight:850!important;letter-spacing:-.15px}
+button.secondary{background:var(--soft)!important;border:1px solid var(--line)!important;color:var(--ink)!important}
+button.danger{background:color-mix(in srgb,var(--danger) 12%,var(--card-solid))!important;color:var(--danger)!important}
+.metric{border:1px solid var(--line);border-radius:18px!important;background:linear-gradient(180deg,var(--card-solid),color-mix(in srgb,var(--soft) 50%,var(--card-solid)));box-shadow:0 6px 18px rgba(34,38,66,.06)}
+.metric b{font-size:22px!important;letter-spacing:-.6px}
+.entry{position:relative;border-left:none!important;border:1px solid var(--line)!important;border-radius:18px!important;background:var(--card-solid)!important;padding:14px 14px 14px 58px!important;box-shadow:0 5px 15px rgba(34,38,66,.05)}
+.entry:before{content:attr(data-icon);position:absolute;left:14px;top:13px;width:32px;height:32px;border-radius:12px;display:grid;place-items:center;background:var(--soft);font-size:16px}
+.entry+.entry{margin-top:10px}
+.timelineHeader{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:8px 2px 12px}.sectionTitle{font-size:22px;font-weight:950;letter-spacing:-.6px}.sectionHint{font-size:13px;color:var(--muted)}
+nav{position:fixed!important;left:10px!important;right:10px!important;bottom:calc(8px + env(safe-area-inset-bottom))!important;height:72px!important;z-index:100!important;border-radius:24px!important;background:color-mix(in srgb,var(--card-solid) 84%,transparent)!important;backdrop-filter:blur(22px) saturate(170%)!important;-webkit-backdrop-filter:blur(22px) saturate(170%)!important;border:1px solid var(--line)!important;box-shadow:var(--shadow-lg)!important;padding:7px!important;display:grid!important;grid-template-columns:repeat(5,1fr)!important}
+nav button{min-height:58px!important;border-radius:18px!important;background:transparent!important;color:var(--muted)!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important;box-shadow:none!important;padding:5px!important;font-size:11px!important}
+nav button .navIcon{font-size:20px;line-height:1}nav button.active{color:var(--accent)!important;background:var(--accent2)!important}
+dialog{border:none!important;border-radius:26px!important;background:var(--card-solid)!important;color:var(--ink)!important;box-shadow:var(--shadow-lg)!important;padding:20px!important}
+dialog::backdrop{background:rgba(10,13,22,.48);backdrop-filter:blur(4px)}
+input,select,textarea{background:var(--card-solid)!important;color:var(--ink)!important;border:1px solid var(--line)!important;border-radius:15px!important;min-height:46px}
+#toast{bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 20px)!important;border-radius:999px!important;padding:12px 16px!important;box-shadow:var(--shadow-lg)!important;font-weight:800!important}
+.screenHeader{display:flex;align-items:center;justify-content:space-between;margin:4px 2px 14px}.screenHeader h2{font-size:28px;margin:0;letter-spacing:-.9px}
+.premiumBadge{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;background:var(--accent2);color:var(--accent);font-size:12px;font-weight:900}
+@media(max-width:520px){main{padding-left:12px;padding-right:12px}.progressWrap{grid-template-columns:1fr!important}.quickAction{min-height:68px}}
+
 </style>
 </head>
 <body>
 <div class="app">
-<header><div><h1>Flexi Buddy</h1><div id="dateLabel" class="sub"></div></div><div id="balancePill" class="pill">0m flexi</div></header>
+<header><div class="topbar"><div class="appTitle">Flexi Buddy</div><div class="appSubtitle">Your calm, clever flexi-time companion</div></div></header>
 
 <section id="today" class="active">
  <div id="lockMount"></div>
  <div id="smartPrompt"></div>
- <div class="card">
+ <div class="card hero">
   <div id="welcomeGreeting" class="greeting">Good morning</div>
   <div id="welcomeSub" class="greetingSub">Your workday, kept simple.</div>
   <div class="progressWrap" style="margin-top:16px">
@@ -105,6 +161,18 @@ body.dark.highContrast{--line:#fff;--muted:#ddd;--soft:#000;--card:#000;--ink:#f
     <div id="currentLocationPill" class="statusPill">📍 No location yet</div>
     <div id="patternInsight" class="miniInsight"></div>
    </div>
+<div class="card">
+ <div class="timelineHeader"><div><div class="sectionTitle">Today</div><div class="sectionHint">Everything you need, one tap away</div></div><span id="liveStateBadge" class="premiumBadge">Ready</span></div>
+ <div class="quickGrid">
+  <button id="startWorkBtn" class="quickAction primaryAction" onclick="startWork()" aria-label="Start work"><span class="qaIcon">▶</span><span>Start work</span></button>
+  <button id="paidBreakBtn" class="quickAction" onclick="paidBreak()" aria-label="Start paid break"><span class="qaIcon">☕</span><span>Paid break</span></button>
+  <button id="lunchBtn" class="quickAction" onclick="lunch()" aria-label="Start lunch"><span class="qaIcon">🍽</span><span>Lunch</span></button>
+  <button id="pauseBtn" class="quickAction" onclick="openPause()" aria-label="Pause work"><span class="qaIcon">⏸</span><span>Pause</span></button>
+  <button id="locationBtn" class="quickAction" onclick="changeLocation()" aria-label="Change location"><span class="qaIcon">📍</span><span>Location</span></button>
+  <button id="finishBtn" class="quickAction primaryAction" onclick="finishWork()" aria-label="Finish work"><span class="qaIcon">■</span><span>Finish day</span></button>
+ </div>
+</div>
+
   </div>
  </div>
  <div class="card">
@@ -162,7 +230,7 @@ body.dark.highContrast{--line:#fff;--muted:#ddd;--soft:#000;--card:#000;--ink:#f
  </div>
 </section>
 
-<section id="calendar">
+<section id="calendar"><div class="screenHeader"><h2>Calendar</h2><span class="premiumBadge">Month view</span></div>
  <div class="card">
   <div class="calendarHead"><button class="secondary mini" onclick="moveMonth(-1)">‹</button><b id="monthTitle"></b><button class="secondary mini" onclick="moveMonth(1)">›</button></div>
   <div class="iconLine"><span>🟢 Worked</span><span>🌴 Leave</span><span>🤒 Sick</span><span>🏖 Flexi</span><span>📍 Home visit</span></div>
@@ -174,7 +242,7 @@ body.dark.highContrast{--line:#fff;--muted:#ddd;--soft:#000;--card:#000;--ink:#f
  </div>
 </section>
 
-<section id="leave">
+<section id="leave"><div class="screenHeader"><h2>Leave</h2><span class="premiumBadge">Allowances</span></div>
  <div class="card">
   <b>Record leave or a non-working day</b>
   <label>Date</label><input id="leaveDate" type="date">
@@ -195,7 +263,7 @@ body.dark.highContrast{--line:#fff;--muted:#ddd;--soft:#000;--card:#000;--ink:#f
  <div class="card"><b>Annual leave</b><div class="statGrid" style="margin-top:12px"><div class="metric"><span>Used</span><b id="leaveUsed">0h</b></div><div class="metric"><span>Remaining</span><b id="leaveRemaining">—</b></div></div></div>
 </section>
 
-<section id="reports">
+<section id="reports"><div class="screenHeader"><h2>Reports</h2><span class="premiumBadge">Your patterns</span></div>
  <div class="card">
   <b>Insights</b>
   <div class="insightGrid" style="margin-top:12px">
@@ -252,7 +320,7 @@ body.dark.highContrast{--line:#fff;--muted:#ddd;--soft:#000;--card:#000;--ink:#f
  </div>
 </section>
 
-<section id="settings">
+<section id="settings"><div class="screenHeader"><h2>Settings</h2><span class="premiumBadge">Personalise</span></div>
  <div class="card">
   <b>Work rules</b>
   <label>Daily target hours</label><input id="targetHours" type="number" step=".25" min="0">
@@ -300,9 +368,9 @@ body.dark.highContrast{--line:#fff;--muted:#ddd;--soft:#000;--card:#000;--ink:#f
   <button style="width:100%;margin-top:14px" onclick="savePolishSettings()">Save polish settings</button>
  </div>
  <div class="card">
-  <b>Data health</b>
+  <b>Your data</b>
   <div id="integrityStatus" class="notice" style="margin-top:10px">Checking your records…</div>
-  <div class="actions"><button class="secondary" onclick="runIntegrityCheck(true)">Check and repair records</button><button class="secondary" onclick="showSetupWizard()">Run setup wizard again</button></div>
+  <div class="actions"><button class="secondary" onclick="runIntegrityCheck(true)">Check my records</button><button class="secondary" onclick="showSetupWizard()">Run setup wizard again</button></div>
   <div id="backupReminder" class="notice"></div>
  </div>
  <div class="card">
@@ -312,13 +380,15 @@ body.dark.highContrast{--line:#fff;--muted:#ddd;--soft:#000;--card:#000;--ink:#f
 </section>
 </div>
 
-<nav>
- <button class="active" onclick="showTab('today',this)">🏠<br>Today</button>
- <button onclick="showTab('calendar',this)">📅<br>Calendar</button>
- <button onclick="showTab('leave',this)">🌴<br>Leave</button>
- <button onclick="showTab('reports',this)">📄<br>Reports</button>
- <button onclick="showTab('settings',this)">⚙️<br>Settings</button>
+
+<nav aria-label="Main navigation">
+ <button class="active" onclick="showTab('today',this)"><span class="navIcon">◉</span><span>Today</span></button>
+ <button onclick="showTab('calendar',this)"><span class="navIcon">▦</span><span>Calendar</span></button>
+ <button onclick="showTab('reports',this)"><span class="navIcon">⌁</span><span>Reports</span></button>
+ <button onclick="showTab('leave',this)"><span class="navIcon">◇</span><span>Leave</span></button>
+ <button onclick="showTab('settings',this)"><span class="navIcon">⚙</span><span>Settings</span></button>
 </nav>
+
 
 <div id="toast" class="toast"></div>
 
@@ -767,6 +837,28 @@ function renderBackupReminder(){
  box.textContent=!last?'You have not created a backup yet.':days>=30?`Your last backup was ${days} days ago.`:`Last backup: ${days} day${days===1?'':'s'} ago.`
 }
 
+
+function decorateTimeline(){
+ document.querySelectorAll('.entry').forEach(entry=>{
+  const txt=(entry.textContent||'').toLowerCase();let icon='•';
+  if(txt.includes('start'))icon='▶';else if(txt.includes('paid break'))icon='☕';
+  else if(txt.includes('lunch'))icon='🍽';else if(txt.includes('location'))icon='📍';
+  else if(txt.includes('pause'))icon='⏸';else if(txt.includes('finish'))icon='■';
+  else if(txt.includes('resume'))icon='↻';entry.dataset.icon=icon;
+ })
+}
+function renderLiveStateBadge(){
+ const badge=$('liveStateBadge');if(!badge)return;const s=stateFor();
+ const map={idle:'◉ Ready',working:'● Working',paid_break:'☕ Paid break',lunch:'🍽 Lunch',paused:'⏸ Paused',finished:'✓ Complete'};
+ badge.textContent=map[s]||('• '+s.replaceAll('_',' '));
+}
+function polishActionAvailability(){
+ const s=stateFor(),start=$('startWorkBtn'),finish=$('finishBtn');
+ if(start)start.style.display=(s==='idle'||s==='finished')?'flex':'none';
+ if(finish)finish.style.display=(s==='idle'||s==='finished')?'none':'flex';
+}
+function appStorePolish(){decorateTimeline();renderLiveStateBadge();polishActionAvailability()}
+
 function monthDatesList(ref=new Date()){
  let y=ref.getFullYear(),m=ref.getMonth(),days=new Date(y,m+1,0).getDate();
  return [...Array(days)].map((_,i)=>`${y}-${pad(m+1)}-${pad(i+1)}`)
@@ -864,7 +956,7 @@ function render(){
  $('breakBadge').textContent=`${c.paidSessions}/${data.settings.paidBreakCount} breaks`;$('actionArea').innerHTML=actionButtons();
  renderTimeline();let wd=weekDatesList(),ww=wd.reduce((a,k)=>a+calc(k,k===d).work,0),wf=wd.reduce((a,k)=>a+flexFor(k,k===d),0);
  $('weekWorked').textContent=fmt(ww).replace('+','');$('weekFlexi').textContent=fmt(wf);$('weekDates').textContent=new Date(wd[0]+'T12:00').toLocaleDateString([],{day:'numeric',month:'short'})+' – '+new Date(wd[6]+'T12:00').toLocaleDateString([],{day:'numeric',month:'short'});
- renderCalendar();renderSelected();renderHistory();renderLeave();renderSettings();renderInsights();renderPauseFavourites();renderSmartPrompt();scheduleLongBreakCheck();renderWelcome();renderPolishSettings();applyPolishSettings();runIntegrityCheck(false);renderBackupReminder()
+ renderCalendar();renderSelected();renderHistory();renderLeave();renderSettings();renderInsights();renderPauseFavourites();renderSmartPrompt();scheduleLongBreakCheck();renderWelcome();renderPolishSettings();applyPolishSettings();runIntegrityCheck(false);renderBackupReminder();appStorePolish()
 }
 function renderTimeline(){
  let ev=eventsFor(dayKey(Date.now()));$('timeline').innerHTML=ev.length?ev.map(e=>`<div class="entry"><div class="time">${clock(e.time)}</div><div class="desc">${icons[e.type]||'•'} ${labels[e.type]||e.type}${e.location?` · <span class="muted">${escapeHtml(e.location)}</span>`:''}${e.note&&e.note!=='Location changed'?`<br><span class="muted">${escapeHtml(e.note)}</span>`:''}${e.type==='credit'?` · ${e.creditMinutes||0}m`:''}</div><button class="secondary mini" onclick="editEntry('${e.id}')">Edit</button></div>`).join(''):'<p class="notice">Nothing recorded yet. Tap Start work when you begin.</p>'
@@ -897,7 +989,7 @@ function openForgot(){editingId=null;$('entryTitle').textContent='Add forgotten 
 function editEntry(id){let e=data.events.find(x=>x.id===id);if(!e)return;editingId=id;$('entryTitle').textContent='Edit entry';$('entryType').value=e.type;$('entryTime').value=new Date(e.time-new Date(e.time).getTimezoneOffset()*60000).toISOString().slice(0,16);$('entryLocation').value=e.location||'';$('entryNote').value=e.note||'';$('entryCredit').value=e.creditMinutes||'';$('deleteEntryBtn').classList.remove('hidden');$('entryDialog').showModal()}
 function saveEntry(){let t=new Date($('entryTime').value).getTime();if(!t)return alert('Choose a date and time.');let obj={id:editingId||'e'+Date.now(),type:$('entryType').value,time:t,location:$('entryLocation').value.trim(),note:$('entryNote').value.trim(),creditMinutes:Number($('entryCredit').value||0)};if(editingId){data.events=data.events.map(e=>e.id===editingId?obj:e)}else data.events.push(obj);$('entryDialog').close();persist();toast('Entry saved')}
 function deleteEntry(){if(!editingId)return;if(confirm('Delete this entry?')){data.events=data.events.filter(e=>e.id!==editingId);$('entryDialog').close();persist();toast('Entry deleted')}}
-function showTab(id,b){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');if(id==='calendar'){selectedDate=selectedDate||dayKey(Date.now());renderCalendar();renderSelected()}}
+function showTab(id,b){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});if(id==='calendar'){selectedDate=selectedDate||dayKey(Date.now());renderCalendar();renderSelected()}}
 function moveMonth(n){calendarCursor.setMonth(calendarCursor.getMonth()+n);renderCalendar()}
 function renderCalendar(){
  let y=calendarCursor.getFullYear(),m=calendarCursor.getMonth(),first=new Date(y,m,1),start=new Date(first);start.setDate(1-((first.getDay()+6)%7));$('monthTitle').textContent=first.toLocaleDateString([],{month:'long',year:'numeric'});
