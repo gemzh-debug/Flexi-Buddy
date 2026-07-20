@@ -35,7 +35,7 @@ button.secondary{background:var(--accent2);color:var(--ink)}button.ghost{backgro
 button.wide{grid-column:1/-1}button.mini{min-height:38px;padding:8px 11px;font-size:13px;border-radius:12px}button:disabled{opacity:.38}
 .quickline{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}.quickline button{font-size:13px;min-height:44px;padding:8px}
 .row{display:flex;justify-content:space-between;align-items:center;gap:10px}.badge{display:inline-block;padding:5px 8px;border-radius:999px;background:var(--accent2);font-size:12px;font-weight:800}
-.timeline{margin-top:8px}.entry{display:grid;grid-template-columns:58px 1fr auto;gap:9px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}.entry:last-child{border-bottom:0}.time{font-weight:850;font-variant-numeric:tabular-nums}.desc{font-size:14px;line-height:1.32}.muted{color:var(--muted)}.positive{color:var(--good)}.negative{color:var(--danger)}.warning{color:var(--amber)}
+.timeline{margin-top:8px}.entry{display:grid;grid-template-columns:58px 1fr auto;gap:9px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);touch-action:pan-y;position:relative;transition:transform .18s,background .18s;border-radius:12px}.entry:last-child{border-bottom:0}.entry.swipeEdit{background:color-mix(in srgb,var(--good) 16%,transparent)}.entry.swipeDelete{background:color-mix(in srgb,var(--danger) 16%,transparent)}.time{font-weight:850;font-variant-numeric:tabular-nums}.desc{font-size:14px;line-height:1.32}.muted{color:var(--muted)}.positive{color:var(--good)}.negative{color:var(--danger)}.warning{color:var(--amber)}
 section{display:none}section.active{display:block}
 nav{position:fixed;left:0;right:0;bottom:0;z-index:20;background:color-mix(in srgb,var(--card) 94%,transparent);backdrop-filter:blur(15px);border-top:1px solid var(--line);padding:7px 6px calc(7px + env(safe-area-inset-bottom));display:flex;justify-content:center}
 nav button{background:transparent;color:var(--muted);min-height:52px;padding:6px 14px;font-size:12px;border-radius:13px}nav button.active{background:var(--accent2);color:var(--accent)}
@@ -51,9 +51,39 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 5px;
 .searchResult{padding:12px 0;border-bottom:1px solid var(--line)}.searchResult:last-child{border-bottom:0}.searchResult b{display:block;margin-bottom:4px}
 .iconLine{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.dayIcon{font-size:12px}
 .favouriteRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.favouriteRow button{min-height:38px;font-size:13px;padding:8px 10px}
-.reflectionBox{background:var(--soft);border-radius:17px;padding:14px;line-height:1.55;margin-top:12px}
+.reflectionBox{background:var(--soft);border-radius:17px;padding:14px;line-height:1.55;margin-top:12px}.heroSummary{text-align:center;padding:8px 0}.heroSummary .big{font-size:36px;font-weight:950;letter-spacing:-1px}.heroSummary .subline{color:var(--muted);margin-top:5px}.timelineReplay{display:grid;gap:0;margin-top:12px}.replayStep{display:grid;grid-template-columns:58px 28px 1fr;gap:8px;min-height:58px}.replayTime{font-weight:850;font-size:13px;padding-top:3px}.replayRail{display:flex;flex-direction:column;align-items:center}.replayDot{width:24px;height:24px;border-radius:50%;background:var(--accent2);display:grid;place-items:center;font-size:12px}.replayLine{width:2px;background:var(--line);flex:1}.replayText{padding:2px 0 16px;line-height:1.35}.smartBanner{border-left:5px solid var(--amber);background:var(--soft);border-radius:16px;padding:13px;margin:10px 0}.calendarGrid .day.worked{background:color-mix(in srgb,#47a36b 18%,var(--card))}.calendarGrid .day.leave{background:color-mix(in srgb,#d0a539 24%,var(--card))}.calendarGrid .day.sick{background:color-mix(in srgb,#c85e5e 20%,var(--card))}.calendarGrid .day.flexi{background:color-mix(in srgb,#8067c8 20%,var(--card))}.calendarGrid .day.partyear{background:color-mix(in srgb,#7b8588 18%,var(--card))}.locationTrail{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.locationChip{background:var(--accent2);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800}.countdown{font-size:13px;color:var(--muted);margin-top:7px}
 .smallSelect{min-height:42px;padding:8px 10px;font-size:14px}
 .toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:var(--ink);color:var(--card);padding:10px 14px;border-radius:999px;font-size:13px;font-weight:800;z-index:50;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1}
+
+/* Flexi Buddy Polished v5 */
+:root{--ring:#6d6af8;--ring-bg:color-mix(in srgb,var(--line) 80%,transparent)}
+*{scroll-behavior:smooth}
+button,.card,.metric,.insight,.entry{transition:transform .18s ease,box-shadow .18s ease,background .18s ease,opacity .18s ease}
+button:active{transform:scale(.97)}
+.card{animation:cardIn .28s ease both}
+@keyframes cardIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@keyframes pulseRing{0%,100%{filter:drop-shadow(0 0 0 transparent)}50%{filter:drop-shadow(0 0 8px color-mix(in srgb,var(--accent) 35%,transparent))}}
+@keyframes pop{0%{transform:scale(.88);opacity:0}70%{transform:scale(1.04)}100%{transform:scale(1);opacity:1}}
+.greeting{font-size:25px;font-weight:950;letter-spacing:-.5px}.greetingSub{color:var(--muted);margin-top:4px;line-height:1.45}
+.progressWrap{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center}
+.progressRing{width:145px;height:145px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--ring) var(--progress,0%),var(--ring-bg) 0);position:relative;animation:pulseRing 3s ease-in-out infinite}
+.progressRing:before{content:"";position:absolute;inset:12px;background:var(--card);border-radius:50%}
+.progressInner{position:relative;text-align:center;z-index:1}.progressInner b{font-size:28px;display:block}.progressInner span{font-size:12px;color:var(--muted)}
+.prediction{background:var(--soft);border-radius:16px;padding:13px;line-height:1.5}
+.statusPill{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:8px 11px;background:var(--accent2);font-size:13px;font-weight:850;margin-top:10px}
+.miniInsight{font-size:13px;color:var(--muted);line-height:1.5;margin-top:9px}
+.setupStep{display:none}.setupStep.active{display:block;animation:cardIn .25s ease}
+.setupProgress{height:7px;background:var(--line);border-radius:999px;overflow:hidden;margin:10px 0 18px}.setupProgress>div{height:100%;background:var(--accent);transition:width .25s ease}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:9999}.confetti i{position:absolute;top:-20px;width:9px;height:14px;background:currentColor;animation:fall 1.7s linear forwards}
+@keyframes fall{to{transform:translate3d(var(--drift),110vh,rotate(720deg));opacity:.2}}
+.highContrast{--line:#000;--muted:#333;--soft:#fff;--card:#fff;--ink:#000}
+body.dark.highContrast{--line:#fff;--muted:#ddd;--soft:#000;--card:#000;--ink:#fff}
+.largeText{font-size:18px}.largeText button,.largeText input,.largeText select,.largeText textarea{font-size:18px}.largeText .notice,.largeText .muted{font-size:15px}
+.focusVisible *:focus{outline:4px solid var(--accent);outline-offset:3px}
+.lockScreen{position:fixed;inset:0;background:var(--bg);z-index:10000;display:grid;place-items:center;padding:24px}.lockCard{max-width:420px;width:100%;background:var(--card);border-radius:24px;padding:22px;box-shadow:var(--shadow);text-align:center}
+.integrityGood{color:var(--good);font-weight:850}.integrityWarn{color:var(--danger);font-weight:850}
+@media(max-width:430px){.progressWrap{grid-template-columns:1fr}.progressRing{margin:auto}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
@@ -61,6 +91,22 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 5px;
 <header><div><h1>Flexi Buddy</h1><div id="dateLabel" class="sub"></div></div><div id="balancePill" class="pill">0m flexi</div></header>
 
 <section id="today" class="active">
+ <div id="lockMount"></div>
+ <div id="smartPrompt"></div>
+ <div class="card">
+  <div id="welcomeGreeting" class="greeting">Good morning</div>
+  <div id="welcomeSub" class="greetingSub">Your workday, kept simple.</div>
+  <div class="progressWrap" style="margin-top:16px">
+   <div id="targetRing" class="progressRing" style="--progress:0%">
+    <div class="progressInner"><b id="ringWorked">0h 00m</b><span id="ringLabel">of 8h 00m</span></div>
+   </div>
+   <div>
+    <div id="finishPrediction" class="prediction">Start work to see your finish-time prediction.</div>
+    <div id="currentLocationPill" class="statusPill">📍 No location yet</div>
+    <div id="patternInsight" class="miniInsight"></div>
+   </div>
+  </div>
+ </div>
  <div class="card">
   <div class="stateRow"><div><div id="state" class="state">Ready to start</div><div id="where" class="location">No location set</div></div><span id="breakBadge" class="badge">0/2 breaks</span></div>
   <div class="progress"><div id="progressBar"></div></div>
@@ -103,9 +149,9 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 5px;
   <div class="row"><b>At a glance</b><button class="secondary mini" onclick="showTab('reports',document.querySelectorAll('nav button')[3])">See insights</button></div>
   <div class="insightGrid" style="margin-top:12px">
    <div class="insight"><span>This month</span><b id="monthFlexiQuick">0m</b></div>
-   <div class="insight"><span>Leave remaining</span><b id="leaveQuick">—</b></div>
+   <div class="insight"><span>Leave remaining</span><b id="leaveQuick">—</b><div id="leaveCountdownQuick" class="countdown"></div></div>
    <div class="insight"><span>Average finish</span><b id="avgFinishQuick">—</b></div>
-   <div class="insight"><span>Days recorded</span><b id="daysRecordedQuick">0</b></div>
+   <div class="insight"><span>Days recorded</span><b id="daysRecordedQuick">0</b><div id="workStreakQuick" class="countdown"></div></div>
   </div>
  </div>
 
@@ -124,7 +170,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 5px;
  </div>
  <div class="card">
   <div class="row"><b id="selectedTitle">Selected day</b><button class="secondary mini" onclick="editSelectedDay()">Edit day</button></div>
-  <div id="selectedSummary" class="notice" style="margin-top:12px"></div>
+  <div id="selectedSummary" class="notice" style="margin-top:12px"></div><div id="selectedLocations" class="locationTrail"></div><div class="dialogActions"><button class="secondary" onclick="playSelectedDay()">▶ Replay day</button></div><div id="selectedReplay" class="timelineReplay"></div>
  </div>
 </section>
 
@@ -160,6 +206,17 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 5px;
   </div>
  </div>
 
+ <div class="card">
+  <div class="row"><b id="reportMonthTitle">This month</b><span class="muted">overview</span></div>
+  <div class="heroSummary">
+   <div id="reportMonthWorked" class="big">0h 00m</div>
+   <div class="subline">worked this month</div>
+  </div>
+  <div class="insightGrid">
+   <div class="insight"><span>Flexi change</span><b id="reportMonthFlexi">0m</b></div>
+   <div class="insight"><span>Working days</span><b id="reportMonthDays">0</b></div>
+  </div>
+ </div>
  <div class="card">
   <div class="row"><b>Last 7 recorded days</b><span class="muted">worked hours</span></div>
   <div id="hoursChart" class="chart"></div>
@@ -210,10 +267,43 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 5px;
   <label>Usual starting location</label>
   <select id="defaultLocation"><option>Home</option><option>Office</option><option>Home visit</option><option>Training</option><option>Other</option></select>
   <label>Usual commute (minutes)</label><input id="commuteMinutes" type="number" min="0" step="1" placeholder="e.g. 20">
+  <label style="display:flex;align-items:center;gap:10px;color:var(--ink);font-size:15px">
+   <input id="smartPrompts" type="checkbox" style="width:auto;transform:scale(1.25)">
+   Show smart reminders when something looks unfinished
+  </label>
   <label>Favourite pause reasons</label>
   <input id="pauseFavourites" type="text" placeholder="Comma separated, e.g. School / nursery, Appointment">
   <p class="notice">Your first three favourites appear at the top of the Pause screen.</p>
   <button style="width:100%;margin-top:14px" onclick="saveSettings()">Save settings</button>
+ </div>
+ <div class="card">
+  <b>Polish and accessibility</b>
+  <label style="display:flex;align-items:center;gap:10px;color:var(--ink);font-size:15px">
+   <input id="hapticsEnabled" type="checkbox" style="width:auto;transform:scale(1.25)"> Gentle haptic feedback
+  </label>
+  <label style="display:flex;align-items:center;gap:10px;color:var(--ink);font-size:15px">
+   <input id="confettiEnabled" type="checkbox" style="width:auto;transform:scale(1.25)"> Celebration when a day is completed
+  </label>
+  <label style="display:flex;align-items:center;gap:10px;color:var(--ink);font-size:15px">
+   <input id="largeTextEnabled" type="checkbox" style="width:auto;transform:scale(1.25)"> Larger text
+  </label>
+  <label style="display:flex;align-items:center;gap:10px;color:var(--ink);font-size:15px">
+   <input id="highContrastEnabled" type="checkbox" style="width:auto;transform:scale(1.25)"> High contrast
+  </label>
+  <label>Auto-lock after inactivity</label>
+  <select id="lockMinutes">
+   <option value="0">Off</option><option value="5">5 minutes</option><option value="15">15 minutes</option><option value="30">30 minutes</option>
+  </select>
+  <label>Optional 4-digit PIN</label>
+  <input id="appPin" type="password" inputmode="numeric" maxlength="4" placeholder="Leave blank for no PIN">
+  <p class="notice">The PIN is a convenience lock stored on this device; it is not equivalent to Face ID or full encryption.</p>
+  <button style="width:100%;margin-top:14px" onclick="savePolishSettings()">Save polish settings</button>
+ </div>
+ <div class="card">
+  <b>Data health</b>
+  <div id="integrityStatus" class="notice" style="margin-top:10px">Checking your records…</div>
+  <div class="actions"><button class="secondary" onclick="runIntegrityCheck(true)">Check and repair records</button><button class="secondary" onclick="showSetupWizard()">Run setup wizard again</button></div>
+  <div id="backupReminder" class="notice"></div>
  </div>
  <div class="card">
   <div class="row"><b>Appearance</b><button class="secondary mini" onclick="toggleTheme()">Toggle light/dark</button></div>
@@ -308,15 +398,58 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 5px;
  <button id="deleteEntryBtn" class="danger hidden" style="width:100%;margin-top:10px" onclick="deleteEntry()">Delete entry</button>
 </dialog>
 
+
+<dialog id="finishDialog">
+ <div class="dialogTitle">Save your day</div>
+ <div class="heroSummary">
+  <div id="finishWorked" class="big">0h 00m</div>
+  <div class="subline">worked today</div>
+ </div>
+ <div class="insightGrid">
+  <div class="insight"><span>Paid breaks</span><b id="finishPaid">0m</b></div>
+  <div class="insight"><span>Unpaid / lunch</span><b id="finishUnpaid">0m</b></div>
+  <div class="insight"><span>Credits</span><b id="finishCredits">0m</b></div>
+  <div class="insight"><span>Today’s flexi</span><b id="finishFlexi">0m</b></div>
+ </div>
+ <div class="dialogActions"><button class="secondary" onclick="undoFinish()">Undo</button><button onclick="confirmFinish()">Save day</button></div>
+</dialog>
+
+<dialog id="forgotFinishDialog">
+ <div class="dialogTitle">Did you forget to finish?</div>
+ <p id="forgotFinishText" class="notice"></p>
+ <label>Finish time</label><input id="forgotFinishTime" type="datetime-local">
+ <div class="dialogActions"><button class="secondary" onclick="dismissSmartPrompt()">Ignore</button><button onclick="saveForgottenFinish()">Finish at this time</button></div>
+</dialog>
+
+<dialog id="breakCheckDialog">
+ <div class="dialogTitle">Still on a break?</div>
+ <p id="breakCheckText" class="notice"></p>
+ <div class="dialogActions"><button class="secondary" onclick="dismissBreakCheck()">Yes, keep counting</button><button onclick="resumeFromBreakCheck()">Resume now</button></div>
+</dialog>
+
+
+<dialog id="setupWizard">
+ <div class="dialogTitle">Set up Flexi Buddy</div>
+ <div class="setupProgress"><div id="setupProgressBar" style="width:16.6%"></div></div>
+ <div class="setupStep active" data-step="0"><b>1. Your working day</b><label>Daily target hours</label><input id="setupTargetHours" type="number" step="0.25" min="1" max="16" value="8"><p class="notice">This is the paid time you aim to complete.</p></div>
+ <div class="setupStep" data-step="1"><b>2. Paid breaks</b><label>Minutes per paid break</label><input id="setupBreakMinutes" type="number" min="0" value="15"><label>Number of paid breaks</label><input id="setupBreakCount" type="number" min="0" value="2"></div>
+ <div class="setupStep" data-step="2"><b>3. Lunch</b><label>Usual lunch length in minutes</label><input id="setupLunchMinutes" type="number" min="0" value="30"><p class="notice">Lunch remains unpaid unless your rules say otherwise.</p></div>
+ <div class="setupStep" data-step="3"><b>4. Default location</b><label>Where do you usually start?</label><select id="setupLocation"><option>Home</option><option>Office</option><option>Home Visit</option><option>Training</option></select></div>
+ <div class="setupStep" data-step="4"><b>5. Leave and flexi</b><label>Annual leave allowance in hours</label><input id="setupLeaveHours" type="number" min="0"><label>Starting flexi balance in minutes</label><input id="setupBalance" type="number" value="0"></div>
+ <div class="setupStep" data-step="5"><b>6. Ready</b><p class="notice">Flexi Buddy will keep the Today screen simple and handle the calculations quietly in the background.</p></div>
+ <div class="dialogActions"><button id="setupBack" class="secondary" onclick="setupMove(-1)">Back</button><button id="setupNext" onclick="setupMove(1)">Next</button></div>
+</dialog>
+
+<div id="confettiLayer" class="confetti" aria-hidden="true"></div>
 <script>
 const KEY='flexiBuddyDataV1';
-const defaults=()=>({settings:{targetMinutes:480,paidBreakLimit:15,paidBreakCount:2,startingBalance:0,annualLeaveHours:0,defaultLocation:'Home',commuteMinutes:20,autoConvertPaidBreak:true,pauseFavourites:['Commute to office','School / nursery','Appointment'],theme:'system'},events:[],days:[],reflections:[]});
+const defaults=()=>({settings:{targetMinutes:480,paidBreakLimit:15,paidBreakCount:2,startingBalance:0,annualLeaveHours:0,defaultLocation:'Home',commuteMinutes:20,autoConvertPaidBreak:true,pauseFavourites:['Commute to office','School / nursery','Appointment'],smartPrompts:true,hapticsEnabled:true,confettiEnabled:true,largeText:false,highContrast:false,lockMinutes:0,appPin:'',usualLunchMinutes:30,onboardingComplete:false,lastBackupAt:0,theme:'system'},events:[],days:[],reflections:[]});
 function load(){
  let d;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}
  d=d||defaults();d.settings={...defaults().settings,...(d.settings||{})};d.events=(d.events||[]).map((e,i)=>({...e,id:e.id||('e'+e.time+i)}));d.days=d.days||[];d.reflections=d.reflections||[];
  return d
 }
-let data=load(),editingId=null,calendarCursor=new Date(),selectedDate=null,reminderTimer=null;
+let data=load(),editingId=null,calendarCursor=new Date(),selectedDate=null,reminderTimer=null,breakWarningTimer=null,finishJustAddedId=null,touchStartX=0,touchStartY=0,touchEntryId=null,setupStepIndex=0,lastInteractionAt=Date.now(),lockTimer=null;
 const $=id=>document.getElementById(id),pad=n=>String(n).padStart(2,'0');
 const dayKey=d=>{d=new Date(d);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
 const fmt=m=>{m=Math.round(Number(m)||0);let s=m<0?'-':m>0?'+':'';m=Math.abs(m);let h=Math.floor(m/60),r=m%60;return h?`${s}${h}h ${pad(r)}m`:`${s}${r}m`};
@@ -361,12 +494,30 @@ function openStart(){$('startDialog').showModal()}
 function startAt(location){$('startDialog').close();addEvent('work',{location});toast('Work started')}
 function customStart(){let v=prompt('Where are you starting?');if(v){$('startDialog').close();startAt(v.trim())}}
 function openPause(){$('pauseDialog').showModal()}
-function pauseFor(note){$('pauseDialog').close();addEvent('pause',{note});toast('Timer paused')}
+function pauseFor(note){$('pauseDialog').close();addEvent('pause',{note});scheduleLongBreakCheck();toast('Timer paused')}
 function customPause(){let v=prompt('Why are you pausing?');if(v){$('pauseDialog').close();pauseFor(v.trim())}}
-function resumeWork(){addEvent('work',{location:latestLocation()||data.settings.defaultLocation});toast('Work resumed')}
-function paidBreak(){addEvent('paid_break');scheduleBreakReminder();toast('Paid break started')}
-function lunch(){addEvent('lunch');toast('Lunch started')}
-function finishWork(){addEvent('finish');finishSummary()}
+function resumeWork(){haptic();clearTimeout(breakWarningTimer);addEvent('work',{location:latestLocation()||data.settings.defaultLocation});toast('Work resumed')}
+function paidBreak(){haptic();addEvent('paid_break');scheduleBreakReminder();scheduleLongBreakCheck();toast('Paid break started')}
+function lunch(){haptic();addEvent('lunch');scheduleLongBreakCheck();toast('Lunch started')}
+function finishWork(){haptic([15,35,15]);
+ let ev={id:'e'+Date.now()+Math.random().toString(16).slice(2),type:'finish',time:Date.now()};
+ data.events.push(ev);finishJustAddedId=ev.id;localStorage.setItem(KEY,JSON.stringify(data));render();openFinishSummary()
+}
+function openFinishSummary(){
+ let d=dayKey(Date.now()),c=calc(d,false),f=Math.round(c.work+c.credit-data.settings.targetMinutes);
+ $('finishWorked').textContent=fmt(c.work).replace('+','');
+ $('finishPaid').textContent=fmt(c.paid).replace('+','');
+ $('finishUnpaid').textContent=fmt(c.unpaid).replace('+','');
+ $('finishCredits').textContent=fmt(c.credit).replace('+','');
+ $('finishFlexi').textContent=fmt(f);
+ $('finishFlexi').className=f>=0?'positive':'negative';
+ $('finishDialog').showModal()
+}
+function confirmFinish(){finishJustAddedId=null;$('finishDialog').close();celebrate();haptic([15,35,15,35,20]);toast('Day saved')}
+function undoFinish(){
+ if(finishJustAddedId)data.events=data.events.filter(e=>e.id!==finishJustAddedId);
+ finishJustAddedId=null;$('finishDialog').close();persist();toast('Finish removed')
+}
 function openLocation(){if(!stateFor())return toast('Start work first');$('locationDialog').showModal()}
 function changeLocation(location){$('locationDialog').close();addEvent('location',{location,note:'Location changed'});toast('Location updated')}
 function customLocation(){let v=prompt('New location');if(v){$('locationDialog').close();changeLocation(v.trim())}}
@@ -396,12 +547,225 @@ function scheduleBreakReminder(){
 }
 function actionButtons(){
  let s=stateFor(),has=eventsFor(dayKey(Date.now())).length>0;
- if(!s)return has?`<button class="primaryAction good" onclick="resumeWork()">▶️ Resume work</button><button class="secondary" onclick="openStart()">🟢 New start</button><button class="danger" onclick="finishWork()">🔴 Finish</button>`:`<button class="primaryAction" onclick="openStart()">🟢 Start work</button>`;
- if(['pause','paid_break','lunch','unpaid_break'].includes(s))return `<button class="primaryAction good" onclick="resumeWork()">▶️ Resume work</button><button class="danger wide" onclick="finishWork()">🔴 Finish day</button>`;
- return `<button class="secondary" onclick="paidBreak()">☕ Paid break</button><button class="secondary" onclick="lunch()">🍽 Lunch</button><button class="secondary wide" onclick="openPause()">⏸ Pause</button><button class="danger wide" onclick="finishWork()">🔴 Finish work</button>`
+ if(!s)return has?`<button class="primaryAction good" onclick="resumeWork()">▶️ Resume work</button><button class="secondary" onclick="openStart()">🟢 New start</button><button class="danger" onclick="finishWork()" aria-label="Finish work">🔴 Finish</button>`:`<button class="primaryAction" onclick="openStart()">🟢 Start work</button>`;
+ if(['pause','paid_break','lunch','unpaid_break'].includes(s))return `<button class="primaryAction good" onclick="resumeWork()">▶️ Resume work</button><button class="danger wide" onclick="finishWork()" aria-label="Finish work">🔴 Finish day</button>`;
+ return `<button class="secondary" onclick="paidBreak()" aria-label="Start paid break">☕ Paid break</button><button class="secondary" onclick="lunch()" aria-label="Start lunch">🍽 Lunch</button><button class="secondary wide" onclick="openPause()">⏸ Pause</button><button class="danger wide" onclick="finishWork()" aria-label="Finish work">🔴 Finish work</button>`
 }
 function estimate(){let s=stateFor();if(!['work','location','work_travel'].includes(s))return null;let c=calc(dayKey(Date.now()),true),rem=Math.max(0,data.settings.targetMinutes-c.work-c.credit);return Date.now()+rem*60000}
 function weekDatesList(){let n=new Date(),day=(n.getDay()+6)%7,m=new Date(n);m.setHours(0,0,0,0);m.setDate(m.getDate()-day);return [...Array(7)].map((_,i)=>{let d=new Date(m);d.setDate(m.getDate()+i);return dayKey(d)})}
+
+
+function lastEventToday(){let ev=eventsFor(dayKey(Date.now()));return ev[ev.length-1]||null}
+function minutesSince(t){return (Date.now()-Number(t))/60000}
+function smartPromptKey(kind,date=dayKey(Date.now())){return `flexiBuddyDismissed:${kind}:${date}`}
+function isDismissed(kind,date=dayKey(Date.now())){return sessionStorage.getItem(smartPromptKey(kind,date))==='1'}
+function dismissSmartPrompt(){
+ sessionStorage.setItem(smartPromptKey('finish'),'1');
+ if($('forgotFinishDialog').open)$('forgotFinishDialog').close();
+ renderSmartPrompt()
+}
+function dismissBreakCheck(){
+ sessionStorage.setItem(smartPromptKey('break'),'1');
+ if($('breakCheckDialog').open)$('breakCheckDialog').close()
+}
+function renderSmartPrompt(){
+ let box=$('smartPrompt');if(!box)return;box.innerHTML='';
+ if(data.settings.smartPrompts===false)return;
+ let ev=lastEventToday(),now=new Date(),hour=now.getHours();
+ if(ev&&!hasFinished(dayKey(Date.now()))&&hour>=19&&!isDismissed('finish')){
+  box.innerHTML=`<div class="smartBanner"><b>It looks like today may still be running.</b><div class="notice">Your last entry was ${clock(ev.time)}. Did you forget to finish?</div><div class="dialogActions"><button class="secondary" onclick="dismissSmartPrompt()">Ignore</button><button onclick="openForgottenFinish()">Fix it</button></div></div>`
+ }
+}
+function openForgottenFinish(){
+ let ev=lastEventToday();if(!ev)return;
+ $('forgotFinishText').textContent=`Your last recorded action was at ${clock(ev.time)}. Choose the time you actually finished.`;
+ let suggested=new Date(Math.max(ev.time,Date.now()-30*60000));
+ $('forgotFinishTime').value=new Date(suggested.getTime()-suggested.getTimezoneOffset()*60000).toISOString().slice(0,16);
+ $('forgotFinishDialog').showModal()
+}
+function saveForgottenFinish(){
+ let t=new Date($('forgotFinishTime').value).getTime();if(!t)return alert('Choose a finish time.');
+ data.events.push({id:'e'+Date.now(),type:'finish',time:t,note:'Added from forgotten-finish reminder'});
+ sessionStorage.setItem(smartPromptKey('finish'),'1');$('forgotFinishDialog').close();persist();toast('Finish time added')
+}
+function scheduleLongBreakCheck(){
+ clearTimeout(breakWarningTimer);
+ if(data.settings.smartPrompts===false)return;
+ let e=lastEventToday();if(!e||!['paid_break','lunch','pause','unpaid_break'].includes(e.type))return;
+ let threshold=e.type==='paid_break'?60:90;
+ let elapsed=minutesSince(e.time),wait=Math.max(0,(threshold-elapsed)*60000);
+ breakWarningTimer=setTimeout(()=>{
+  if(stateFor()===e.type&&!isDismissed('break')){
+   $('breakCheckText').textContent=`This ${labels[e.type].toLowerCase()} has been running for about ${Math.round(minutesSince(e.time))} minutes.`;
+   if(!$('breakCheckDialog').open)$('breakCheckDialog').showModal()
+  }
+ },wait)
+}
+function resumeFromBreakCheck(){$('breakCheckDialog').close();resumeWork()}
+function workStreak(){
+ let dates=completedWorkDates(),set=new Set(dates),d=new Date();let streak=0;
+ if(!set.has(dayKey(d))){d.setDate(d.getDate()-1)}
+ while(set.has(dayKey(d))){streak++;d.setDate(d.getDate()-1)}
+ return streak
+}
+function nextAnnualLeave(){
+ let today=dayKey(Date.now());
+ return data.days.filter(x=>x.type==='annual_leave'&&x.date>=today).sort((a,b)=>a.date.localeCompare(b.date))[0]||null
+}
+function locationSequence(d){
+ let out=[],last='';
+ eventsFor(d).forEach(e=>{let loc=e.location;if(loc&&loc!==last){out.push({time:e.time,location:loc});last=loc}});
+ return out
+}
+function playSelectedDay(){
+ let box=$('selectedReplay'),ev=eventsFor(selectedDate);if(!box)return;
+ if(!ev.length){box.innerHTML='<p class="notice">Nothing to replay for this day.</p>';return}
+ box.innerHTML=ev.map((e,i)=>`<div class="replayStep"><div class="replayTime">${clock(e.time)}</div><div class="replayRail"><div class="replayDot">${icons[e.type]||'•'}</div>${i<ev.length-1?'<div class="replayLine"></div>':''}</div><div class="replayText"><b>${labels[e.type]||e.type}</b>${e.location?`<div class="muted">📍 ${escapeHtml(e.location)}</div>`:''}${e.note?`<div class="muted">${escapeHtml(e.note)}</div>`:''}</div></div>`).join('')
+}
+function duplicateEntry(id){
+ let e=data.events.find(x=>x.id===id);if(!e)return;
+ let copy={...e,id:'e'+Date.now()+Math.random().toString(16).slice(2),time:Date.now(),note:e.note?`${e.note} (duplicated)`:'Duplicated entry'};
+ data.events.push(copy);persist();toast('Entry duplicated')
+}
+function attachTimelineGestures(){
+ document.querySelectorAll('.entry[data-id]').forEach(el=>{
+  el.ontouchstart=ev=>{let t=ev.touches[0];touchStartX=t.clientX;touchStartY=t.clientY;touchEntryId=el.dataset.id};
+  el.ontouchmove=ev=>{let t=ev.touches[0],dx=t.clientX-touchStartX,dy=t.clientY-touchStartY;if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>12){el.style.transform=`translateX(${Math.max(-90,Math.min(90,dx))}px)`;el.classList.toggle('swipeEdit',dx>0);el.classList.toggle('swipeDelete',dx<0)}};
+  el.ontouchend=ev=>{let dx=(ev.changedTouches[0]?.clientX||touchStartX)-touchStartX;el.style.transform='';el.classList.remove('swipeEdit','swipeDelete');if(Math.abs(dx)>65){if(dx>0)editEntry(touchEntryId);else if(confirm('Delete this entry?')){data.events=data.events.filter(e=>e.id!==touchEntryId);persist();toast('Entry deleted')}}};
+  let hold;el.onpointerdown=()=>{hold=setTimeout(()=>{if(confirm('Duplicate this entry at the current time?'))duplicateEntry(el.dataset.id)},700)};el.onpointerup=el.onpointercancel=()=>clearTimeout(hold)
+ })
+}
+
+
+function haptic(pattern=10){if(data.settings.hapticsEnabled!==false&&navigator.vibrate)navigator.vibrate(pattern)}
+function greetingForNow(){let h=new Date().getHours();return h<12?'Good morning':h<18?'Good afternoon':'Good evening'}
+function todayStartEvent(){return eventsFor(dayKey(Date.now())).find(e=>e.type==='start')}
+function formatClockFromMinutes(total){
+ total=((Math.round(total)%1440)+1440)%1440;return `${pad(Math.floor(total/60))}:${pad(total%60)}`
+}
+function predictedFinishMinutes(){
+ let ev=eventsFor(dayKey(Date.now())),start=ev.find(e=>e.type==='start');if(!start)return null;
+ let c=calc(dayKey(Date.now()),false),remaining=Math.max(0,data.settings.targetMinutes-c.work-c.credit);
+ return new Date().getHours()*60+new Date().getMinutes()+remaining
+}
+function averageTimeForType(type){
+ let vals=data.events.filter(e=>e.type===type).map(e=>{let d=new Date(e.time);return d.getHours()*60+d.getMinutes()});
+ return vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):null
+}
+function renderWelcome(){
+ let g=$('welcomeGreeting');if(!g)return;
+ g.textContent=greetingForNow();
+ let c=calc(dayKey(Date.now()),true),target=Number(data.settings.targetMinutes||480),progress=Math.max(0,Math.min(100,c.work/target*100));
+ $('targetRing').style.setProperty('--progress',`${progress}%`);
+ $('ringWorked').textContent=fmt(c.work).replace('+','');
+ $('ringLabel').textContent=`of ${fmt(target).replace('+','')}`;
+ let state=stateFor(),loc=latestLocation()||data.settings.defaultLocation||'Not set';
+ $('currentLocationPill').textContent=`📍 ${loc}`;
+ let finish=predictedFinishMinutes();
+ if(state==='idle')$('finishPrediction').textContent='Start work to see your finish-time prediction.';
+ else if(state==='finished')$('finishPrediction').textContent=`Day complete — today’s flexi is ${fmt(flexFor(dayKey(Date.now()),false))}.`;
+ else if(finish!==null)$('finishPrediction').innerHTML=`At your current pace, you can finish at <b>${formatClockFromMinutes(finish)}</b> to reach today’s target.`;
+ let avgFinish=averageTimeForType('finish'),avgLunch=averageTimeForType('lunch');
+ let insights=[];
+ if(avgFinish!==null)insights.push(`You usually finish around ${formatClockFromMinutes(avgFinish)}.`);
+ if(avgLunch!==null)insights.push(`Lunch usually starts around ${formatClockFromMinutes(avgLunch)}.`);
+ $('patternInsight').textContent=insights.join(' ');
+ $('welcomeSub').textContent=state==='idle'?'Ready when you are.':state==='finished'?'Your day has been saved.':`You are currently ${state.replaceAll('_',' ')}.`;
+}
+function celebrate(){
+ if(data.settings.confettiEnabled===false)return;
+ let layer=$('confettiLayer');if(!layer)return;layer.innerHTML='';
+ let chars=['◆','●','■','▲'];
+ for(let i=0;i<34;i++){let el=document.createElement('i');el.textContent=chars[i%chars.length];el.style.left=`${Math.random()*100}%`;el.style.color=`hsl(${Math.random()*360} 75% 58%)`;el.style.setProperty('--drift',`${(Math.random()-.5)*220}px`);el.style.animationDelay=`${Math.random()*.35}s`;layer.appendChild(el)}
+ setTimeout(()=>layer.innerHTML='',2300)
+}
+function showSetupWizard(){
+ setupStepIndex=0;
+ $('setupTargetHours').value=(data.settings.targetMinutes||480)/60;
+ $('setupBreakMinutes').value=data.settings.paidBreakLimit||15;
+ $('setupBreakCount').value=data.settings.paidBreakCount||2;
+ $('setupLunchMinutes').value=data.settings.usualLunchMinutes||30;
+ $('setupLocation').value=data.settings.defaultLocation||'Home';
+ $('setupLeaveHours').value=data.settings.annualLeaveHours||'';
+ $('setupBalance').value=data.settings.startingBalance||0;
+ renderSetupStep();$('setupWizard').showModal()
+}
+function renderSetupStep(){
+ document.querySelectorAll('.setupStep').forEach((x,i)=>x.classList.toggle('active',i===setupStepIndex));
+ $('setupProgressBar').style.width=`${(setupStepIndex+1)/6*100}%`;
+ $('setupBack').style.visibility=setupStepIndex===0?'hidden':'visible';
+ $('setupNext').textContent=setupStepIndex===5?'Finish':'Next'
+}
+function setupMove(delta){
+ if(delta>0&&setupStepIndex===5){
+  data.settings.targetMinutes=Math.round(Number($('setupTargetHours').value||8)*60);
+  data.settings.paidBreakLimit=Number($('setupBreakMinutes').value||15);
+  data.settings.paidBreakCount=Number($('setupBreakCount').value||2);
+  data.settings.usualLunchMinutes=Number($('setupLunchMinutes').value||30);
+  data.settings.defaultLocation=$('setupLocation').value;
+  data.settings.annualLeaveHours=Number($('setupLeaveHours').value||0);
+  data.settings.startingBalance=Number($('setupBalance').value||0);
+  data.settings.onboardingComplete=true;
+  $('setupWizard').close();persist();haptic([15,40,15]);toast('Setup complete');return
+ }
+ setupStepIndex=Math.max(0,Math.min(5,setupStepIndex+delta));renderSetupStep()
+}
+function applyPolishSettings(){
+ document.body.classList.toggle('largeText',!!data.settings.largeText);
+ document.body.classList.toggle('highContrast',!!data.settings.highContrast);
+ document.body.classList.add('focusVisible')
+}
+function savePolishSettings(){
+ data.settings.hapticsEnabled=$('hapticsEnabled').checked;
+ data.settings.confettiEnabled=$('confettiEnabled').checked;
+ data.settings.largeText=$('largeTextEnabled').checked;
+ data.settings.highContrast=$('highContrastEnabled').checked;
+ data.settings.lockMinutes=Number($('lockMinutes').value||0);
+ let pin=$('appPin').value.trim();
+ if(pin&&!/^\d{4}$/.test(pin))return alert('Use exactly four digits, or leave the PIN blank.');
+ data.settings.appPin=pin;persist();applyPolishSettings();scheduleAutoLock();toast('Polish settings saved')
+}
+function renderPolishSettings(){
+ if(!$('hapticsEnabled'))return;
+ $('hapticsEnabled').checked=data.settings.hapticsEnabled!==false;
+ $('confettiEnabled').checked=data.settings.confettiEnabled!==false;
+ $('largeTextEnabled').checked=!!data.settings.largeText;
+ $('highContrastEnabled').checked=!!data.settings.highContrast;
+ $('lockMinutes').value=String(data.settings.lockMinutes||0);
+ $('appPin').value=data.settings.appPin||'';
+}
+function userActivity(){lastInteractionAt=Date.now();scheduleAutoLock()}
+function scheduleAutoLock(){
+ clearTimeout(lockTimer);let mins=Number(data.settings.lockMinutes||0);if(!mins||!data.settings.appPin)return;
+ lockTimer=setTimeout(()=>showLockScreen(),mins*60000)
+}
+function showLockScreen(){
+ if(!data.settings.appPin)return;
+ let mount=$('lockMount');if(!mount)return;
+ mount.innerHTML=`<div class="lockScreen"><div class="lockCard"><div class="dialogTitle">Flexi Buddy is locked</div><p class="notice">Enter your 4-digit PIN.</p><input id="unlockPin" type="password" inputmode="numeric" maxlength="4" aria-label="PIN"><button style="width:100%;margin-top:12px" onclick="unlockApp()">Unlock</button></div></div>`;
+ setTimeout(()=>$('unlockPin')?.focus(),50)
+}
+function unlockApp(){
+ if($('unlockPin').value===String(data.settings.appPin||'')){ $('lockMount').innerHTML='';userActivity();haptic([12,30,12]) }else{haptic([60,30,60]);alert('That PIN is incorrect.')}
+}
+function runIntegrityCheck(repair=false){
+ let issues=[],sorted=[...data.events].sort((a,b)=>a.time-b.time),seen=new Set(),clean=[];
+ sorted.forEach(e=>{
+  if(!e.id)e.id='e'+e.time+Math.random().toString(16).slice(2);
+  if(seen.has(e.id)){issues.push('Duplicate event ID');if(repair)e.id+='x'+Math.random().toString(16).slice(2)}
+  seen.add(e.id);
+  if(!e.type||!Number.isFinite(Number(e.time))){issues.push('Invalid event');if(!repair)clean.push(e);return}
+  clean.push(e)
+ });
+ if(repair){data.events=clean;data.days=(data.days||[]).filter(x=>x&&x.date&&x.type);persist()}
+ let box=$('integrityStatus');if(box)box.innerHTML=issues.length?`<span class="${repair?'integrityGood':'integrityWarn'}">${repair?'Records checked and repaired.':issues.length+' issue(s) found.'}</span>`:'<span class="integrityGood">Everything looks healthy.</span>';
+ return issues
+}
+function renderBackupReminder(){
+ let box=$('backupReminder');if(!box)return;
+ let last=Number(data.settings.lastBackupAt||0),days=last?Math.floor((Date.now()-last)/86400000):null;
+ box.textContent=!last?'You have not created a backup yet.':days>=30?`Your last backup was ${days} days ago.`:`Last backup: ${days} day${days===1?'':'s'} ago.`
+}
 
 function monthDatesList(ref=new Date()){
  let y=ref.getFullYear(),m=ref.getMonth(),days=new Date(y,m+1,0).getDate();
@@ -472,6 +836,14 @@ function renderInsights(){
  if($('leaveQuick'))$('leaveQuick').textContent=leave.remaining===null?'—':`${leave.remaining}h`;
  if($('avgFinishQuick'))$('avgFinishQuick').textContent=avgFinish||'—';
  if($('daysRecordedQuick'))$('daysRecordedQuick').textContent=dates.length;
+ if($('workStreakQuick'))$('workStreakQuick').textContent=workStreak()?`🔥 ${workStreak()} completed-day streak`:'';
+ let nextLeave=nextAnnualLeave();
+ if($('leaveCountdownQuick'))$('leaveCountdownQuick').textContent=nextLeave?`${Math.max(0,Math.ceil((new Date(nextLeave.date+'T12:00')-new Date())/86400000))} days until leave`:'';
+ let monthWorked=month.reduce((a,d)=>a+calc(d,false).work,0),monthDays=month.filter(d=>eventsFor(d).length).length;
+ if($('reportMonthTitle'))$('reportMonthTitle').textContent=new Date().toLocaleDateString([],{month:'long',year:'numeric'});
+ if($('reportMonthWorked'))$('reportMonthWorked').textContent=fmt(monthWorked).replace('+','');
+ if($('reportMonthFlexi'))$('reportMonthFlexi').textContent=fmt(monthFlex);
+ if($('reportMonthDays'))$('reportMonthDays').textContent=monthDays;
  if($('insightBalance'))$('insightBalance').textContent=fmt(runningBalance());
  if($('insightMonth'))$('insightMonth').textContent=fmt(monthFlex);
  if($('insightAverageDay'))$('insightAverageDay').textContent=avgDay===null?'—':fmt(avgDay).replace('+','');
@@ -492,14 +864,14 @@ function render(){
  $('breakBadge').textContent=`${c.paidSessions}/${data.settings.paidBreakCount} breaks`;$('actionArea').innerHTML=actionButtons();
  renderTimeline();let wd=weekDatesList(),ww=wd.reduce((a,k)=>a+calc(k,k===d).work,0),wf=wd.reduce((a,k)=>a+flexFor(k,k===d),0);
  $('weekWorked').textContent=fmt(ww).replace('+','');$('weekFlexi').textContent=fmt(wf);$('weekDates').textContent=new Date(wd[0]+'T12:00').toLocaleDateString([],{day:'numeric',month:'short'})+' – '+new Date(wd[6]+'T12:00').toLocaleDateString([],{day:'numeric',month:'short'});
- renderCalendar();renderSelected();renderHistory();renderLeave();renderSettings();renderInsights();renderPauseFavourites()
+ renderCalendar();renderSelected();renderHistory();renderLeave();renderSettings();renderInsights();renderPauseFavourites();renderSmartPrompt();scheduleLongBreakCheck();renderWelcome();renderPolishSettings();applyPolishSettings();runIntegrityCheck(false);renderBackupReminder()
 }
 function renderTimeline(){
  let ev=eventsFor(dayKey(Date.now()));$('timeline').innerHTML=ev.length?ev.map(e=>`<div class="entry"><div class="time">${clock(e.time)}</div><div class="desc">${icons[e.type]||'•'} ${labels[e.type]||e.type}${e.location?` · <span class="muted">${escapeHtml(e.location)}</span>`:''}${e.note&&e.note!=='Location changed'?`<br><span class="muted">${escapeHtml(e.note)}</span>`:''}${e.type==='credit'?` · ${e.creditMinutes||0}m`:''}</div><button class="secondary mini" onclick="editEntry('${e.id}')">Edit</button></div>`).join(''):'<p class="notice">Nothing recorded yet. Tap Start work when you begin.</p>'
 }
 function escapeHtml(v){return String(v||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function undoLast(){let ev=eventsFor(dayKey(Date.now()));if(!ev.length)return toast('Nothing to undo');data.events=data.events.filter(x=>x.id!==ev[ev.length-1].id);persist();toast('Last action undone')}
-function finishSummary(){let d=dayKey(Date.now()),c=calc(d,false),f=Math.round(c.work+c.credit-data.settings.targetMinutes);setTimeout(()=>alert(`Day saved\n\nWorked: ${fmt(c.work).replace('+','')}\nPaid breaks: ${fmt(c.paid).replace('+','')}\nLunch / pauses: ${fmt(c.unpaid).replace('+','')}\nCredits: ${fmt(c.credit).replace('+','')}\nFlexi: ${fmt(f)}`),50)}
+function finishSummary(){openFinishSummary()}
 function explainMyDay(){
  let d=dayKey(Date.now()),ev=eventsFor(d),c=calc(d,true);if(!ev.length)return toast('Nothing to explain yet');
  let first=ev.find(e=>['work','location','work_travel'].includes(e.type)),finish=[...ev].reverse().find(e=>e.type==='finish'),parts=[];
@@ -530,7 +902,7 @@ function moveMonth(n){calendarCursor.setMonth(calendarCursor.getMonth()+n);rende
 function renderCalendar(){
  let y=calendarCursor.getFullYear(),m=calendarCursor.getMonth(),first=new Date(y,m,1),start=new Date(first);start.setDate(1-((first.getDay()+6)%7));$('monthTitle').textContent=first.toLocaleDateString([],{month:'long',year:'numeric'});
  let html=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<div class="dow">${x}</div>`).join('');
- for(let i=0;i<42;i++){let d=new Date(start);d.setDate(start.getDate()+i);let k=dayKey(d),s=special(k),ev=eventsFor(k),cls='day '+(d.getMonth()!==m?'out ':'')+(k===dayKey(Date.now())?'today ':'');if(s)cls+=s.type==='sick'?'sick ':['annual_leave','flexi_day'].includes(s.type)?'leave ':'off ';else if(ev.length)cls+='worked ';let iconsHere=[];
+ for(let i=0;i<42;i++){let d=new Date(start);d.setDate(start.getDate()+i);let k=dayKey(d),s=special(k),ev=eventsFor(k),cls='day '+(d.getMonth()!==m?'out ':'')+(k===dayKey(Date.now())?'today ':'');if(s)cls+=s.type==='sick'?'sick ':s.type==='annual_leave'?'leave ':['flexi_day','part_flexi'].includes(s.type)?'flexi ':s.type==='part_year'?'partyear ':'off ';else if(ev.length)cls+='worked ';let iconsHere=[];
  if(s){
   if(s.type==='annual_leave')iconsHere.push('🌴');
   else if(s.type==='sick')iconsHere.push('🤒');
@@ -544,13 +916,15 @@ function renderCalendar(){
  $('calendarGrid').innerHTML=html
 }
 function selectDate(k){selectedDate=k;renderSelected()}
-function renderSelected(){if(!selectedDate)return;let s=special(selectedDate),c=calc(selectedDate,false),ev=eventsFor(selectedDate),names={annual_leave:'Annual leave',flexi_day:'Full flexi day',part_flexi:'Part flexi',sick:'Sick leave',dependants:'Dependants leave',special:'Special leave',part_year:'Part-year day',bank_holiday:'Bank holiday'};$('selectedTitle').textContent=new Date(selectedDate+'T12:00').toLocaleDateString([],{weekday:'long',day:'numeric',month:'long'});let reflection=data.reflections.find(r=>r.date===selectedDate);$('selectedSummary').innerHTML=s?`<b>${names[s.type]}</b>${s.hours?` · ${s.hours}h`:''}${reflection?`<br><br><b>Reflection</b><br>${escapeHtml(reflection.text)}`:''}`:ev.length?`Worked ${fmt(c.work).replace('+','')} · Credits ${fmt(c.credit).replace('+','')} · Flexi ${fmt(flexFor(selectedDate,false))}<br><br>${ev.map(e=>`${clock(e.time)} ${icons[e.type]||'•'} ${labels[e.type]||e.type}${e.location?' · '+escapeHtml(e.location):''}${e.note?' · '+escapeHtml(e.note):''}`).join('<br>')}${reflection?`<br><br><b>Reflection</b><br>${escapeHtml(reflection.text)}`:''}`:reflection?`<b>Reflection</b><br>${escapeHtml(reflection.text)}`:'No record for this day.'}
+function renderSelected(){if(!selectedDate)return;let s=special(selectedDate),c=calc(selectedDate,false),ev=eventsFor(selectedDate),names={annual_leave:'Annual leave',flexi_day:'Full flexi day',part_flexi:'Part flexi',sick:'Sick leave',dependants:'Dependants leave',special:'Special leave',part_year:'Part-year day',bank_holiday:'Bank holiday'};$('selectedTitle').textContent=new Date(selectedDate+'T12:00').toLocaleDateString([],{weekday:'long',day:'numeric',month:'long'});let reflection=data.reflections.find(r=>r.date===selectedDate);$('selectedSummary').innerHTML=s?`<b>${names[s.type]}</b>${s.hours?` · ${s.hours}h`:''}${reflection?`<br><br><b>Reflection</b><br>${escapeHtml(reflection.text)}`:''}`:ev.length?`Worked ${fmt(c.work).replace('+','')} · Credits ${fmt(c.credit).replace('+','')} · Flexi ${fmt(flexFor(selectedDate,false))}<br><br>${ev.map(e=>`${clock(e.time)} ${icons[e.type]||'•'} ${labels[e.type]||e.type}${e.location?' · '+escapeHtml(e.location):''}${e.note?' · '+escapeHtml(e.note):''}`).join('<br>')}${reflection?`<br><br><b>Reflection</b><br>${escapeHtml(reflection.text)}`:''}`:reflection?`<b>Reflection</b><br>${escapeHtml(reflection.text)}`:'No record for this day.';
+let locs=locationSequence(selectedDate);$('selectedLocations').innerHTML=locs.map(x=>`<span class="locationChip">📍 ${clock(x.time)} ${escapeHtml(x.location)}</span>`).join('');$('selectedReplay').innerHTML='';
+}
 function editSelectedDay(){if(!selectedDate)return;$('leaveDate').value=selectedDate;showTab('leave',document.querySelectorAll('nav button')[2])}
 function saveDay(){let date=$('leaveDate').value,type=$('leaveType').value,hours=Number($('leaveHours').value||0);if(!date)return alert('Choose a date.');data.days=data.days.filter(x=>x.date!==date);data.days.push({date,type,hours});persist();toast('Day saved')}
 function renderLeave(){let used=data.days.filter(x=>x.type==='annual_leave').reduce((s,x)=>s+(Number(x.hours)||data.settings.targetMinutes/60),0),ent=Number(data.settings.annualLeaveHours||0);$('leaveUsed').textContent=used+'h';$('leaveRemaining').textContent=ent?Math.max(0,ent-used)+'h':'—'}
 function renderHistory(){let dates=new Set(data.events.map(e=>dayKey(e.time)));data.days.forEach(x=>dates.add(x.date));let names={annual_leave:'Annual leave',flexi_day:'Flexi day',part_flexi:'Part flexi',sick:'Sick',dependants:'Dependants',special:'Special',part_year:'Part-year',bank_holiday:'Bank holiday'};$('historyRows').innerHTML=[...dates].sort().reverse().slice(0,120).map(d=>{let s=special(d),c=calc(d,false),f=flexFor(d,false);return `<tr><td>${new Date(d+'T12:00').toLocaleDateString([],{day:'2-digit',month:'short',year:'2-digit'})}</td><td>${s?names[s.type]:'Working day'}</td><td class="right">${s?'—':fmt(c.work).replace('+','')}</td><td class="right ${f>=0?'positive':'negative'}">${fmt(f)}</td></tr>`}).join('')||'<tr><td colspan="4" class="muted">No records yet.</td></tr>'}
-function renderSettings(){$('targetHours').value=data.settings.targetMinutes/60;$('paidLimit').value=data.settings.paidBreakLimit;$('paidCount').value=data.settings.paidBreakCount;$('autoConvertPaidBreak').checked=data.settings.autoConvertPaidBreak!==false;$('startBalance').value=data.settings.startingBalance;$('leaveEntitlement').value=data.settings.annualLeaveHours||'';$('defaultLocation').value=data.settings.defaultLocation;$('commuteMinutes').value=data.settings.commuteMinutes||'';$('pauseFavourites').value=(data.settings.pauseFavourites||[]).join(', ');applyTheme()}
-function saveSettings(){data.settings.targetMinutes=Math.round(Number($('targetHours').value||8)*60);data.settings.paidBreakLimit=Number($('paidLimit').value||15);data.settings.paidBreakCount=Number($('paidCount').value||2);data.settings.autoConvertPaidBreak=$('autoConvertPaidBreak').checked;data.settings.startingBalance=Number($('startBalance').value||0);data.settings.annualLeaveHours=Number($('leaveEntitlement').value||0);data.settings.defaultLocation=$('defaultLocation').value;data.settings.commuteMinutes=Number($('commuteMinutes').value||20);data.settings.pauseFavourites=$('pauseFavourites').value.split(',').map(x=>x.trim()).filter(Boolean).slice(0,6);persist();toast('Settings saved')}
+function renderSettings(){$('targetHours').value=data.settings.targetMinutes/60;$('paidLimit').value=data.settings.paidBreakLimit;$('paidCount').value=data.settings.paidBreakCount;$('autoConvertPaidBreak').checked=data.settings.autoConvertPaidBreak!==false;$('startBalance').value=data.settings.startingBalance;$('leaveEntitlement').value=data.settings.annualLeaveHours||'';$('defaultLocation').value=data.settings.defaultLocation;$('commuteMinutes').value=data.settings.commuteMinutes||'';$('pauseFavourites').value=(data.settings.pauseFavourites||[]).join(', ');$('smartPrompts').checked=data.settings.smartPrompts!==false;applyTheme()}
+function saveSettings(){data.settings.targetMinutes=Math.round(Number($('targetHours').value||8)*60);data.settings.paidBreakLimit=Number($('paidLimit').value||15);data.settings.paidBreakCount=Number($('paidCount').value||2);data.settings.autoConvertPaidBreak=$('autoConvertPaidBreak').checked;data.settings.startingBalance=Number($('startBalance').value||0);data.settings.annualLeaveHours=Number($('leaveEntitlement').value||0);data.settings.defaultLocation=$('defaultLocation').value;data.settings.commuteMinutes=Number($('commuteMinutes').value||20);data.settings.pauseFavourites=$('pauseFavourites').value.split(',').map(x=>x.trim()).filter(Boolean).slice(0,6);data.settings.smartPrompts=$('smartPrompts').checked;persist();toast('Settings saved')}
 function toggleTheme(){data.settings.theme=data.settings.theme==='dark'?'light':'dark';persist()}
 function applyTheme(){if(data.settings.theme==='dark')document.documentElement.setAttribute('data-theme','dark');else document.documentElement.removeAttribute('data-theme')}
 function exportOfficialCSV(){
@@ -565,10 +939,15 @@ function exportDiaryCSV(){
  [...dates].sort().forEach(d=>{let s=special(d),c=calc(d,false),r=data.reflections.find(x=>x.date===d);rows.push([d,s?s.type:'working_day',Math.round(c.work),Math.round(c.paid),Math.round(c.unpaid),Math.round(c.credit),flexFor(d,false),eventsFor(d).map(e=>`${clock(e.time)} ${labels[e.type]||e.type}${e.location?' '+e.location:''}${e.note?' - '+e.note:''}${e.type==='credit'?' '+e.creditMinutes+'m':''}`).join(' | '),r?.text||''])});
  download('flexi-buddy-personal-diary.csv',rows.map(r=>r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(',')).join('\n'),'text/csv')
 }
-function exportBackup(){download('flexi-buddy-backup.json',JSON.stringify(data,null,2),'application/json')}
+function exportBackup(){data.settings.lastBackupAt=Date.now();localStorage.setItem(KEY,JSON.stringify(data));download('flexi-buddy-backup.json',JSON.stringify(data,null,2),'application/json')}
 function restoreBackup(ev){let f=ev.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!d.settings||!Array.isArray(d.events))throw 0;if(confirm('Replace current Flexi Buddy data with this backup?')){data=d;data.settings={...defaults().settings,...data.settings};persist();toast('Backup restored')}}catch(e){alert('That does not look like a valid Flexi Buddy backup.')}};r.readAsText(f)}
 function download(name,text,type){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 if('serviceWorker'in navigator)navigator.serviceWorker.register('service-worker.js');
+setTimeout(()=>{if(!data.settings.onboardingComplete)showSetupWizard()},450);
+['pointerdown','keydown','touchstart'].forEach(evt=>document.addEventListener(evt,userActivity,{passive:true}));
+scheduleAutoLock();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){render();renderSmartPrompt();scheduleLongBreakCheck()}});
+window.addEventListener('focus',()=>{renderSmartPrompt();scheduleLongBreakCheck()});
 $('leaveDate').value=dayKey(Date.now());selectedDate=dayKey(Date.now());calendarCursor=new Date();render();setInterval(render,30000);
 </script>
 </body>
