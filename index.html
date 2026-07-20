@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#385a64" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Flexi Buddy" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <title>Flexi Buddy</title>
+  <style>
+    :root{
+      --bg:#f4f1eb;--card:#ffffff;--ink:#203035;--muted:#6e7d80;
+      --accent:#385a64;--accent2:#dce8e5;--danger:#a33d3d;--ok:#2f7456;
+      --shadow:0 8px 24px rgba(24,47,55,.10);--radius:22px
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    .app{max-width:620px;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 16px calc(90px + env(safe-area-inset-bottom))}
+    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+    h1{font-size:30px;margin:0}.sub{color:var(--muted);font-size:14px;margin-top:3px}
+    .pill{background:var(--accent2);padding:8px 11px;border-radius:999px;font-size:13px;font-weight:700}
+    .card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin:13px 0}
+    .status{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .metric{background:#f8faf9;border-radius:16px;padding:14px}
+    .metric b{display:block;font-size:24px;margin-top:4px}.metric span{font-size:12px;color:var(--muted)}
+    .state{font-size:14px;font-weight:800;color:var(--accent);margin-bottom:12px}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    button{border:0;border-radius:16px;padding:15px 12px;font-size:16px;font-weight:800;background:var(--accent);color:white;min-height:58px}
+    button.secondary{background:var(--accent2);color:var(--ink)}
+    button.danger{background:var(--danger)}
+    button.wide{grid-column:1/-1}
+    button:disabled{opacity:.45}
+    .small-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    .small-actions button{min-height:46px;font-size:14px;padding:10px}
+    nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-top:1px solid #d9dfdf;padding:8px 10px calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:5px}
+    nav button{background:transparent;color:var(--muted);font-size:12px;min-height:50px;padding:7px 13px;border-radius:13px}
+    nav button.active{background:var(--accent2);color:var(--accent)}
+    section{display:none} section.active{display:block}
+    label{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px}
+    input,select{width:100%;padding:13px;border:1px solid #cfd8d8;border-radius:13px;font-size:16px;background:white}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{text-align:left;padding:10px 5px;border-bottom:1px solid #edf0ef;vertical-align:top}
+    .right{text-align:right}.muted{color:var(--muted)} .positive{color:var(--ok)} .negative{color:var(--danger)}
+    dialog{border:0;border-radius:22px;max-width:520px;width:calc(100% - 28px);padding:20px;box-shadow:var(--shadow)}
+    dialog::backdrop{background:rgba(0,0,0,.35)}
+    .notice{font-size:13px;line-height:1.45;color:var(--muted)}
+  </style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div><h1>Flexi Buddy</h1><div class="sub" id="todayLabel"></div></div>
+  <div class="pill" id="topBalance">0m flexi</div>
+</header>
+
+<section id="home" class="active">
+  <div class="card">
+    <div class="state" id="currentState">Not working</div>
+    <div class="status">
+      <div class="metric"><span>Worked today</span><b id="workedToday">0h 00m</b></div>
+      <div class="metric"><span>Remaining</span><b id="remainingToday">8h 00m</b></div>
+      <div class="metric"><span>Flexi today</span><b id="flexiToday">0m</b></div>
+      <div class="metric"><span>Estimated finish</span><b id="finishEstimate">—</b></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="actions">
+      <button id="startBtn" onclick="startEvent('work')">🟢 Start work</button>
+      <button id="resumeBtn" onclick="startEvent('work')">▶️ Resume</button>
+      <button class="secondary" onclick="startEvent('paid_break')">☕ Paid break</button>
+      <button class="secondary" onclick="startEvent('unpaid_break')">⏸ Unpaid break</button>
+      <button class="secondary wide" onclick="startEvent('lunch')">🍽 Lunch</button>
+      <button class="danger wide" onclick="finishDay()">🔴 Finish work</button>
+    </div>
+    <div class="small-actions">
+      <button class="secondary" onclick="openForgot()">🕒 I forgot</button>
+      <button class="secondary" onclick="undoLast()">↩️ Undo last</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <b>Today’s breakdown</b>
+    <table>
+      <tr><td>Paid breaks</td><td class="right" id="paidToday">0m</td></tr>
+      <tr><td>Unpaid breaks/lunch</td><td class="right" id="unpaidToday">0m</td></tr>
+      <tr><td>Daily target</td><td class="right" id="targetToday">8h 00m</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="days">
+  <div class="card">
+    <b>Record leave or another day type</b>
+    <label>Date</label><input id="dayDate" type="date" />
+    <label>Day type</label>
+    <select id="dayType">
+      <option value="annual_leave">🌴 Annual leave</option>
+      <option value="flexi_day">🏖 Full flexi day</option>
+      <option value="part_flexi">🕒 Part flexi</option>
+      <option value="sick">🤒 Sick leave</option>
+      <option value="dependants">👶 Dependants leave</option>
+      <option value="special">❤️ Special leave</option>
+      <option value="part_year">📅 Part-year non-working day</option>
+      <option value="bank_holiday">🏦 Bank holiday</option>
+    </select>
+    <label id="hoursLabel">Hours (only needed for part flexi)</label>
+    <input id="dayHours" type="number" min="0" max="24" step="0.25" placeholder="e.g. 3.5" />
+    <button class="wide" style="margin-top:14px" onclick="recordDayType()">Save day</button>
+    <p class="notice">A full flexi day deducts your daily target from your running flexi balance. Other leave types count as an authorised non-working day and do not change the balance.</p>
+  </div>
+</section>
+
+<section id="history">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center"><b>Recent days</b><button class="secondary" style="min-height:38px;padding:8px 11px;font-size:13px" onclick="exportCSV()">Export CSV</button></div>
+    <div style="overflow:auto"><table><thead><tr><th>Date</th><th>Type</th><th class="right">Worked</th><th class="right">Flexi</th></tr></thead><tbody id="historyRows"></tbody></table></div>
+  </div>
+</section>
+
+<section id="settings">
+  <div class="card">
+    <b>Settings</b>
+    <label>Daily target hours</label><input id="targetHours" type="number" min="0" max="24" step="0.25" value="8" />
+    <label>Paid break allowance per break (minutes)</label><input id="paidBreakLimit" type="number" min="0" max="120" step="1" value="15" />
+    <label>Starting flexi balance (minutes)</label><input id="startingBalance" type="number" step="1" value="0" />
+    <button style="margin-top:14px;width:100%" onclick="saveSettings()">Save settings</button>
+  </div>
+  <div class="card">
+    <b>Backup and reset</b>
+    <div class="small-actions">
+      <button class="secondary" onclick="downloadBackup()">Download backup</button>
+      <button class="danger" onclick="resetAll()">Reset all data</button>
+    </div>
+  </div>
+</section>
+</div>
+
+<nav>
+  <button class="active" onclick="showTab('home',this)">Today</button>
+  <button onclick="showTab('days',this)">Leave</button>
+  <button onclick="showTab('history',this)">History</button>
+  <button onclick="showTab('settings',this)">Settings</button>
+</nav>
+
+<dialog id="forgotDialog">
+  <h3>Record something you forgot</h3>
+  <label>What happened?</label>
+  <select id="forgotType">
+    <option value="work">Start/resume work</option>
+    <option value="paid_break">Start paid break</option>
+    <option value="unpaid_break">Start unpaid break</option>
+    <option value="lunch">Start lunch</option>
+    <option value="finish">Finish work</option>
+  </select>
+  <label>Date and time</label><input id="forgotTime" type="datetime-local" />
+  <div class="small-actions"><button class="secondary" onclick="closeForgot()">Cancel</button><button onclick="saveForgot()">Save</button></div>
+</dialog>
+
+<script>
+const KEY='flexiBuddyDataV1';
+let data=loadData();
+function defaultData(){return {settings:{targetMinutes:480,paidBreakLimit:15,startingBalance:0},events:[],days:[]}}
+function loadData(){try{return JSON.parse(localStorage.getItem(KEY))||defaultData()}catch(e){return defaultData()}}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+const pad=n=>String(n).padStart(2,'0');
+const dateKey=d=>{d=new Date(d);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
+const fmtMin=m=>{m=Math.round(m);let s=m<0?'-':m>0?'+':'';m=Math.abs(m);let h=Math.floor(m/60),r=m%60;return h?`${s}${h}h ${pad(r)}m`:`${s}${r}m`}
+const fmtTime=t=>t?new Date(t).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}):'—';
+function todayEvents(){let k=dateKey(new Date());return data.events.filter(e=>dateKey(e.time)===k).sort((a,b)=>a.time-b.time)}
+function intervalsFor(dateStr){
+  const ev=data.events.filter(e=>dateKey(e.time)===dateStr).sort((a,b)=>a.time-b.time);
+  let work=0,paid=0,unpaid=0,current=null;
+  for(let i=0;i<ev.length;i++){
+    const e=ev[i], next=ev[i+1], end=next?next.time:Date.now();
+    if(e.type==='finish'){current=null;continue}
+    current=e.type;
+    let mins=Math.max(0,(end-e.time)/60000);
+    if(e.type==='work') work+=mins;
+    if(e.type==='paid_break'){paid+=Math.min(mins,data.settings.paidBreakLimit);unpaid+=Math.max(0,mins-data.settings.paidBreakLimit)}
+    if(e.type==='unpaid_break'||e.type==='lunch') unpaid+=mins;
+  }
+  return {work,paid,unpaid,events:ev};
+}
+function currentType(){
+  let ev=todayEvents(); if(!ev.length)return null;
+  let t=ev[ev.length-1].type; return t==='finish'?null:t;
+}
+function startEvent(type){data.events.push({type,time:Date.now()});save()}
+function finishDay(){data.events.push({type:'finish',time:Date.now()});save()}
+function undoLast(){
+  let ev=todayEvents(); if(!ev.length)return alert('There is nothing to undo today.');
+  let target=ev[ev.length-1]; data.events=data.events.filter(e=>e!==target); save();
+}
+function dayFlexi(dateStr){
+  const special=data.days.find(d=>d.date===dateStr);
+  if(special){
+    if(special.type==='flexi_day')return -data.settings.targetMinutes;
+    if(special.type==='part_flexi')return -(Number(special.hours||0)*60);
+    return 0;
+  }
+  const x=intervalsFor(dateStr); return Math.round(x.work-data.settings.targetMinutes);
+}
+function balance(){
+  let dates=new Set(data.events.map(e=>dateKey(e.time)));
+  data.days.forEach(d=>dates.add(d.date));
+  return data.settings.startingBalance+[...dates].reduce((s,d)=>s+dayFlexi(d),0);
+}
+function estimatedFinish(){
+  let type=currentType(); if(type!=='work')return null;
+  let x=intervalsFor(dateKey(new Date()));
+  let rem=Math.max(0,data.settings.targetMinutes-x.work);
+  return Date.now()+rem*60000;
+}
+function render(){
+  const now=new Date(), k=dateKey(now), x=intervalsFor(k), state=currentType();
+  document.getElementById('todayLabel').textContent=now.toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('workedToday').textContent=fmtMin(x.work).replace('+','');
+  document.getElementById('remainingToday').textContent=fmtMin(Math.max(0,data.settings.targetMinutes-x.work)).replace('+','');
+  let f=Math.round(x.work-data.settings.targetMinutes);
+  document.getElementById('flexiToday').textContent=fmtMin(f);
+  document.getElementById('flexiToday').className=f>=0?'positive':'negative';
+  document.getElementById('finishEstimate').textContent=fmtTime(estimatedFinish());
+  document.getElementById('paidToday').textContent=fmtMin(x.paid).replace('+','');
+  document.getElementById('unpaidToday').textContent=fmtMin(x.unpaid).replace('+','');
+  document.getElementById('targetToday').textContent=fmtMin(data.settings.targetMinutes).replace('+','');
+  let names={work:'Currently working',paid_break:'On a paid break',unpaid_break:'On an unpaid break',lunch:'At lunch'};
+  document.getElementById('currentState').textContent=names[state]||'Not working';
+  document.getElementById('topBalance').textContent=fmtMin(balance())+' flexi';
+  document.getElementById('startBtn').disabled=!!state;
+  document.getElementById('resumeBtn').disabled=state==='work'||!state;
+  document.getElementById('targetHours').value=data.settings.targetMinutes/60;
+  document.getElementById('paidBreakLimit').value=data.settings.paidBreakLimit;
+  document.getElementById('startingBalance').value=data.settings.startingBalance;
+  renderHistory();
+}
+function renderHistory(){
+  let dates=new Set(data.events.map(e=>dateKey(e.time))); data.days.forEach(d=>dates.add(d.date));
+  let rows=[...dates].sort().reverse().slice(0,60).map(d=>{
+    let special=data.days.find(x=>x.date===d), x=intervalsFor(d);
+    let names={annual_leave:'Annual leave',flexi_day:'Full flexi day',part_flexi:'Part flexi',sick:'Sick leave',dependants:'Dependants leave',special:'Special leave',part_year:'Part-year day',bank_holiday:'Bank holiday'};
+    let typ=special?names[special.type]:'Working day', flex=dayFlexi(d);
+    return `<tr><td>${new Date(d+'T12:00').toLocaleDateString([], {day:'2-digit',month:'short'})}</td><td>${typ}</td><td class="right">${special?'—':fmtMin(x.work).replace('+','')}</td><td class="right ${flex>=0?'positive':'negative'}">${fmtMin(flex)}</td></tr>`
+  }).join('');
+  document.getElementById('historyRows').innerHTML=rows||'<tr><td colspan="4" class="muted">No records yet.</td></tr>';
+}
+function showTab(id,btn){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+function recordDayType(){
+  let date=document.getElementById('dayDate').value||dateKey(new Date()),type=document.getElementById('dayType').value,hours=document.getElementById('dayHours').value;
+  data.days=data.days.filter(d=>d.date!==date);data.days.push({date,type,hours:Number(hours||0)});save();alert('Day saved.');
+}
+function saveSettings(){
+  data.settings.targetMinutes=Math.round(Number(document.getElementById('targetHours').value||8)*60);
+  data.settings.paidBreakLimit=Math.round(Number(document.getElementById('paidBreakLimit').value||15));
+  data.settings.startingBalance=Math.round(Number(document.getElementById('startingBalance').value||0));save();alert('Settings saved.');
+}
+function openForgot(){document.getElementById('forgotTime').value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);document.getElementById('forgotDialog').showModal()}
+function closeForgot(){document.getElementById('forgotDialog').close()}
+function saveForgot(){
+  let type=document.getElementById('forgotType').value,time=new Date(document.getElementById('forgotTime').value).getTime();
+  if(!time)return alert('Choose a date and time.');
+  data.events.push({type,time});data.events.sort((a,b)=>a.time-b.time);closeForgot();save()
+}
+function exportCSV(){
+  let dates=new Set(data.events.map(e=>dateKey(e.time)));data.days.forEach(d=>dates.add(d.date));
+  let lines=[['Date','Day type','Worked minutes','Paid break minutes','Unpaid/lunch minutes','Flexi minutes']];
+  [...dates].sort().forEach(d=>{let s=data.days.find(x=>x.date===d),x=intervalsFor(d);lines.push([d,s?s.type:'working_day',Math.round(x.work),Math.round(x.paid),Math.round(x.unpaid),dayFlexi(d)])});
+  downloadBlob(lines.map(r=>r.join(',')).join('\n'),'flexi-buddy.csv','text/csv')
+}
+function downloadBackup(){downloadBlob(JSON.stringify(data,null,2),'flexi-buddy-backup.json','application/json')}
+function downloadBlob(content,name,type){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function resetAll(){if(confirm('Delete all Flexi Buddy data from this device?')){data=defaultData();save()}}
+document.getElementById('dayDate').value=dateKey(new Date());
+if('serviceWorker' in navigator)navigator.serviceWorker.register('service-worker.js');
+render();setInterval(render,30000);
+</script>
+</body></html>
