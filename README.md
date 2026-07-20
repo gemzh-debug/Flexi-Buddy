@@ -18,3 +18,13 @@ Key improvements:
 - Once the allowance is reached, excess time is automatically counted as unpaid.
 - This can be switched off in Settings.
 - The default remains 15 minutes per paid break and two paid breaks per day.
+
+## Version 3 additions
+- At-a-glance monthly dashboard
+- Average finish and average working day
+- Simple worked-hours and flexi trend charts
+- Search across notes, locations, pause reasons and reflections
+- Configurable favourite pause reasons
+- Calendar icons for work, leave, sick days, flexi days and home visits
+- Separate official flexi and personal diary reports
+- Daily reflection creation, editing, saving and searching
