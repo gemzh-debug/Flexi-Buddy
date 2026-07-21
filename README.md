@@ -1,14 +1,14 @@
-# Flexi Buddy 5.2 Professional
+# Flexi Buddy 5.3 Professional
 
-Offline-first flexi-time work companion.
+An offline-first flexi-time work companion.
 
-## New in 5.2
-- Customisable Insights dashboard
-- Drag-and-drop dashboard card ordering
-- Show or hide individual dashboard widgets
-- Automatic monthly review with printable summary
-- Live progress bars for flexi and monthly workday goals
-- Achievement unlock notifications
-- Keeps all existing data in `flexiBuddyDataV1`
+## New in 5.3
+- Quick Work button for short email and work-message tasks
+- 5, 10, 15-minute and custom durations
+- Works even when a full work session is not running
+- Adds time immediately to today, flexi totals and reports
+- Optional notes and clear timeline entries
+- Daily Quick Work total and entry count
+- Existing `flexiBuddyDataV1` data remains compatible
 
-Upload every file in this folder to the root of the GitHub Pages repository.
+Upload all files to the root of the GitHub Pages repository.
