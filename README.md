@@ -1,14 +1,19 @@
-# Flexi Buddy 5.3 Professional
+# Flexi Buddy 6.0 Professional
 
-An offline-first flexi-time work companion.
+Adds editable previous days from the Calendar, including creating, correcting and deleting timeline entries. Existing saved data remains compatible.
 
-## New in 5.3
-- Quick Work button for short email and work-message tasks
-- 5, 10, 15-minute and custom durations
-- Works even when a full work session is not running
-- Adds time immediately to today, flexi totals and reports
-- Optional notes and clear timeline entries
-- Daily Quick Work total and entry count
-- Existing `flexiBuddyDataV1` data remains compatible
+# Flexi Buddy 5.5 Professional
 
-Upload all files to the root of the GitHub Pages repository.
+Offline-first flexi-time work companion.
+
+## New in 5.5
+- Customisable favourite actions on the Today dashboard
+- Automatic plain-English work diary generated from the timeline
+- Editable diary wording saved per day
+- Copy and download diary summaries
+- Existing Flexi Buddy data remains compatible through `flexiBuddyDataV1`
+
+Upload every file in this folder to the root of the GitHub Pages repository.
+
+
+Version 6.2: Adds a prominent Edit a previous day button on Today, keeps Calendar in navigation, and includes before/after lunch paid-time totals.
