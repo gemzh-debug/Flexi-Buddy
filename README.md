@@ -70,3 +70,10 @@ Important: the optional PIN is a local convenience lock, not encrypted storage o
 - Branded header and clearer screen hierarchy
 - Smooth screen transitions and refined microcopy
 - Existing calculations, reports, backups, reminders and accessibility retained
+
+
+## Pro Edition v7
+- Flexi Coach panel
+- Dashboard enhancements
+- Foundation for intelligent coaching
+- Ready for future trend analysis
