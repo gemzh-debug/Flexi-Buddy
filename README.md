@@ -1,19 +1,15 @@
-# Flexi Buddy 2.0
+# Flexi Buddy 5.0 Professional
 
-A ground-up visual redesign of Flexi Buddy while retaining the established time-tracking engine and stored data format.
+A complete offline-first flexi-time work companion.
 
-## What changed
-- Completely rebuilt Today screen
-- New dark, premium visual identity
-- Daily Briefing with live contextual wording
-- Genuine Flexi Coach messages based on current state, remaining time, weekly balance and recorded habits
-- Large live progress ring and predicted finish time
-- New bento-style day, week and month statistics
-- Redesigned one-tap action dock
-- Rebuilt timeline and reflection presentation
-- Native-style floating navigation
-- Fully restyled Calendar, Leave, Reports and Settings screens
-- Existing records, calculations, exports, reminders, backups and accessibility features retained
+## New in 5.0
+- Dedicated Work Coach with readiness score, personalised advice and flexi forecasting
+- What-if finish-time calculator
+- Global search across dates, notes, locations, workdays and leave
+- Leave Centre with full-year planner and planning guidance
+- Personal flexi and monthly workday goals
+- Smart reminder preferences
+- Updated professional five-tab navigation
+- Existing Flexi Buddy data remains compatible through `flexiBuddyDataV1`
 
-## Publishing
-Upload all six files to the root of the GitHub Pages repository, replacing the previous version. Commit the changes and allow GitHub Pages to redeploy. Because this is an offline PWA, an iPhone may briefly retain the previous cached version; closing and reopening the installed app or refreshing the browser page will load the new cache.
+Upload all files to the root of the GitHub Pages repository.
