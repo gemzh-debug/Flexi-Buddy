@@ -1,19 +1,21 @@
-# Flexi Buddy 2.0
+# Flexi Buddy 3.0 — Rebuilt
 
-A ground-up visual redesign of Flexi Buddy while retaining the established time-tracking engine and stored data format.
+This version is a ground-up front-end rebuild, not a visual overlay.
 
-## What changed
-- Completely rebuilt Today screen
-- New dark, premium visual identity
-- Daily Briefing with live contextual wording
-- Genuine Flexi Coach messages based on current state, remaining time, weekly balance and recorded habits
-- Large live progress ring and predicted finish time
-- New bento-style day, week and month statistics
-- Redesigned one-tap action dock
-- Rebuilt timeline and reflection presentation
-- Native-style floating navigation
-- Fully restyled Calendar, Leave, Reports and Settings screens
-- Existing records, calculations, exports, reminders, backups and accessibility features retained
+## Important
+It uses the same browser storage key (`flexiBuddyDataV1`) as the previous app, so existing records and settings should appear automatically on the same GitHub Pages address and browser.
 
-## Publishing
-Upload all six files to the root of the GitHub Pages repository, replacing the previous version. Commit the changes and allow GitHub Pages to redeploy. Because this is an offline PWA, an iPhone may briefly retain the previous cached version; closing and reopening the installed app or refreshing the browser page will load the new cache.
+## Included
+- Entirely new Today screen and navigation
+- Daily briefing and live Flexi Coach
+- Live finish prediction and progress ring
+- Start, resume, paid break, lunch, pause, location and finish controls
+- Editable timeline with undo and delete
+- Calendar with work and leave markers
+- Reports, chart, CSV export and JSON backup
+- Leave recording
+- Settings and backup restore
+- Offline PWA service worker
+
+## Upload
+Replace the files in the root of the GitHub repository with all files from this ZIP and commit them. The service-worker cache name is completely new, so the redesign should replace the old cached interface once GitHub Pages deploys.
