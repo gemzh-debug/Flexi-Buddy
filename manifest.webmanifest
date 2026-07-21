@@ -1,12 +1,10 @@
 {
-  "name": "Flexi Buddy 3.0",
+  "name": "Flexi Buddy 2.0",
   "short_name": "Flexi Buddy",
-  "description": "A rebuilt flexi-time companion for tracking work, breaks, leave and balance.",
   "start_url": "./",
-  "scope": "./",
   "display": "standalone",
-  "background_color": "#080d19",
-  "theme_color": "#0a1020",
+  "background_color": "#090d1a",
+  "theme_color": "#090d1a",
   "icons": [
     {
       "src": "icon-192.png",
@@ -18,5 +16,6 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "description": "A beautifully redesigned flexi-time companion with intelligent workday guidance."
 }
