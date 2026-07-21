@@ -1,15 +1,12 @@
-# Flexi Buddy 5.0 Professional
+# Flexi Buddy 5.1.2 Professional
 
-A complete offline-first flexi-time work companion.
+Offline-first flexi-time work companion.
 
-## New in 5.0
-- Dedicated Work Coach with readiness score, personalised advice and flexi forecasting
-- What-if finish-time calculator
-- Global search across dates, notes, locations, workdays and leave
-- Leave Centre with full-year planner and planning guidance
-- Personal flexi and monthly workday goals
-- Smart reminder preferences
-- Updated professional five-tab navigation
-- Existing Flexi Buddy data remains compatible through `flexiBuddyDataV1`
+## New in 5.1.2
+- Functional one-tap quick actions for WFH, office, home visits, meetings, paid travel, lunch and paid breaks
+- Weekly hours dashboard with daily totals, target progress and projected weekly flexi
+- Smart weekly forecast based on recent completed workdays
+- Interactive Timeline Replay with work, break and paused segments
+- Existing records and settings remain compatible through `flexiBuddyDataV1`
 
-Upload all files to the root of the GitHub Pages repository.
+Upload every file in this ZIP to the root of the GitHub Pages repository, replacing the previous files.
