@@ -1,4 +1,4 @@
-# Flexi Buddy 5.1 Professional
+# Flexi Buddy 5.0 Professional
 
 A complete offline-first flexi-time work companion.
 
@@ -13,7 +13,3 @@ A complete offline-first flexi-time work companion.
 - Existing Flexi Buddy data remains compatible through `flexiBuddyDataV1`
 
 Upload all files to the root of the GitHub Pages repository.
-
-
-## 5.1
-- Added Quick Actions panel (initial implementation).
