@@ -3,7 +3,7 @@ const KEY='flexiBuddyDataV1';
 const defaults=()=>({settings:{targetMinutes:480,paidBreakLimit:15,paidBreakCount:2,startingBalance:0,annualLeaveHours:0,defaultLocation:'Home',usualLunchMinutes:30,autoConvertPaidBreak:true,theme:'midnight',goalFlexiHours:0,goalMonthlyDays:0,remindBreak:false,remindFinish:false,remindStart:false,replaySpeed:18,dashboardOrder:['avgDay','avgStart','avgFinish','daysRecorded','reportBalance','leaveRemaining'],dashboardHidden:[],seenAchievements:[],workMode:'',travelStartedAt:null,favourites:['wfh','office','quick','travel','lunch','meeting'],diaryEdits:{}},events:[],days:[],reflections:[]});
 function load(){let d;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}d=d||defaults();d.settings={...defaults().settings,...(d.settings||{})};d.events=Array.isArray(d.events)?d.events:[];d.days=Array.isArray(d.days)?d.days:[];d.reflections=Array.isArray(d.reflections)?d.reflections:[];return d}
 let data=load(),monthCursor=new Date(),selectedDay=null,creatingEntry=false;
-const APP_VERSION='7.0.0';
+const APP_VERSION='7.0.1';
 const $=id=>document.getElementById(id),pad=n=>String(n).padStart(2,'0');
 const dayKey=x=>{let d=new Date(x);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
 const clock=x=>new Date(x).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
