@@ -3,7 +3,7 @@ const KEY='flexiBuddyDataV1';
 const defaults=()=>({settings:{targetMinutes:480,paidBreakLimit:15,paidBreakCount:2,startingBalance:0,annualLeaveHours:0,defaultLocation:'Home',usualLunchMinutes:30,autoConvertPaidBreak:true,theme:'midnight',goalFlexiHours:0,goalMonthlyDays:0,remindBreak:false,remindFinish:false,remindStart:false,replaySpeed:18,dashboardOrder:['avgDay','avgStart','avgFinish','daysRecorded','reportBalance','leaveRemaining'],dashboardHidden:[],seenAchievements:[],workMode:'',travelStartedAt:null,favourites:['wfh','office','quick','travel','lunch','meeting'],diaryEdits:{}},events:[],days:[],reflections:[]});
 function load(){let d;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}d=d||defaults();d.settings={...defaults().settings,...(d.settings||{})};d.events=Array.isArray(d.events)?d.events:[];d.days=Array.isArray(d.days)?d.days:[];d.reflections=Array.isArray(d.reflections)?d.reflections:[];return d}
 let data=load(),monthCursor=new Date(),selectedDay=null,creatingEntry=false;
-const APP_VERSION='7.0.2';
+const APP_VERSION='7.0.3';
 const $=id=>document.getElementById(id),pad=n=>String(n).padStart(2,'0');
 const dayKey=x=>{let d=new Date(x);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
 const clock=x=>new Date(x).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
@@ -37,6 +37,48 @@ function daySplit(d,live=false){
   });
   return{before,after,total:before+after,paidBreak,lunch:lunchMinutes};
 }
+
+function flexiSheetTimes(d=dayKey(Date.now()),live=true){
+  const ev=eventsFor(d),split=daySplit(d,live),lunchIndex=ev.findIndex(e=>e.type==='lunch');
+  const productive=e=>['work','location','work_travel'].includes(e.type);
+  const firstBefore=ev.find((e,i)=>productive(e)&&(lunchIndex<0||i<lunchIndex));
+  let firstAfter=null;
+  if(lunchIndex>=0) firstAfter=ev.slice(lunchIndex+1).find(productive)||null;
+  const at=(start,mins)=>start?new Date(start.time+Math.round(mins)*60000):null;
+  return{
+    beforeStart:firstBefore?new Date(firstBefore.time):null,
+    beforeFinish:at(firstBefore,split.before),
+    afterStart:firstAfter?new Date(firstAfter.time):null,
+    afterFinish:at(firstAfter,split.after),
+    beforeMinutes:split.before,
+    afterMinutes:split.after,
+    hasLunch:lunchIndex>=0
+  };
+}
+function renderFlexiSheetTimes(){
+  if(!$('flexiBeforeStart'))return;
+  const t=flexiSheetTimes(),show=x=>x?clock(x):'—';
+  $('flexiBeforeStart').textContent=show(t.beforeStart);
+  $('flexiBeforeFinish').textContent=show(t.beforeFinish);
+  $('flexiAfterStart').textContent=show(t.afterStart);
+  $('flexiAfterFinish').textContent=show(t.afterFinish);
+  $('flexiBeforeTotal').textContent=`${plain(t.beforeMinutes)} paid`;
+  $('flexiAfterTotal').textContent=`${plain(t.afterMinutes)} paid`;
+  const readyBefore=!!t.beforeStart,readyAfter=!!t.afterStart;
+  $('copyFlexiTimesButton').disabled=!readyBefore;
+  if(!readyBefore){$('flexiSheetIntro').textContent='Start work to calculate your first set of times.';$('flexiSheetNote').textContent='Your separate before-lunch and after-lunch times will appear here automatically.'}
+  else if(!t.hasLunch){$('flexiSheetIntro').textContent='Your before-lunch times are ready. The second period will appear when you return from lunch.';$('flexiSheetNote').textContent='The finish shown equals the paid work recorded so far, even if you paused during the morning.'}
+  else if(!readyAfter){$('flexiSheetIntro').textContent='Your before-lunch times are ready. Resume work after lunch to create the second period.';$('flexiSheetNote').textContent='The after-lunch start and finish will appear as soon as work resumes.'}
+  else{$('flexiSheetIntro').textContent='These are the two periods to enter on your Flexi sheet.';$('flexiSheetNote').textContent='Each suggested finish is adjusted so both periods exactly match the paid work recorded.'}
+}
+async function copyFlexiSheetTimes(){
+  const t=flexiSheetTimes(),show=x=>x?clock(x):'—';
+  if(!t.beforeStart)return toast('Start work first');
+  let text=`Before lunch: ${show(t.beforeStart)} to ${show(t.beforeFinish)} (${plain(t.beforeMinutes)})`;
+  if(t.afterStart)text+=`
+After lunch: ${show(t.afterStart)} to ${show(t.afterFinish)} (${plain(t.afterMinutes)})`;
+  try{await navigator.clipboard.writeText(text);toast('Flexi sheet times copied')}catch(e){let a=document.createElement('textarea');a.value=text;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();toast('Flexi sheet times copied')}
+}
 function flexFor(d,live=false){let s=special(d);if(s){if(s.type==='flexi_day')return-Number(data.settings.targetMinutes);if(s.type==='part_flexi')return-(Number(s.hours||0)*60);return 0}let ev=eventsFor(d);if(!ev.length)return 0;if(!live&&d===dayKey(Date.now())&&!hasFinished(d))return 0;let c=calc(d,live);return Math.round(c.work+c.credit-Number(data.settings.targetMinutes))}
 function allDates(){let set=new Set(data.events.map(e=>dayKey(e.time)));data.days.forEach(x=>set.add(x.date));return [...set].sort()}
 function runningBalance(){return Number(data.settings.startingBalance||0)+allDates().reduce((s,d)=>s+(d===dayKey(Date.now())&&!hasFinished(d)&&!special(d)?0:flexFor(d,false)),0)}
@@ -67,7 +109,7 @@ function selectQuickWorkType(btn){quickWorkKind=btn.dataset.kind;document.queryS
 function selectQuickWorkDuration(btn){let v=btn.dataset.minutes;if(v==='custom'){let n=Number(prompt('How many minutes?','5'));if(!Number.isFinite(n)||n<=0)return;quickWorkMinutes=Math.min(240,Math.round(n));btn.textContent=quickWorkMinutes+'m'}else quickWorkMinutes=Number(v);document.querySelectorAll('#quickWorkDurations button').forEach(b=>b.classList.toggle('selected',b===btn))}
 function saveQuickWork(){let note=$('quickWorkNote').value.trim(),kind=quickWorkKind;if(kind==='Other quick work'&&note)kind=note;data.events.push({id:'e'+Date.now()+Math.random().toString(16).slice(2),type:'quick_work',time:Date.now(),creditMinutes:quickWorkMinutes,note:kind+(note&&kind!==note?' · '+note:'')});closeDialog('quickWorkDialog');persist();toast(`${quickWorkMinutes} minutes of quick work added`)}
 function quickWorkToday(){let ev=eventsFor(dayKey(Date.now())).filter(e=>e.type==='quick_work'),mins=ev.reduce((a,e)=>a+Number(e.creditMinutes||0),0);return{count:ev.length,mins}}
-function renderToday(){let d=dayKey(Date.now()),c=calc(d,true),target=Number(data.settings.targetMinutes),pct=Math.min(100,Math.max(0,(c.work+c.credit)/target*100)),week=weekDates().reduce((a,x)=>a+flexFor(x,false),0),s=currentState(),loc=latestLocation()||data.settings.defaultLocation||'';$('greeting').textContent=greeting();$('briefing').textContent=briefingText();$('ring').style.setProperty('--p',pct);$('workedRing').textContent=plain(c.work);$('ring').querySelector('span').textContent=`of ${plain(target)}`;$('workedStat').textContent=plain(c.work);let split=daySplit(d,true);$('beforeLunchStat').textContent=plain(split.before);$('afterLunchStat').textContent=plain(split.after);$('appVersion').textContent='v'+APP_VERSION;$('todayFlex').textContent=fmt(flexFor(d,true));$('weekFlex').textContent=fmt(week);$('runningBalance').textContent=fmt(runningBalance());$('weekChip').textContent=`Week ${fmt(week)}`;$('balanceChip').textContent=`Balance ${fmt(runningBalance())}`;$('coach').textContent=coachText();$('locationPill').textContent=loc?`📍 ${loc}`:'📍 No location yet';$('stateBadge').textContent={idle:'Ready',finished:'Finished',work:'Working',location:'Working',work_travel:'Travelling',paid_break:'Paid break',lunch:'Lunch',pause:'Paused'}[s]||'Working';$('progressTitle').textContent=s==='finished'?'Day complete':s==='idle'?'Ready when you are':'On your way';$('prediction').innerHTML=(s==='idle'||s==='finished')?'Start work to see your finish prediction.':`Estimated finish<b>${clock(finishPrediction())}</b>`;$('actions').innerHTML=actionHTML();let ev=eventsFor(d);$('timeline').innerHTML=ev.length?ev.map(e=>`<div class="entry"><div class="entry-icon">${icons[e.type]||'•'}</div><div><b>${labels[e.type]||e.type}</b><small>${clock(e.time)}${e.location?' · '+escapeHTML(e.location):''}${e.note?' · '+escapeHTML(e.note):''}${['credit','quick_work'].includes(e.type)?' · '+Number(e.creditMinutes||0)+'m':''}</small></div><div class="entry-actions"><button onclick="editEntry('${e.id}')">Edit</button></div></div>`).join(''):'<div class="empty">Your day will appear here as soon as you start work.</div>';$('quickPresets').innerHTML=presetHTML()+`<button class="quick-work-btn" onclick="openQuickWork()">⚡ Quick work · email or messages</button>`;let qw=quickWorkToday();$('quickHint').innerHTML=qw.count?`<div class="quick-work-summary"><span>Quick work today · ${qw.count} ${qw.count===1?'entry':'entries'}</span><b>${plain(qw.mins)}</b></div>`:'One tap records the change and keeps your diary up to date.';renderWorkModeTools();renderFavourites();renderDiary();renderWeekSummary();renderReplay()}
+function renderToday(){let d=dayKey(Date.now()),c=calc(d,true),target=Number(data.settings.targetMinutes),pct=Math.min(100,Math.max(0,(c.work+c.credit)/target*100)),week=weekDates().reduce((a,x)=>a+flexFor(x,false),0),s=currentState(),loc=latestLocation()||data.settings.defaultLocation||'';$('greeting').textContent=greeting();$('briefing').textContent=briefingText();$('ring').style.setProperty('--p',pct);$('workedRing').textContent=plain(c.work);$('ring').querySelector('span').textContent=`of ${plain(target)}`;$('workedStat').textContent=plain(c.work);let split=daySplit(d,true);$('beforeLunchStat').textContent=plain(split.before);$('afterLunchStat').textContent=plain(split.after);$('appVersion').textContent='v'+APP_VERSION;$('todayFlex').textContent=fmt(flexFor(d,true));$('weekFlex').textContent=fmt(week);$('runningBalance').textContent=fmt(runningBalance());$('weekChip').textContent=`Week ${fmt(week)}`;$('balanceChip').textContent=`Balance ${fmt(runningBalance())}`;$('coach').textContent=coachText();$('locationPill').textContent=loc?`📍 ${loc}`:'📍 No location yet';$('stateBadge').textContent={idle:'Ready',finished:'Finished',work:'Working',location:'Working',work_travel:'Travelling',paid_break:'Paid break',lunch:'Lunch',pause:'Paused'}[s]||'Working';$('progressTitle').textContent=s==='finished'?'Day complete':s==='idle'?'Ready when you are':'On your way';$('prediction').innerHTML=(s==='idle'||s==='finished')?'Start work to see your finish prediction.':`Estimated finish<b>${clock(finishPrediction())}</b>`;$('actions').innerHTML=actionHTML();let ev=eventsFor(d);$('timeline').innerHTML=ev.length?ev.map(e=>`<div class="entry"><div class="entry-icon">${icons[e.type]||'•'}</div><div><b>${labels[e.type]||e.type}</b><small>${clock(e.time)}${e.location?' · '+escapeHTML(e.location):''}${e.note?' · '+escapeHTML(e.note):''}${['credit','quick_work'].includes(e.type)?' · '+Number(e.creditMinutes||0)+'m':''}</small></div><div class="entry-actions"><button onclick="editEntry('${e.id}')">Edit</button></div></div>`).join(''):'<div class="empty">Your day will appear here as soon as you start work.</div>';$('quickPresets').innerHTML=presetHTML()+`<button class="quick-work-btn" onclick="openQuickWork()">⚡ Quick work · email or messages</button>`;let qw=quickWorkToday();$('quickHint').innerHTML=qw.count?`<div class="quick-work-summary"><span>Quick work today · ${qw.count} ${qw.count===1?'entry':'entries'}</span><b>${plain(qw.mins)}</b></div>`:'One tap records the change and keeps your diary up to date.';renderWorkModeTools();renderFlexiSheetTimes();renderFavourites();renderDiary();renderWeekSummary();renderReplay()}
 
 let replayTimer=null,replayPosition=0;
 function projectedWeekFlex(){let dates=weekDates(),today=dayKey(Date.now()),rec=workdayRecords().slice(-15),avg=rec.length?rec.reduce((a,r)=>a+r.flex,0)/rec.length:0,total=0;dates.forEach(d=>{let x=new Date(d+'T12:00'),sp=special(d);if(d<today||d===today&&hasFinished(d))total+=flexFor(d,false);else if(d===today&&currentState()!=='idle'&&currentState()!=='finished')total+=flexFor(d,true);else if(x.getDay()>0&&x.getDay()<6&&!sp)total+=avg});return Math.round(total)}

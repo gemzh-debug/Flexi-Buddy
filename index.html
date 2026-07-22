@@ -9,13 +9,13 @@
 <meta name="apple-mobile-web-app-title" content="Flexi Buddy">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>Flexi Buddy 7.0.2 Professional</title>
-<link rel="stylesheet" href="styles.css?v=702">
+<title>Flexi Buddy 7.0.3 Professional</title>
+<link rel="stylesheet" href="styles.css?v=703">
 </head>
 <body>
 <div class="app">
 <section id="today" class="screen active">
-  <div class="top"><div class="brand"><div class="logo">◷</div><div><b>Flexi Buddy</b><small>Complete workday companion · <span id="appVersion">v7.0.2</span></small></div></div><div class="avatar">FB</div></div>
+  <div class="top"><div class="brand"><div class="logo">◷</div><div><b>Flexi Buddy</b><small>Complete workday companion · <span id="appVersion">v7.0.3</span></small></div></div><div class="avatar">FB</div></div>
   <div class="hero"><div class="eyebrow">Daily briefing</div><h1 id="greeting">Good morning</h1><p id="briefing"></p></div>
   <div class="card actions"><div class="section-head"><h2>Quick actions</h2><span class="state" id="stateBadge">Ready</span></div><div class="action-grid" id="actions"></div><div class="quick-presets" id="quickPresets"></div><div class="mini-action-note" id="quickHint">One tap records the change and keeps your diary up to date.</div></div>
   <div class="grid2">
@@ -23,6 +23,7 @@
     <div class="card coach"><div class="coach-head"><div><div class="eyebrow">Flexi Coach</div><h3>A helpful nudge</h3></div><div class="coach-icon">✦</div></div><div class="coach-msg" id="coach"></div><div class="chips"><div class="chip" id="weekChip">Week 0m</div><div class="chip" id="balanceChip">Balance 0m</div></div></div>
   </div>
   <div class="stats"><div class="stat"><span>Worked today</span><b id="workedStat">0h 00m</b></div><div class="stat"><span>Before lunch</span><b id="beforeLunchStat">0h 00m</b></div><div class="stat"><span>After lunch & evening</span><b id="afterLunchStat">0h 00m</b></div><div class="stat"><span>Today’s flexi</span><b id="todayFlex">0m</b></div><div class="stat"><span>This week</span><b id="weekFlex">0m</b></div><div class="stat"><span>Running balance</span><b id="runningBalance">0m</b></div></div>
+  <div class="card flexi-sheet-card"><div class="section-head"><div><div class="eyebrow">Ready to copy</div><h3>Flexi sheet times</h3></div><button class="softbtn" id="copyFlexiTimesButton" onclick="copyFlexiSheetTimes()">Copy</button></div><p class="flexi-sheet-intro" id="flexiSheetIntro">Start work to calculate your first set of times.</p><div class="flexi-sheet-grid"><div class="flexi-period"><span>Before lunch</span><div class="flexi-time-row"><div><small>Start</small><b id="flexiBeforeStart">—</b></div><div class="time-arrow">→</div><div><small>Finish</small><b id="flexiBeforeFinish">—</b></div></div><em id="flexiBeforeTotal">0h 00m paid</em></div><div class="flexi-period"><span>After lunch</span><div class="flexi-time-row"><div><small>Start</small><b id="flexiAfterStart">—</b></div><div class="time-arrow">→</div><div><small>Finish</small><b id="flexiAfterFinish">—</b></div></div><em id="flexiAfterTotal">0h 00m paid</em></div></div><div class="flexi-sheet-note" id="flexiSheetNote">The suggested finish times are adjusted so the two periods equal the paid work Flexi Buddy has recorded.</div></div>
   <div class="card favourites-card"><div class="section-head"><div><h3>Favourites</h3><small style="color:var(--muted)">Your most useful actions, always one tap away.</small></div><button class="softbtn" onclick="openFavouriteSettings()">Edit</button></div><div class="favourite-grid" id="favouriteGrid"></div></div>
   <div class="mode-finish-grid">
     <div class="card work-mode-card"><div class="section-head"><div><h3>Work mode</h3><small style="color:var(--muted)">One tap sets today up correctly.</small></div><span class="chip" id="modeChip">Not set</span></div><div class="mode-buttons" id="modeButtons"><button class="mode-btn" data-mode="Home" onclick="setWorkMode('Home')">🏠 WFH<small>Work from home</small></button><button class="mode-btn" data-mode="Office" onclick="setWorkMode('Office')">🏢 Office<small>Commute stays unpaid</small></button><button class="mode-btn" data-mode="Home Visits" onclick="setWorkMode('Home Visits')">🚗 Home visits<small>Paid travel available</small></button><button class="mode-btn" data-mode="Hybrid" onclick="setWorkMode('Hybrid')">🔀 Hybrid<small>Move between locations</small></button></div></div>
@@ -164,7 +165,7 @@
 <dialog id="diaryDialog"><h2>Edit work diary</h2><div class="field"><label>Today’s summary</label><textarea id="diaryEditor" rows="12"></textarea></div><div class="dialog-actions"><button class="btn secondary" onclick="closeDialog('diaryDialog')">Cancel</button><button class="btn" onclick="saveDiaryEdit()">Save wording</button></div></dialog>
 <div class="achievement-pop" id="achievementPop"><b id="achievementTitle">Achievement unlocked</b><small id="achievementText"></small></div><div class="toast" id="toast"></div>
 
-<script src="app.js?v=702"></script>
+<script src="app.js?v=703"></script>
 
 </body>
 </html>
