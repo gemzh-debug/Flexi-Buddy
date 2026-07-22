@@ -1,0 +1,17 @@
+FLEXI BUDDY 6.2.2 — HOME BUTTONS UPDATE
+
+This update moves the Quick Actions buttons directly underneath Today's Progress / Flexi Coach.
+
+1. Put these two files in the same folder as index.html:
+   - home-layout-update.js
+   - home-layout-update.css
+
+2. In index.html, add this line immediately after the existing styles.css line:
+   <link rel="stylesheet" href="home-layout-update.css?v=622">
+
+3. Add this line immediately before the closing </body> tag:
+   <script src="home-layout-update.js?v=622"></script>
+
+4. Save, then refresh/reopen Flexi Buddy.
+
+No stored work data is changed.

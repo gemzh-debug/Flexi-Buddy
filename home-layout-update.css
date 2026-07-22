@@ -1,0 +1,12 @@
+/* Flexi Buddy 6.2.2 — promoted home actions */
+#today .actions-promoted {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 720px) {
+  #today .actions-promoted {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
