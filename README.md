@@ -27,5 +27,5 @@ Upload every file in this folder to the root of the GitHub Pages repository.
 7.0.10 fixes the broken screen-rendering scope, synchronises Calendar selection, rebuilds Insights from the shared records, updates weekly totals, improves mobile safe-area spacing, and forces old cached releases to be removed.
 
 
-## 7.0.11
+## 7.0.12
 Flexi-sheet suggestions are now anchored to the actual lunch actions: the morning period finishes at the exact Lunch click and works backwards by paid time; the afternoon period starts at the exact Resume click and works forwards by paid time. Paid breaks remain included and unpaid pauses/lunch are excluded.
