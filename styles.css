@@ -13,7 +13,7 @@ linear-gradient(#0b1120,#080d19 62%);color:var(--text);min-height:100vh}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 .app{max-width:860px;margin:auto;min-height:100vh}
-.screen{display:none;padding:calc(18px + env(safe-area-inset-top)) 15px 118px}
+.screen{display:none;padding:calc(18px + env(safe-area-inset-top)) 15px calc(180px + env(safe-area-inset-bottom))}
 .screen.active{display:block}
 .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}
 .brand{display:flex;align-items:center;gap:11px}.logo{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;
@@ -145,3 +145,6 @@ body[data-theme="light"] nav button.active{color:#172033}
 .flexi-sheet-note{margin-top:10px;color:var(--muted);font-size:11px;line-height:1.45}
 .softbtn:disabled{opacity:.45;cursor:not-allowed}
 @media(max-width:560px){.flexi-sheet-grid{grid-template-columns:1fr}.flexi-time-row b{font-size:25px}}
+
+/* 7.0.9 mobile layout fixes */
+.chart-tabs{display:flex;gap:8px;overflow-x:auto;overscroll-behavior-inline:contain;padding-bottom:4px;scrollbar-width:none}.chart-tabs::-webkit-scrollbar{display:none}.chart-tab{flex:0 0 auto}.day.selected{outline:2px solid var(--blue);outline-offset:-2px}.screen.active{min-height:100dvh}.card:last-child{margin-bottom:18px}
