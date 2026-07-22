@@ -122,7 +122,9 @@
   <div class="page-title"><h1>Settings</h1><p>Make Flexi Buddy fit your working pattern.</p></div>
   <div class="card"><div class="form-grid">
     <div class="field"><label>Daily target hours</label><input id="targetHours" type="number" step=".25" min="1"></div>
-    <div class="field"><label>Starting flexi balance (minutes)</label><input id="startingBalance" type="number"></div>
+    <div class="field"><label>Weekly contracted hours</label><input id="weeklyTargetHours" type="number" step=".25" min="1"></div>
+    <div class="field full"><label>Usual working days</label><div class="row" style="flex-wrap:wrap;gap:8px"><label class="chip"><input type="checkbox" data-workday="1"> Mon</label><label class="chip"><input type="checkbox" data-workday="2"> Tue</label><label class="chip"><input type="checkbox" data-workday="3"> Wed</label><label class="chip"><input type="checkbox" data-workday="4"> Thu</label><label class="chip"><input type="checkbox" data-workday="5"> Fri</label><label class="chip"><input type="checkbox" data-workday="6"> Sat</label><label class="chip"><input type="checkbox" data-workday="0"> Sun</label></div></div>
+    <div class="field full"><label>Previous flexi balance</label><div class="row"><div class="field" style="flex:1"><label style="font-size:.78rem">Hours</label><input id="startingBalanceHours" type="number" min="-999" max="999" step="1" inputmode="numeric"></div><div class="field" style="flex:1"><label style="font-size:.78rem">Minutes</label><input id="startingBalanceMinutes" type="number" min="-59" max="59" step="1" inputmode="numeric"></div></div><small style="color:var(--muted)">Use a minus sign for a balance owed, for example −2 hours 15 minutes.</small></div>
     <div class="field"><label>Paid break minutes</label><input id="paidBreakLimit" type="number" min="0"></div>
     <div class="field"><label>Number of paid breaks</label><input id="paidBreakCount" type="number" min="0"></div>
     <div class="field"><label>Usual lunch minutes</label><input id="lunchMinutes" type="number" min="0"></div>
@@ -165,7 +167,7 @@
 <dialog id="diaryDialog"><h2>Edit work diary</h2><div class="field"><label>Today’s summary</label><textarea id="diaryEditor" rows="12"></textarea></div><div class="dialog-actions"><button class="btn secondary" onclick="closeDialog('diaryDialog')">Cancel</button><button class="btn" onclick="saveDiaryEdit()">Save wording</button></div></dialog>
 <div class="achievement-pop" id="achievementPop"><b id="achievementTitle">Achievement unlocked</b><small id="achievementText"></small></div><div class="toast" id="toast"></div>
 
-<script src="app.js?v=703"></script>
+<script src="app.js?v=704"></script>
 
 </body>
 </html>
