@@ -1,9 +1,9 @@
 
 const KEY='flexiBuddyDataV1';
 const defaults=()=>({settings:{targetMinutes:480,weeklyTargetMinutes:1920,workingDays:[1,2,3,4],paidBreakLimit:15,paidBreakCount:2,startingBalance:0,annualLeaveHours:0,defaultLocation:'Home',usualLunchMinutes:30,autoConvertPaidBreak:true,theme:'midnight',goalFlexiHours:0,goalMonthlyDays:0,remindBreak:false,remindFinish:false,remindStart:false,replaySpeed:18,dashboardOrder:['avgDay','avgStart','avgFinish','daysRecorded','reportBalance','leaveRemaining'],dashboardHidden:[],seenAchievements:[],workMode:'',travelStartedAt:null,favourites:['wfh','office','quick','travel','lunch','meeting'],diaryEdits:{}},events:[],days:[],reflections:[]});
-function load(){let d;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}d=d||defaults();d.settings={...defaults().settings,...(d.settings||{})};d.events=Array.isArray(d.events)?d.events:[];d.days=Array.isArray(d.days)?d.days:[];d.reflections=Array.isArray(d.reflections)?d.reflections:[];return d}
+function load(){let d;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}d=d||defaults();d.settings={...defaults().settings,...(d.settings||{})};if(!d.settings.migratedTo705){if(Number(d.settings.weeklyTargetMinutes)===2400)d.settings.weeklyTargetMinutes=1920;if(!Array.isArray(d.settings.workingDays)||d.settings.workingDays.length===5)d.settings.workingDays=[1,2,3,4];d.settings.migratedTo705=true;}d.events=Array.isArray(d.events)?d.events:[];d.days=Array.isArray(d.days)?d.days:[];d.reflections=Array.isArray(d.reflections)?d.reflections:[];localStorage.setItem(KEY,JSON.stringify(d));return d}
 let data=load(),monthCursor=new Date(),selectedDay=null,creatingEntry=false;
-const APP_VERSION='7.0.4';
+const APP_VERSION='7.0.5';
 const $=id=>document.getElementById(id),pad=n=>String(n).padStart(2,'0');
 const dayKey=x=>{let d=new Date(x);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
 const clock=x=>new Date(x).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
@@ -261,18 +261,13 @@ function closeDialog(id){$(id).close()}
 function moveMonth(n){monthCursor.setMonth(monthCursor.getMonth()+n);renderCalendar()}
 function saveLeave(){let date=$('leaveDate').value,type=$('leaveType').value,hours=Number($('leaveHours').value||0);if(!date)return alert('Choose a date.');data.days=data.days.filter(x=>x.date!==date);data.days.push({date,type,hours});persist();toast('Leave added')}
 function deleteLeave(index){let sorted=[...data.days].sort((a,b)=>b.date.localeCompare(a.date)),target=sorted[index];data.days=data.days.filter(x=>x!==target);persist()}
-function saveSettings(){data.settings.targetMinutes=Math.round(Number($('targetHours').value||8)*60);data.settings.weeklyTargetMinutes=Math.round(Number($('weeklyTargetHours').value||32)*60);data.settings.workingDays=[...document.querySelectorAll('[data-workday]:checked')].map(x=>Number(x.dataset.workday));if(!data.settings.workingDays.length)data.settings.workingDays=[1,2,3,4];let h=Number($('startingBalanceHours').value||0),m=Number($('startingBalanceMinutes').value||0),negative=h<0||m<0;data.settings.startingBalance=(negative?-1:1)*(Math.abs(Math.trunc(h))*60+Math.min(59,Math.abs(Math.trunc(m))));data.settings.paidBreakLimit=Number($('paidBreakLimit').value||0);data.settings.paidBreakCount=Number($('paidBreakCount').value||0);data.settings.usualLunchMinutes=Number($('lunchMinutes').value||30);data.settings.defaultLocation=$('defaultLocation').value.trim()||'Home';data.settings.annualLeaveHours=Number($('annualLeave').value||0);persist();renderAll();toast('Settings saved')}
+function saveSettings(){data.settings.targetMinutes=Math.round(Number($('targetHours').value||8)*60);data.settings.weeklyTargetMinutes=Math.round(Number($('weeklyTargetHours').value||32)*60);data.settings.workingDays=[...document.querySelectorAll('[data-workday]:checked')].map(x=>Number(x.dataset.workday));if(!data.settings.workingDays.length)data.settings.workingDays=[1,2,3,4];let h=Number($('startingBalanceHours').value||0),m=Number($('startingBalanceMinutes').value||0),negative=h<0||m<0;data.settings.startingBalance=(negative?-1:1)*(Math.abs(Math.trunc(h))*60+Math.min(59,Math.abs(Math.trunc(m))));data.settings.paidBreakLimit=Number($('paidBreakLimit').value||0);data.settings.paidBreakCount=Number($('paidBreakCount').value||0);data.settings.usualLunchMinutes=Number($('lunchMinutes').value||30);data.settings.defaultLocation=$('defaultLocation').value.trim()||'Home';data.settings.annualLeaveHours=Number($('annualLeave').value||0);persist();toast('Settings saved')}
 function exportCSV(){let rows=[['date','type','worked_minutes','flexi_minutes','timeline']];allDates().forEach(d=>{let sp=special(d),c=calc(d,false);rows.push([d,sp?sp.type:'working_day',Math.round(paidWorked(c)),flexFor(d,false),eventsFor(d).map(e=>`${clock(e.time)} ${labels[e.type]||e.type}`).join(' | ')])});download('flexi-buddy-report.csv',rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(',')).join('\n'),'text/csv')}
 function exportBackup(){download('flexi-buddy-backup.json',JSON.stringify(data,null,2),'application/json')}
 function restoreBackup(ev){let f=ev.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!d.settings||!Array.isArray(d.events))throw 0;if(confirm('Replace current data with this backup?')){data=d;data.settings={...defaults().settings,...data.settings};persist();toast('Backup restored')}}catch(e){alert('That is not a valid Flexi Buddy backup.')}};r.readAsText(f)}
 function resetAll(){if(confirm('Erase every Flexi Buddy record and setting? This cannot be undone.')){localStorage.removeItem(KEY);data=defaults();persist()}}
 function download(name,text,type){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>goScreen(b.dataset.screen));
-$('leaveDate').value=dayKey(Date.now());
-render();setInterval(()=>{if(document.getElementById('today').classList.contains('active'))renderToday()},30000);
-if('serviceWorker'in navigator)navigator.serviceWorker.register('service-worker.js');
-
 
 // Flexi Buddy 5.5 — favourites and automatic work diary
 const favouriteActions={
@@ -332,3 +327,10 @@ function editDiary(){$('diaryEditor').value=currentDiary();$('diaryDialog').show
 function saveDiaryEdit(){let d=dayKey(Date.now());data.settings.diaryEdits=data.settings.diaryEdits||{};data.settings.diaryEdits[d]=$('diaryEditor').value.trim();closeDialog('diaryDialog');persist();toast('Diary wording saved')}
 async function copyDiary(){try{await navigator.clipboard.writeText(currentDiary());toast('Diary copied')}catch(e){let t=document.createElement('textarea');t.value=currentDiary();document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();toast('Diary copied')}}
 function downloadDiary(){let d=dayKey(Date.now());download(`flexi-buddy-diary-${d}.txt`,currentDiary(),'text/plain')}
+
+// Start only after every feature and constant has been initialised.
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>goScreen(b.dataset.screen));
+$('leaveDate').value=dayKey(Date.now());
+render();
+setInterval(()=>{if(document.getElementById('today').classList.contains('active'))renderToday()},30000);
+if('serviceWorker'in navigator)navigator.serviceWorker.register('service-worker.js');
