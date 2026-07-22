@@ -3,7 +3,7 @@ const KEY='flexiBuddyDataV1';
 const defaults=()=>({settings:{targetMinutes:480,weeklyTargetMinutes:1920,workingDays:[1,2,3,4],paidBreakLimit:15,paidBreakCount:2,startingBalance:0,annualLeaveHours:0,defaultLocation:'Home',usualLunchMinutes:30,autoConvertPaidBreak:true,theme:'midnight',goalFlexiHours:0,goalMonthlyDays:0,remindBreak:false,remindFinish:false,remindStart:false,replaySpeed:18,dashboardOrder:['avgDay','avgStart','avgFinish','daysRecorded','reportBalance','leaveRemaining'],dashboardHidden:[],seenAchievements:[],workMode:'',travelStartedAt:null,favourites:['wfh','office','quick','travel','lunch','meeting'],diaryEdits:{}},events:[],days:[],reflections:[]});
 function load(){let d;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}d=d||defaults();d.settings={...defaults().settings,...(d.settings||{})};if(!d.settings.migratedTo705){if(Number(d.settings.weeklyTargetMinutes)===2400)d.settings.weeklyTargetMinutes=1920;if(!Array.isArray(d.settings.workingDays)||d.settings.workingDays.length===5)d.settings.workingDays=[1,2,3,4];d.settings.migratedTo705=true;}d.events=Array.isArray(d.events)?d.events:[];d.days=Array.isArray(d.days)?d.days:[];d.reflections=Array.isArray(d.reflections)?d.reflections:[];localStorage.setItem(KEY,JSON.stringify(d));return d}
 let data=load(),monthCursor=new Date(),selectedDay=null,creatingEntry=false;
-const APP_VERSION='7.0.6';
+const APP_VERSION='7.0.7';
 const $=id=>document.getElementById(id),pad=n=>String(n).padStart(2,'0');
 const dayKey=x=>{let d=new Date(x);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
 const clock=x=>new Date(x).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
@@ -113,6 +113,53 @@ function selectQuickWorkType(btn){quickWorkKind=btn.dataset.kind;document.queryS
 function selectQuickWorkDuration(btn){let v=btn.dataset.minutes;if(v==='custom'){let n=Number(prompt('How many minutes?','5'));if(!Number.isFinite(n)||n<=0)return;quickWorkMinutes=Math.min(240,Math.round(n));btn.textContent=quickWorkMinutes+'m'}else quickWorkMinutes=Number(v);document.querySelectorAll('#quickWorkDurations button').forEach(b=>b.classList.toggle('selected',b===btn))}
 function saveQuickWork(){let note=$('quickWorkNote').value.trim(),kind=quickWorkKind;if(kind==='Other quick work'&&note)kind=note;data.events.push({id:'e'+Date.now()+Math.random().toString(16).slice(2),type:'quick_work',time:Date.now(),creditMinutes:quickWorkMinutes,note:kind+(note&&kind!==note?' · '+note:'')});closeDialog('quickWorkDialog');persist();toast(`${quickWorkMinutes} minutes of quick work added`)}
 function quickWorkToday(){let ev=eventsFor(dayKey(Date.now())).filter(e=>e.type==='quick_work'),mins=ev.reduce((a,e)=>a+Number(e.creditMinutes||0),0);return{count:ev.length,mins}}
+function renderWeekSummary(){
+  const dates=weekWorkDates();
+  const today=dayKey(Date.now());
+  const weeklyTarget=Math.max(0,Number(data.settings.weeklyTargetMinutes||0));
+  let worked=0;
+  const dayItems=[];
+
+  dates.forEach((d,index)=>{
+    const isToday=d===today;
+    const sp=special(d);
+    const c=calc(d,isToday&&!hasFinished(d));
+    let mins=paidWorked(c);
+    let label='';
+
+    // Paid leave counts towards the contracted week, but is labelled clearly.
+    if(sp){
+      if(['annual_leave','bank_holiday','sick_leave','other_paid_leave'].includes(sp.type)){
+        mins=Number(sp.hours||0)*60 || Number(data.settings.targetMinutes||0);
+        label=sp.type.replaceAll('_',' ');
+      }else if(sp.type==='part_flexi'){
+        label='part flexi';
+      }else if(sp.type==='flexi_day'){
+        label='flexi day';
+      }
+    }
+
+    worked+=mins;
+    const dateObj=new Date(d+'T12:00:00');
+    const dayName=dateObj.toLocaleDateString([],{weekday:'short'});
+    const perDayTarget=dates.length?weeklyTarget/dates.length:0;
+    const dayFlex=mins-perDayTarget;
+    dayItems.push(`<div class="week-day${isToday?' today':''}"><b>${dayName}</b><small>${label?escapeHTML(label):plain(mins)}</small>${mins||label?`<small>${fmt(dayFlex)}</small>`:''}</div>`);
+  });
+
+  const pct=weeklyTarget?Math.min(100,Math.max(0,worked/weeklyTarget*100)):0;
+  // Existing flex for recorded days is the forecast if remaining working days meet target.
+  const forecast=weekFlexTotal(true);
+  const status=forecast>0?`Forecast up ${plain(forecast)}`:forecast<0?`Forecast down ${plain(Math.abs(forecast))}`:'On track';
+
+  if($('weekWorked')) $('weekWorked').textContent=plain(worked);
+  if($('weekProgressBar')) $('weekProgressBar').style.width=pct+'%';
+  if($('weekTargetText')) $('weekTargetText').textContent=`${plain(worked)} of ${plain(weeklyTarget)}`;
+  if($('weekForecastChip')) $('weekForecastChip').textContent=`Forecast ${fmt(forecast)}`;
+  if($('weekForecastText')) $('weekForecastText').textContent=status;
+  if($('weekDays')) $('weekDays').innerHTML=dayItems.join('');
+}
+
 function renderToday(){let d=dayKey(Date.now()),c=calc(d,true),target=Number(data.settings.targetMinutes),pct=Math.min(100,Math.max(0,paidWorked(c)/target*100)),week=weekFlexTotal(true),s=currentState(),loc=latestLocation()||data.settings.defaultLocation||'';$('greeting').textContent=greeting();$('briefing').textContent=briefingText();$('ring').style.setProperty('--p',pct);$('workedRing').textContent=plain(paidWorked(c));$('ring').querySelector('span').textContent=`of ${plain(target)}`;$('workedStat').textContent=plain(paidWorked(c));let split=daySplit(d,true);$('beforeLunchStat').textContent=plain(split.before);$('afterLunchStat').textContent=plain(split.after);$('appVersion').textContent='v'+APP_VERSION;$('todayFlex').textContent=fmt(flexFor(d,true));$('weekFlex').textContent=fmt(week);$('runningBalance').textContent=fmt(runningBalance());$('weekChip').textContent=`Week ${fmt(week)}`;$('balanceChip').textContent=`Balance ${fmt(runningBalance())}`;$('coach').textContent=coachText();$('locationPill').textContent=loc?`📍 ${loc}`:'📍 No location yet';$('stateBadge').textContent={idle:'Ready',finished:'Finished',work:'Working',location:'Working',work_travel:'Travelling',paid_break:'Paid break',lunch:'Lunch',pause:'Paused'}[s]||'Working';$('progressTitle').textContent=s==='finished'?'Day complete':s==='idle'?'Ready when you are':'On your way';$('prediction').innerHTML=(s==='idle'||s==='finished')?'Start work to see your finish prediction.':`Estimated finish<b>${clock(finishPrediction())}</b>`;$('actions').innerHTML=actionHTML();let ev=eventsFor(d);$('timeline').innerHTML=ev.length?ev.map(e=>`<div class="entry"><div class="entry-icon">${icons[e.type]||'•'}</div><div><b>${labels[e.type]||e.type}</b><small>${clock(e.time)}${e.location?' · '+escapeHTML(e.location):''}${e.note?' · '+escapeHTML(e.note):''}${['credit','quick_work'].includes(e.type)?' · '+Number(e.creditMinutes||0)+'m':''}</small></div><div class="entry-actions"><button onclick="editEntry('${e.id}')">Edit</button></div></div>`).join(''):'<div class="empty">Your day will appear here as soon as you start work.</div>';$('quickPresets').innerHTML=presetHTML()+`<button class="quick-work-btn" onclick="openQuickWork()">⚡ Quick work · email or messages</button>`;let qw=quickWorkToday();$('quickHint').innerHTML=qw.count?`<div class="quick-work-summary"><span>Quick work today · ${qw.count} ${qw.count===1?'entry':'entries'}</span><b>${plain(qw.mins)}</b></div>`:'One tap records the change and keeps your diary up to date.';renderDiary();renderWeekSummary();renderWorkModeTools();renderFlexiSheetTimes();renderFavourites()}
 
 function renderCalendar(){let y=monthCursor.getFullYear(),m=monthCursor.getMonth(),first=new Date(y,m,1),start=new Date(first);start.setDate(1-((first.getDay()+6)%7));$('monthTitle').textContent=first.toLocaleDateString([],{month:'long',year:'numeric'});let html=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<div class="dow">${x}</div>`).join('');for(let i=0;i<42;i++){let x=new Date(start);x.setDate(start.getDate()+i);let k=dayKey(x),sp=special(k),cls='day '+(x.getMonth()!==m?'out ':'')+(k===dayKey(Date.now())?'today ':'')+(sp?'leave ':eventsFor(k).length?'worked ':'');html+=`<button class="${cls}" onclick="showDay('${k}')">${x.getDate()}</button>`}$('calendarGrid').innerHTML=html}
