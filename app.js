@@ -3,7 +3,7 @@ const KEY='flexiBuddyDataV1';
 const defaults=()=>({settings:{targetMinutes:480,weeklyTargetMinutes:1920,workingDays:[1,2,3,4],paidBreakLimit:15,paidBreakCount:2,startingBalance:0,annualLeaveHours:0,defaultLocation:'Home',usualLunchMinutes:30,autoConvertPaidBreak:true,theme:'midnight',goalFlexiHours:0,goalMonthlyDays:0,remindBreak:false,remindFinish:false,remindStart:false,replaySpeed:18,dashboardOrder:['avgDay','avgStart','avgFinish','daysRecorded','reportBalance','leaveRemaining'],dashboardHidden:[],seenAchievements:[],workMode:'',travelStartedAt:null,favourites:['wfh','office','quick','travel','lunch','meeting'],diaryEdits:{}},events:[],days:[],reflections:[]});
 function load(){let d;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}d=d||defaults();d.settings={...defaults().settings,...(d.settings||{})};if(!d.settings.migratedTo705){if(Number(d.settings.weeklyTargetMinutes)===2400)d.settings.weeklyTargetMinutes=1920;if(!Array.isArray(d.settings.workingDays)||d.settings.workingDays.length===5)d.settings.workingDays=[1,2,3,4];d.settings.migratedTo705=true;}d.events=Array.isArray(d.events)?d.events:[];d.days=Array.isArray(d.days)?d.days:[];d.reflections=Array.isArray(d.reflections)?d.reflections:[];localStorage.setItem(KEY,JSON.stringify(d));return d}
 let data=load(),monthCursor=new Date(),selectedDay=null,creatingEntry=false;
-const APP_VERSION='7.0.12';
+const APP_VERSION='7.0.13';
 const $=id=>document.getElementById(id),pad=n=>String(n).padStart(2,'0');
 const dayKey=x=>{let d=new Date(x);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
 const clock=x=>new Date(x).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
@@ -76,6 +76,33 @@ function flexiSheetTimes(d=dayKey(Date.now()),live=true){
     hasLunch:lunchIndex>=0
   };
 }
+
+function flexiSheetCardHTML(d){
+  const t=flexiSheetTimes(d,false),show=x=>x?clock(x):'—';
+  if(!eventsFor(d).length)return '';
+  const title=new Date(d+'T12:00').toLocaleDateString([],{weekday:'long',day:'numeric',month:'long'});
+  const beforeReady=!!t.beforeStart;
+  const afterReady=!!t.afterStart;
+  let note='Add or edit the Lunch and Resume entries to create both Flexi-sheet periods.';
+  if(beforeReady&&!t.hasLunch)note='No Lunch entry is recorded, so the first period is provisional.';
+  else if(beforeReady&&t.hasLunch&&!afterReady)note='The morning period is ready. Add a Resume work entry after lunch to create the second period.';
+  else if(beforeReady&&afterReady)note='Morning ends at the recorded Lunch time. Afternoon starts at the recorded Resume time.';
+  return `<section class="selected-flexi-sheet">
+    <div class="section-head"><div><small class="eyebrow">READY TO COPY</small><b>${escapeHTML(title)} Flexi sheet times</b><p>Use these periods when completing this day later.</p></div><button class="softbtn" ${beforeReady?'':'disabled'} onclick="copyFlexiSheetTimesForDay('${d}')">Copy</button></div>
+    <div class="flexi-sheet-periods">
+      <div class="flexi-period"><b>Before lunch</b><div class="flexi-time-row"><div><span>START</span><strong>${show(t.beforeStart)}</strong></div><i>→</i><div><span>FINISH</span><strong>${show(t.beforeFinish)}</strong></div></div><small>${plain(t.beforeMinutes)} paid</small></div>
+      <div class="flexi-period"><b>After lunch</b><div class="flexi-time-row"><div><span>START</span><strong>${show(t.afterStart)}</strong></div><i>→</i><div><span>FINISH</span><strong>${show(t.afterFinish)}</strong></div></div><small>${plain(t.afterMinutes)} paid</small></div>
+    </div><p class="flexi-sheet-note">${escapeHTML(note)}</p>
+  </section>`;
+}
+async function copyFlexiSheetTimesForDay(d){
+  const t=flexiSheetTimes(d,false),show=x=>x?clock(x):'—';
+  if(!t.beforeStart)return toast('This day needs work and lunch entries first');
+  let text=`${new Date(d+'T12:00').toLocaleDateString([],{weekday:'long',day:'numeric',month:'long',year:'numeric'})}\nBefore lunch: ${show(t.beforeStart)} to ${show(t.beforeFinish)} (${plain(t.beforeMinutes)})`;
+  if(t.afterStart)text+=`\nAfter lunch: ${show(t.afterStart)} to ${show(t.afterFinish)} (${plain(t.afterMinutes)})`;
+  try{await navigator.clipboard.writeText(text);toast('Flexi sheet times copied')}catch(e){let a=document.createElement('textarea');a.value=text;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();toast('Flexi sheet times copied')}
+}
+
 function renderFlexiSheetTimes(){
   if(!$('flexiBeforeStart'))return;
   const t=flexiSheetTimes(),show=x=>x?clock(x):'—';
@@ -208,7 +235,7 @@ function showDay(d){
   const summary=`<div class="day-timesheet"><div><span>Before lunch</span><b>${plain(split.before)}</b></div><div><span>After lunch & evening</span><b>${plain(split.after)}</b></div><div><span>Total paid work</span><b>${plain(split.total)}</b></div><div><span>Lunch</span><b>${plain(split.lunch)}</b></div><div><span>Flexi</span><b>${fmt(flexFor(d,false))}</b></div></div>`;
   const entries=ev.length?ev.map(e=>`<div class="entry"><div class="entry-icon">${icons[e.type]||'•'}</div><div><b>${labels[e.type]||e.type}</b><small>${clock(e.time)}${e.location?' · '+escapeHTML(e.location):''}${e.note?' · '+escapeHTML(e.note):''}${['credit','quick_work'].includes(e.type)?' · '+Number(e.creditMinutes||0)+'m':''}</small></div><div class="entry-actions"><button onclick="editEntry('${e.id}')">Edit</button></div></div>`).join(''):'<div class="empty">No entries yet. Add one below.</div>';
   $('dayDetail').className='';
-  $('dayDetail').innerHTML=`<div class="section-head"><div><b>${title}</b><p>Worked ${plain(paidWorked(c))} · Flexi ${fmt(flexFor(d,false))}</p></div><button class="btn" onclick="openNewEntry('${d}')">Add entry</button></div>${summary}<div class="timeline" style="margin-top:12px">${entries}</div>`;
+  $('dayDetail').innerHTML=`<div class="section-head"><div><b>${title}</b><p>Worked ${plain(paidWorked(c))} · Flexi ${fmt(flexFor(d,false))}</p></div><button class="btn" onclick="openNewEntry('${d}')">Add entry</button></div>${summary}${flexiSheetCardHTML(d)}<div class="timeline" style="margin-top:12px">${entries}</div>`;
 }
 function openNewEntry(d=selectedDay){
   creatingEntry=true; selectedDay=d;

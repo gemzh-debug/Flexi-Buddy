@@ -167,3 +167,21 @@ body[data-theme="light"] nav button.active{color:#172033}
   .today-details-link{align-items:flex-start;flex-direction:column}
   .today-details-link .btn{width:100%}
 }
+
+
+/* Selected-day Flexi sheet */
+.selected-flexi-sheet{margin-top:18px;padding:18px;border:1px solid var(--line);border-radius:24px;background:rgba(5,10,24,.42)}
+.selected-flexi-sheet .section-head{align-items:flex-start;margin-bottom:14px}
+.selected-flexi-sheet .section-head b{display:block;font-size:1.15rem;margin-top:3px}
+.selected-flexi-sheet .section-head p{margin:5px 0 0;color:var(--muted)}
+.selected-flexi-sheet .eyebrow{letter-spacing:.18em;font-weight:800;color:var(--muted)}
+.flexi-sheet-periods{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.flexi-period{padding:16px;border:1px solid var(--line);border-radius:20px;background:rgba(16,25,48,.68)}
+.flexi-period>b{display:block;margin-bottom:12px}
+.flexi-time-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:8px}
+.flexi-time-row div span{display:block;font-size:.7rem;letter-spacing:.14em;color:var(--muted);margin-bottom:5px}
+.flexi-time-row strong{font-size:1.55rem;line-height:1}
+.flexi-time-row i{font-style:normal;font-size:1.35rem;padding-bottom:1px}
+.flexi-period>small{display:block;color:var(--muted);margin-top:12px}
+.flexi-sheet-note{color:var(--muted);margin:12px 2px 0;font-size:.9rem;line-height:1.45}
+@media(max-width:560px){.flexi-sheet-periods{grid-template-columns:1fr}.flexi-time-row strong{font-size:1.4rem}}
