@@ -9,13 +9,13 @@
 <meta name="apple-mobile-web-app-title" content="Flexi Buddy">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>Flexi Buddy 7.0.3 Professional</title>
-<link rel="stylesheet" href="styles.css?v=707">
+<title>Flexi Buddy 7.0.8 Professional</title>
+<link rel="stylesheet" href="styles.css?v=708">
 </head>
 <body>
 <div class="app">
 <section id="today" class="screen active">
-  <div class="top"><div class="brand"><div class="logo">◷</div><div><b>Flexi Buddy</b><small>Complete workday companion · <span id="appVersion">v7.0.3</span></small></div></div><div class="avatar">FB</div></div>
+  <div class="top"><div class="brand"><div class="logo">◷</div><div><b>Flexi Buddy</b><small>Complete workday companion · <span id="appVersion">v7.0.8</span></small></div></div><div class="avatar">FB</div></div>
   <div class="hero"><div class="eyebrow">Daily briefing</div><h1 id="greeting">Good morning</h1><p id="briefing"></p></div>
   <div class="card actions"><div class="section-head"><h2>Quick actions</h2><span class="state" id="stateBadge">Ready</span></div><div class="action-grid" id="actions"></div><div class="quick-presets" id="quickPresets"></div><div class="mini-action-note" id="quickHint">One tap records the change and keeps your diary up to date.</div></div>
   <div class="grid2">
@@ -42,6 +42,7 @@
 
 <section id="reports" class="screen">
   <div class="page-title"><h1>Dashboard</h1><p>Your patterns, progress and personal records in one place.</p></div>
+  <div class="row dashboard-shortcuts" style="margin-bottom:12px;flex-wrap:wrap"><button class="softbtn" onclick="goScreen('leave')">＋ Record leave</button><button class="softbtn" onclick="goScreen('planner')">🌴 Leave Centre</button><button class="softbtn" onclick="goScreen('settings')">⚙ Settings</button></div>
   <div class="card"><div class="section-head"><div><h3>Dashboard layout</h3><small style="color:var(--muted)">Drag cards to reorder or choose what to show.</small></div><button class="softbtn" onclick="toggleDashboardCustomise()">Customise</button></div><div class="customise-panel" id="customisePanel"><div id="widgetOptions"></div><button class="btn secondary" style="margin-top:10px" onclick="resetDashboardLayout()">Reset layout</button></div></div>
   <div class="dashboard-grid customisable" id="dashboardGrid">
     <div class="dashboard-tile" draggable="true" data-widget="avgDay"><small>Average working day</small><b id="avgDay">—</b><em id="avgDayNote">Completed days</em></div>
@@ -81,7 +82,7 @@
 </section>
 
 <section id="leave" class="screen">
-  <div class="page-title"><h1>Leave</h1><p>Record time away without disturbing your flexi calculations.</p></div>
+  <div class="page-title"><h1>Leave</h1><p>Record annual leave, flexi leave and other time away.</p><div class="row" style="margin-top:12px"><button class="softbtn" onclick="goScreen('planner')">Open Leave Centre</button><button class="softbtn" onclick="goScreen('settings')">Set annual allowance</button></div></div>
   <div class="card">
     <div class="form-grid">
       <div class="field"><label>Date</label><input type="date" id="leaveDate"></div>
@@ -166,7 +167,7 @@
 <dialog id="diaryDialog"><h2>Edit work diary</h2><div class="field"><label>Today’s summary</label><textarea id="diaryEditor" rows="12"></textarea></div><div class="dialog-actions"><button class="btn secondary" onclick="closeDialog('diaryDialog')">Cancel</button><button class="btn" onclick="saveDiaryEdit()">Save wording</button></div></dialog>
 <div class="achievement-pop" id="achievementPop"><b id="achievementTitle">Achievement unlocked</b><small id="achievementText"></small></div><div class="toast" id="toast"></div>
 
-<script src="app.js?v=707"></script>
+<script src="app.js?v=708"></script>
 
 </body>
 </html>

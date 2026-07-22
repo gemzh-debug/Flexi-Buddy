@@ -15,7 +15,10 @@ Offline-first flexi-time work companion.
 Upload every file in this folder to the root of the GitHub Pages repository.
 
 
-7.0.7 fixes the partial-loading error that prevented the diary, weekly progress and replay cards from updating. It also migrates the previous 40-hour default to 32 hours across Monday–Thursday and keeps hours/minutes starting balance entry.
+7.0.8 fixes the partial-loading error that prevented the diary, weekly progress and replay cards from updating. It also migrates the previous 40-hour default to 32 hours across Monday–Thursday and keeps hours/minutes starting balance entry.
 
 
-7.0.7: Removed Timeline replay and made diary/weekly totals render first so optional dashboard tools cannot block them.
+7.0.8: Removed Timeline replay and made diary/weekly totals render first so optional dashboard tools cannot block them.
+
+
+7.0.8: Added visible leave and settings shortcuts on Insights, and allows previous recorded workdays to populate Insights even where an explicit Finish entry was not saved.
